@@ -1,1 +1,1 @@
-# the-guestbook-of-artificial-intelligence
+# The Artificial Intelligence Guestbook

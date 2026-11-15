@@ -269,6 +269,8 @@ draft or submitted --discard, or abandon after inactivity--> deleted
 | `published` | `published` | moderator or contributor | New public version after redaction or a moderated correction |
 | `published` | `withdrawn` | contributor | Withdrawal request verified. Deletion lifecycle runs and a tombstone is created. |
 | `published` | `withdrawn` | moderator | Removal after a notice or a later finding. Same public effect, cause recorded privately. |
+| `submitted`, `under_review`, `published` | `quarantined` | moderator | Suspected illegal content or a threat, per the [illegal-content protocol](../operations/illegal-content.md). The testimony is hidden everywhere, excluded from exports, search and caches. It is not deleted, and the moderation interface shows its metadata only, never its text, unless the custodian deliberately opens it. A published testimony's URL answers 410, like a withdrawal. |
+| `quarantined` | `withdrawn`, `rejected` or deleted | moderator | Only as the protocol and the authorities' instructions allow, recorded in the moderation record |
 | `draft`, `submitted` | deleted | contributor | Contributor discards. No public ID ever existed. |
 | `draft` | deleted | system | Abandoned after the inactivity period |
 | `rejected` | deleted | system | After the retention period |
@@ -278,7 +280,8 @@ Invariants:
 1. A testimony has a `public_id` if and only if it has been published at least once.
 2. Only `published` testimonies are rendered at their URL. Every other state, including deleted, answers the same 404, except withdrawn, which answers 410 with the tombstone ([identifiers](identifiers.md), section 3).
 3. No path leads from `withdrawn` back to `published`. A contributor who changes their mind submits a new testimony and gets a new `public_id`.
-4. The consent record of the submission that led to publication is kept while the testimony is published.
+4. A withdrawal request on a `quarantined` testimony is recorded and answered within the deadline, but executed only once the legal hold ends. Erasure can be limited where the data is needed for legal claims or a legal obligation (GDPR art. 17(3); to be confirmed in #41's open items).
+5. The consent record of the submission that led to publication is kept while the testimony is published.
 
 ## 4. Relationships and linkability
 

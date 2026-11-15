@@ -1136,7 +1136,7 @@ The implicit invitation is:
 
 This closely matches the purpose of the project. Contributors are not primarily research subjects, survey respondents or commentators expected to produce authoritative analyses. They are people living through a historical period and leaving accounts of what that period looks like from where they stand.
 
-The guestbook metaphor also accommodates differences in the scale and character of contributions. A short observation, a detailed essay, uncertainty, indifference, enthusiasm, fear and an incorrect prediction can all legitimately be entries in the same guestbook.
+The guestbook metaphor also accommodates differences in the scale and character of contributions. A short observation, a detailed essay, uncertainty, indifference, enthusiasm, fear and an incorrect prediction can all legitimately be testimonies in the same guestbook.
 
 ### Public terminology
 
@@ -1145,18 +1145,18 @@ The naming should influence the language of the interface.
 Prefer ordinary terms such as:
 
 - sign the guestbook;
-- write an entry;
+- leave a testimony;
 - read the guestbook;
-- browse entries;
-- your entry;
-- anonymous entry;
-- previous entries.
+- browse testimonies;
+- your testimony;
+- anonymous testimony;
+- previous testimonies.
 
-The project may use more precise terms such as "testimony," "contemporary testimony," "contributor," "archival record," and "corpus" in its methodology, documentation and internal implementation.
+The project may use more precise terms such as "contemporary testimony," "contributor," "archival record," and "corpus" in its methodology, documentation and internal implementation.
 
 These terms should not unnecessarily make the public interface feel academic or bureaucratic.
 
-An individual public contribution is therefore normally an "entry" in the interface, even when the same object is understood as testimony for archival and research purposes.
+An individual public contribution is a "testimony" ("témoignage" in French) in the interface, in the documentation and in the implementation alike. The word is more specific than "entry", and it names what the archive is for (owner decision, 2026-11-15).
 
 ### Subtitle
 
@@ -1189,7 +1189,7 @@ The two metaphors describe different aspects of the project and should coexist.
 
 The guestbook is the living collection.
 
-It remains open. People arrive, leave entries, and read what others have written.
+It remains open. People arrive, leave testimonies, and read what others have written.
 
 A time capsule is a preserved historical edition of that guestbook and its surrounding context.
 
@@ -1204,7 +1204,7 @@ The Artificial Intelligence Guestbook
     |
     +-- Guestbook       living collection
     |
-    +-- Entry           individual contribution
+    +-- Testimony       individual contribution
     |
     +-- Time Capsule    preserved annual edition
     |
@@ -1219,9 +1219,9 @@ The terminology is conceptual rather than a required website navigation structur
 
 The more serious intellectual basis of the project should be explained on the About or methodology pages rather than forced into its name.
 
-One useful concept is the German term "Zeitzeugnis": broadly, a testimony or document that bears witness to its own time. Related concepts such as "Zeitzeuge," a contemporary witness, help describe why these entries are historically interesting.
+One useful concept is the German term "Zeitzeugnis": broadly, a testimony or document that bears witness to its own time. Related concepts such as "Zeitzeuge," a contemporary witness, help describe why these testimonies are historically interesting.
 
-The important property of an entry is not simply that somebody remembers an event.
+The important property of a testimony is not simply that somebody remembers an event.
 
 The contributor writes while the future is still unknown.
 
@@ -1237,7 +1237,7 @@ The About page should explain this idea in accessible language and may introduce
 
 When evaluating product decisions, the implementer can ask whether the resulting experience still behaves like a guestbook.
 
-A guestbook naturally supports writing, reading, browsing, returning and leaving another entry.
+A guestbook naturally supports writing, reading, browsing, returning and leaving another testimony.
 
 It does not naturally require likes, followers, engagement rankings, recommendation feeds, reputation scores or discussion threads.
 
@@ -1245,7 +1245,7 @@ This reinforces the project's existing decision not to become a social network.
 
 Likewise, the metaphor argues against making contribution feel like completing a research questionnaire. Structured metadata can support preservation and discovery, but the central interaction should remain:
 
-> Leave an entry.
+> Leave a testimony.
 
 The name therefore acts as a useful product constraint as well as a public identity.
 

@@ -25,4 +25,4 @@ Status: Draft, awaiting owner ratification
 
 ## Public language
 
-13. The interface speaks plainly: "sign the guestbook", "read the guestbook", "time capsule". Academic terms such as "corpus", "archival record" or "Zeitzeugnis" belong in methodology pages and internal documentation. The object itself is a "testimony" everywhere in code, URLs and documentation. Whether visible interface copy also says "testimony", or "entry" as plan section 38 suggests, is open.
+13. The interface speaks plainly: "sign the guestbook", "leave a testimony", "read the guestbook", "time capsule". The object itself is a "testimony" ("témoignage" in French) everywhere, in the interface as in code and documentation. Academic terms such as "corpus", "archival record" or "Zeitzeugnis" belong in methodology pages and internal documentation.

@@ -56,6 +56,20 @@ Directories that do not exist yet are created when their first document is writt
 - English is the working language of documentation. Public interface text is French and English.
 - Markdown with no hard line wrapping, one paragraph per line. Plain hyphens and straight quotes. No decorative Unicode.
 
+### Markdown
+
+All Markdown files are constrained to a tractable subset, enforced by markdownlint ([.markdownlint-cli2.jsonc](.markdownlint-cli2.jsonc)) locally, in the editor and in CI ([.github/workflows/markdownlint.yml](.github/workflows/markdownlint.yml)):
+
+- ATX headings (`#`), one top-level heading, first line a heading, no heading levels skipped;
+- `-` bullets indented by two spaces; ordered lists numbered `1.`, `2.`, `3.` from 1 in every list, so items are cited by section and number, not by a global number;
+- fenced code blocks with backticks and a language (`text` when nothing else applies);
+- `*emphasis*` and `**strong**` with asterisks;
+- inline links `[text](target)` or autolinks `<https://...>` only; no reference-style links, no bare URLs;
+- tables with leading and trailing pipes and one space of padding;
+- no inline HTML, no trailing whitespace, no two-space line breaks, no line length limit.
+
+Run `pnpm lint:md` before committing documentation; `pnpm fix:md` applies the mechanical fixes. Review what `fix:md` changes: renumbering a list or removing a line break can change meaning. Source tags such as `[S12]` are plain text, so write two of them as `[S1] [S2]`, never `[S1][S2]`, which Markdown reads as a reference link.
+
 ## Terminology
 
 The individual contribution is a **testimony** (plural "testimonies"; French "témoignage") everywhere: interface, code, URLs, identifiers and documentation ([ADR 0011](docs/decisions/0011-testimony-in-the-interface.md)). "Voices" and "entry" were earlier wordings and must not reappear. Other terms: "contributor", "archival record", "edition" (public: "time capsule"), "context", "reference shelf".
@@ -68,7 +82,7 @@ Dated research documents in `docs/research/` keep the wording of their date and 
 
 ## Tracking
 
-- GitHub Project (public): https://github.com/users/5cover/projects/23
+- GitHub Project (public): <https://github.com/users/5cover/projects/23>
 - Issues live in this repository. Milestones map to plan phases A to G. Labels: `decision`, `research`, `legal`, `ops`, `area:*`, plus the GitHub defaults.
 - Status workflow: `Idea` (captured), `Ready` (specified enough to start), `In Progress`, `Pending` (blocked on a decision, an external party or another item), `Nope` (deliberately not doing, reason on the item), `Done`.
 - When starting work on an issue, set it to `In Progress`. When a document or commit completes it, close the issue and set `Done`. New work discovered along the way becomes a new issue rather than an unrecorded intention.

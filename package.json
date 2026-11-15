@@ -1,0 +1,12 @@
+{
+  "name": "the-artificial-intelligence-guestbook",
+  "private": true,
+  "packageManager": "pnpm@12.18.0",
+  "scripts": {
+    "lint:md": "markdownlint-cli2",
+    "fix:md": "markdownlint-cli2 --fix"
+  },
+  "devDependencies": {
+    "markdownlint-cli2": "^0.24.1"
+  }
+}

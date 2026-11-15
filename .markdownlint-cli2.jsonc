@@ -1,0 +1,45 @@
+// Markdown subset for this repository. Rationale in AGENTS.md ("Markdown").
+// Read by markdownlint-cli2 (`pnpm lint:md`, `pnpm fix:md`) and by the markdownlint editor extension.
+{
+  "config": {
+    "default": true,
+    // Headings: ATX (`#`) only.
+    "MD003": { "style": "atx" },
+    // Bullets: `-` only, nested by two spaces.
+    "MD004": { "style": "dash" },
+    "MD007": { "indent": 2 },
+    // No trailing whitespace, hence no invisible two-space line breaks.
+    "MD009": { "br_spaces": 0, "strict": true },
+    // No line length limit: one paragraph per line, never hard-wrapped.
+    "MD013": false,
+    // Repeated headings are fine in different sections (for example "Strengths").
+    "MD024": { "siblings_only": true },
+    // Ordered lists count 1, 2, 3.
+    "MD029": { "style": "ordered" },
+    // No inline HTML (default, stated for clarity).
+    "MD033": true,
+    "MD035": { "style": "---" },
+    // Code: fenced with backticks; MD040 (on by default) requires a language.
+    "MD046": { "style": "fenced" },
+    "MD048": { "style": "backtick" },
+    // Emphasis with asterisks only.
+    "MD049": { "style": "asterisk" },
+    "MD050": { "style": "asterisk" },
+    // Links: inline links and <autolinks> only; no reference-style links, no [url](url).
+    "MD054": {
+      "autolink": true,
+      "inline": true,
+      "full": false,
+      "collapsed": false,
+      "shortcut": false,
+      "url_inline": false
+    },
+    // Tables: leading and trailing pipes, one space of padding.
+    "MD055": { "style": "leading_and_trailing" },
+    "MD060": { "style": "compact" }
+  },
+  "globs": ["**/*.md"],
+  // CLAUDE.md only holds Claude Code's `@AGENTS.md` import directive; it is not a document.
+  "ignores": ["CLAUDE.md"],
+  "gitignore": true
+}

@@ -15,9 +15,10 @@ Source tags such as [S12] refer to the numbered list in the Sources section. Any
 The owner asked for a comparison of application stacks, not a build. The short version:
 
 - Django (Python, with PostgreSQL 18) scores highest on the weighted criteria, mainly because of its first-party admin, its gettext-based i18n, its PostgreSQL full-text search with French and English configurations, a clear foundation governance model and a security policy that was verified. Its weak points are the lack of a first-party magic-link flow, no production worker for its new Tasks framework, and no first-party rate limiter found in this pass.
-- Symfony 7.4 LTS (PHP) is the runner-up. It has the longest verified LTS window of the candidates, a first-party login-link (magic link) feature, strong XLIFF and ICU translation support and a Doctrine-backed job transport. It has no first-party admin and it is a PHP stack the owner does not have installed.
+- Symfony 7.4 LTS (PHP) is the runner-up. It has the longest verified LTS window of the candidates, a first-party login-link (magic link) feature, strong XLIFF and ICU translation support and a Doctrine-backed job transport. It has no first-party admin and it is a PHP stack the owner does not currently use.
 - The strongest TypeScript option is SvelteKit with Drizzle and Paraglide. It is the best fit for no-JavaScript forms and for localized URLs, but it leaves admin, magic-link auth and background jobs to the operator. AdonisJS was evaluated but its first-party docs did not show magic-link auth and several details could not be verified.
 - Architecture is largely independent of the winner. ADR 0006 makes the archive format the primary artefact, so the framework choice is less consequential than usual. This document recommends the archive specification (issue #13) be written before the application scaffold.
+- Addendum A applies the criteria in reverse to design the worst possible stack, and derives five pass/fail gates from it. Addendum B tests the owner's point that TypeScript expresses complex data models better than Python.
 
 ## 2. Context and decided constraints
 
@@ -30,7 +31,7 @@ These are owner decisions already recorded in the repository or stated for this 
 - Database: PostgreSQL is the presumptive choice for full-text search in French and English. A challenge to it is required (section 6).
 - One operator, for decades. Successor-friendliness, low dependency churn and low supply-chain surface matter ([plan section 28 and 29](../plans/main.md)).
 - Server-rendered, accessible HTML that works without JavaScript is preferred. French and English are first-class interface languages, and testimonies may be in any language ([plan sections 8 and 27](../plans/main.md)).
-- The operator's machine is Windows 11 with Node 26, pnpm and Python 3.12. Docker is not installed and PHP is not installed. The owner is comfortable with TypeScript. This is noted in section 10 and deliberately kept out of the scoring matrix.
+- The owner is comfortable with TypeScript and values its type system for expressing complex data models (see Addendum B). Local tooling is not a constraint: the owner can install whatever is needed and can develop on other machines, so missing tools are an immediate setup step, not a risk (owner clarification, 2026-11-15).
 - Git: this document is not committed. The owner asked for no commit in this pass.
 
 ## 3. Requirements derived from the plan
@@ -90,7 +91,7 @@ PostgreSQL is presumed. The challenge was asked for, so the tradeoff is stated h
 - The case for SQLite: one file, no database server, simple backup with its online backup mechanism, no extra service to patch, and enough capacity for a small archive. Its operational simplicity is real and would suit a successor.
 - The case against SQLite for this project is specific. SQLite's FTS5 ships the unicode61 tokenizer (the default), an ascii tokenizer, a porter tokenizer and a trigram tokenizer. The porter stemmer is documented as designed for English only, and the document does not describe a French stemmer [S43]. French search would therefore be accent-folded and unstemmed, which is a real loss for a bilingual archive.
 - The case for PostgreSQL: Snowball stemmers are documented for many languages [S42]; Django's own documentation uses config="french" in its search examples [S7], so PostgreSQL search configurations per testimony language are a practical option. PostgreSQL also gives row-level concurrency, LISTEN/NOTIFY and SKIP LOCKED for a job table. Rails' Solid Queue uses PostgreSQL's SKIP LOCKED [S13], and River runs on PostgreSQL [S40].
-- Costs of PostgreSQL: one more service to install, patch and back up on the VPS; on the owner's Windows machine without Docker, a native PostgreSQL install (or WSL) is needed for local development. This is a real cost and is recorded as a risk.
+- Costs of PostgreSQL: one more service to install, patch and back up on the VPS. Local development needs a PostgreSQL install, which is a one-time setup step.
 - Version: PostgreSQL 18 is the current major (18.7 on the versioning page). PostgreSQL 14's final release is 12 November 2026, three days before this document's date, so a new deployment should not start on 14 [S41]. PostgreSQL 19 is at release-candidate stage and is not supported yet [S41].
 
 Recommendation for this section: keep PostgreSQL 18. Keep SQLite as a documented fallback only if the owner decides that the one-server simplicity outweighs French stemming. No candidate argued for SQLite in this pass.
@@ -122,7 +123,7 @@ Strengths:
 - PostgreSQL-native search with per-language configurations and maintained search columns, which makes deletion propagate to the search index automatically if the index is a generated column (R11).
 - Server-rendered forms and templates by default, with no JavaScript needed for the core flow (R14).
 - Foundation governance and a published, specific security process (R20).
-- Large talent pool and documentation quality. Python 3.12 is already on the owner's machine. Python 3.12 is supported until 31 October 2028 [S45].
+- Large talent pool and documentation quality. Python 3.12 is supported until 31 October 2028 [S45].
 
 Weaknesses:
 
@@ -158,7 +159,7 @@ Strengths:
 Weaknesses:
 
 - No first-party admin; EasyAdmin or a hand-built admin would be needed.
-- PHP is not installed on the owner's machine. The owner is comfortable with TypeScript, not PHP.
+- The owner is comfortable with TypeScript, not PHP.
 - Symfony's own docs advise caution about login links for security-critical use. A guestbook is not security-critical in that sense, but the owner should accept this on the record.
 - The company-led governance model (Symfony SAS) needs a current check.
 - Full-text search needs raw SQL or a Doctrine extension (not verified in this pass).
@@ -188,7 +189,6 @@ Weaknesses:
 - Company-led product (the legal entity is not verified, see above). Laravel 13 foregrounds AI features [S17]. That is not a technical reason to reject it, but the product direction is not aligned with an archive.
 - The i18n model is weaker for translator workflows than gettext or XLIFF (not verified beyond the docs page read).
 - Magic-link packages are numerous and of uneven maintenance; the owner would need to pick and audit one.
-- PHP is not installed on the owner's machine.
 
 ### 6.4 Ruby on Rails
 
@@ -256,7 +256,7 @@ Strengths:
 
 - Long LTS windows and monthly security servicing.
 - Strong typing and tooling; a large enterprise talent pool.
-- Runs on Linux on a VPS, although the owner's tools are Windows-first.
+- Runs on Linux on a VPS.
 
 Weaknesses:
 
@@ -429,8 +429,8 @@ PostgreSQL 18               job runner (systemd timers -> management commands)
 
 ## 10. Owner context (noted, not scored)
 
-- Windows 11, no Docker, no PHP. A local PostgreSQL install (native installer or WSL) is needed for every Postgres-backed option. SQLite would avoid that. This is recorded as a real cost of PostgreSQL.
-- Python 3.12 is already installed; Django's development loop works natively on Windows. Python 3.12 is supported until 31 October 2028 [S45].
+- Local tooling is not a constraint (owner clarification, 2026-11-15). Any runtime, PostgreSQL or Docker can be installed, and development can happen on other machines. Missing tools are a setup step, not a risk, and do not favour any candidate.
+- Python 3.12 is supported until 31 October 2028 [S45].
 - Node 26 is installed. Node 26 is the current LTS line, released 5 May 2026, with active LTS support until 27 October 2027 and maintenance support until 30 April 2029 [S44]. This matters only for the TypeScript options.
 - The owner is comfortable with TypeScript. If that comfort is weighted heavily, SvelteKit (with its assembly cost) becomes the best TypeScript choice. Under the current weights it does not overturn Django's lead. This should be the owner's explicit decision.
 - Because ADR 0006 makes the archive the primary deliverable, a later move between stacks is less costly than usual if the archive specification and exporter are done first. This is the strongest argument for making a provisional choice now and recording it as an ADR that can be superseded.
@@ -458,7 +458,7 @@ A reasonable owner might pick Symfony instead of Django for these reasons:
 - Symfony has a first-party login-link feature, strong translation tooling with XLIFF and ICU, and a database-backed job transport with no extra service (S25, S26, S27).
 - Its typed component model may suit a long-lived codebase with a strict domain model.
 
-Reasons not to pick it: no first-party admin, PHP is not installed on the owner's machine, and the owner would be learning a stack without TypeScript in it. The Symfony login-link documentation also advises caution for security-critical use.
+Reasons not to pick it: no first-party admin, and the owner would be learning a stack without TypeScript in it. (The Symfony login-link caution applies to magic links in any stack; see section 12.)
 
 Honourable mention: Go, if the owner values minimal dependencies and a single binary more than first-party features and accepts building the admin, magic-link flow and job runner from the standard library and a few libraries. This is a larger one-person build than the verified facts for Django and Symfony suggest.
 
@@ -473,7 +473,6 @@ If the owner decides that TypeScript familiarity should dominate: SvelteKit with
 - Security support windows: Rails 8.0 security support has already ended (7 November 2026), and Rails 8.1 is security-only until 10 October 2027 [S12]. Symfony 6.4 bug fixes end in November 2026 [S24]. Upgrade windows are short for some candidates; the owner must schedule these.
 - Ended support already: .NET 8 and .NET 9 reached end of support on 10 November 2026 [S32]. PostgreSQL 14's final release is 12 November 2026 [S41]. These are not choices against the candidates, but they show how quickly versions expire.
 - PostgreSQL operations: one more service to back up, patch and restore. Mitigation: documented runbook, tested restores (plan 30).
-- Local development on Windows without Docker: a native PostgreSQL install is needed (section 10).
 - Supply chain: all candidates depend on large package ecosystems (PyPI, Composer, npm, Hex, NuGet, Go modules). Mitigation: lock files, reviewed updates, minimal dependency set, and a dependency list in the runbook.
 - ALTCHA: the widget is MIT [S51], but the server component is ALTCHA Sentinel or a custom server. The Sentinel licence was not stated on the pages read; server libraries exist for Python, Go, PHP, Elixir and .NET [S51]. The licence of each library was not verified. If the owner wants a Python-side verifier, its licence and maintenance must be checked.
 - Disposable-email blocklist: CC0 [S52], community-maintained, with no guarantee of completeness. ADR 0003 already puts it on the recurring duties list.
@@ -484,7 +483,7 @@ If the owner decides that TypeScript familiarity should dominate: SvelteKit with
 ## 13. Questions for the owner
 
 1. Do you accept Python (Django) as the application language, given that you are comfortable with TypeScript?
-2. Do you confirm PostgreSQL 18 (not 14, which reaches its final release on 12 November 2026) and accept the local install cost on Windows, or do you want SQLite with the French-stemming loss?
+2. Do you confirm PostgreSQL 18 (not 14, which reaches its final release on 12 November 2026) or do you want SQLite with the French-stemming loss?
 3. Django 5.2 LTS (supported to April 2028) or wait for Django 6.2 LTS (planned April 2027)? Which should the first deployment target?
 4. Should background work use systemd timers with management commands only, or a database-backed package for Django? The first option has no extra dependency.
 5. Which magic-link library, if any, is acceptable? What maintenance threshold do you require (for example a release in the last 12 months, and an open security contact)?
@@ -562,3 +561,96 @@ Numbered sources. "Fetched" means the page was read in this pass through a fetch
 - Repository documents: docs/plans/main.md; docs/decisions/0002-single-eu-vps.md; 0003-email-magic-link-auth.md; 0006-archive-first-replaceable-application.md; 0007-privacy-review-path.md; docs/research/domain-and-persistence.md; docs/constitution/archival-model.md; AGENTS.md.
 
 Not verified in this pass (listed so they are not mistaken for facts): Django deprecation policy and upgrade history; Django rate limiting; Django admin change-history storage; Python minimum for Django 6.x; Phoenix governance and security policy; Oban and Ecto full-text search; Laravel scheduler; Laravel and Rails i18n URL handling; ASP.NET localization and jobs; Go html/template, pgx and migration tools; AdonisJS Node requirement, Lucid, jobs and governance; SvelteKit magic-link and job libraries; Drizzle full-text search; Symfony full-text search; the licences of altcha-lib packages and the Sentinel server; Rails Foundation structure; Symfony governance today.
+
+## Addendum A: the worst possible stack
+
+Added 2026-11-15 at the owner's request: apply the criteria in reverse, "for fun, but maybe we'd learn a bit". The stack below is a deliberate composite of real categories, not a review of any particular product.
+
+### A.1 The anti-stack
+
+A client-rendered single-page app built on a 0.x meta-framework maintained by one venture-funded developer, shipping breaking changes weekly. It runs as a dozen microservices on Kubernetes spread across three US clouds. Testimonies live in a proprietary schemaless serverless document store and, "for permanence", each one is also written in full to a public blockchain and pinned on IPFS. Contributors sign in with a social network whose profile photo and name appear next to their testimony by default. The interface is machine-translated at runtime by a third-party AI API, which also receives drafts "to suggest improvements". Moderation happens in the database vendor's web console. Jobs run on a queue SaaS triggered by a cron SaaS. Session-replay analytics record every keystroke in the contribution form "for UX insights". The lockfile resolves to 2,000 packages, and there are no tests.
+
+### A.2 How it scores
+
+| # | Criterion | Anti-stack choice | Score |
+| --- | --- | --- | --- |
+| 1 | Longevity | 0.x framework, one maintainer, funding-dependent | 1 |
+| 2 | Upgrade burden | Weekly breaking changes, across a dozen services | 1 |
+| 3 | Admin | The database vendor's console: no redaction, no audit, no privacy workflow | 1 |
+| 4 | i18n | Runtime machine translation of the UI; no catalogs, no review, no plural rules | 1 |
+| 5 | Auth | Social login that publishes the account identity, the opposite of plan section 4 | 1 |
+| 6 | Forms and no-JS | Nothing renders without JavaScript; validation only on the client | 1 |
+| 7 | Database | Schemaless proprietary store, no French search, personal data duplicated across documents | 1 |
+| 8 | Security | Keystroke recording, drafts sent to a third party, no CSRF story, unpatched 0.x dependencies | 1 |
+| 9 | Jobs | Two extra SaaS dependencies for what a timer could do | 1 |
+| 10 | Operations | Kubernetes across three clouds, for one person | 1 |
+| 11 | Successor | Nobody can understand it, including the author six months later | 1 |
+| 12 | Dependency footprint | 2,000 packages plus a dozen external services | 1 |
+| 13 | Testing | None | 1 |
+| 14 | Archive-first fit | Data locked in a vendor format; the only "permanent" copy is one that can never be corrected or erased | 1 |
+| | Weighted total | | 20 / 100 |
+
+### A.3 What it teaches
+
+1. **Permanence is not immutability.** The blockchain is the most instructive mistake because it maximizes the property people naively associate with archives. It makes erasure impossible, which turns every withdrawal request into an unresolvable GDPR violation and contradicts the [deletion philosophy](../constitution/deletion-philosophy.md) at its root. What the archive needs is *stable identity with revisable content*: identifiers that never change, plus editions that can be revised for privacy.
+2. **The export is the product.** A platform that cannot be left losslessly fails ADR 0006, whatever else it does well. Vendor lock-in is a preservation failure, not just a cost.
+3. **Jurisdiction is part of the stack.** Three US clouds, a US identity provider and a US AI API make the CLOUD Act and transfer questions ([legal research](../research/legal-landscape.md), section 9) unavoidable.
+4. **Server-rendered HTML is an archival format in itself.** A page that needs a JavaScript runtime to show its text is inaccessible to some people, invisible to some search engines, and poorly captured by the BnF and Wayback crawlers that might preserve the site.
+5. **Every system holding personal data multiplies the cost of deletion.** Each extra service is one more place deletion must reach, one more processor agreement, and one more breach surface. This is [privacy assumption](../constitution/privacy-assumptions.md) 10 in concrete form.
+6. **Churn is a tax paid in custodial attention.** Over ten years, a framework that breaks weekly costs more than any feature it offers. The scarce resource is attention (plan section 37).
+7. **"Helpful" AI integrations leak unpublished testimony.** The [threat model](../specs/threat-model.md) (section 3.6) already forbids sending unpublished content to third parties.
+8. **A weighted sum cannot express a veto.** The worst stack still scores 20, not 0. A stack scoring 5 everywhere except erasure would score about 95 while being unlawful to operate.
+
+### A.4 Consequence: pass/fail gates before scoring
+
+Lesson 8 means some criteria should be gates rather than weights. A candidate, and any later addition to the stack such as a CDN, a translation service or a search engine, must pass all of these before it is scored:
+
+| Gate | Requirement | Source |
+| --- | --- | --- |
+| G1 Erasure | Any personal data held anywhere in the system can be deleted within the defined lifecycle, backups included. | Deletion philosophy; plan sections 21, 22 |
+| G2 Lossless export | All archival data can be exported to the open, documented archive format without the vendor's cooperation. | ADR 0006; plan section 23 |
+| G3 EU processing | Personal data is processed and stored by EU-controlled infrastructure under processor agreements. | ADR 0002; privacy assumption 11 |
+| G4 No-JS core | Reading testimonies and contributing work without client-side JavaScript. | Plan section 27; editorial principles |
+| G5 Supported line | A released, supported version line with a published security process and a known end-of-support date. | Plan sections 26, 28 |
+
+Judgement, not verified per candidate: all nine candidates in section 6 are self-hostable frameworks and can pass G1 to G5, so the gates do not change the ranking. Their value is in protecting future decisions about services added around the application.
+
+## Addendum B: data-model expressiveness and the TypeScript question
+
+Added 2026-11-15. The owner values TypeScript because it can express complex data models efficiently, finds Python more complicated, and considers this relevant. The original criteria do not measure it, so this addendum tests it.
+
+### B.1 The point is valid
+
+The archive's core is a data model with real structure. A testimony moves through states, each with different valid fields. Authorship disclosure is a closed set of codes with conditional details. Translations carry provenance that differs by producer. Public identity is optional at every field, and some fields are forbidden for minors. Some fields are private and must never be exported. A type system that makes invalid states unrepresentable, and that flags every place a new state must be handled, directly lowers the risk of the failures the plan cares most about, such as a private field leaking into an export or a withdrawn testimony being rendered.
+
+Judgement, from general knowledge of the languages rather than sourced in this pass:
+
+- **TypeScript** has structural typing, discriminated unions with exhaustiveness checking, literal and template literal types, and mapped and conditional types, all checked by the compiler on every build. Types are erased at runtime, so external data still needs runtime validation. Schema-first libraries can derive static types from runtime validators, which keeps one source of truth.
+- **Python** has optional type hints (`Literal`, unions, `TypedDict`, `Protocol`, dataclasses, `match`, `assert_never`), checked by external tools such as mypy or pyright rather than by the runtime. The checkers are good in strict mode, but adoption across libraries is uneven. Django's ORM in particular is dynamic, and its static typing depends on third-party stubs and a type-checker plugin.
+
+### B.2 Sensitivity: adding the criterion
+
+Criterion 15, "type system and data-model expressiveness", scored 1 to 5 (judgement): SvelteKit 5, AdonisJS 5, ASP.NET Core 4, Symfony 3, Django 2, Go 2, Laravel 2, Phoenix 2, Rails 1. Totals are recomputed out of 100 with the original 14 weights unchanged.
+
+| Candidate | Original | With criterion 15 at weight 8 |
+| --- | --- | --- |
+| Django | 88.6 | 85.0 |
+| Symfony 7.4 | 78.8 | 77.4 |
+| ASP.NET Core | 69.0 | 69.8 |
+| Go | 71.4 | 69.1 |
+| Laravel 13 | 65.4 | 63.5 |
+| SvelteKit | 59.8 | 62.8 |
+| Rails 8.1 | 66.0 | 62.6 |
+| Phoenix | 64.2 | 62.4 |
+| AdonisJS | 55.6 | 58.9 |
+
+For SvelteKit to tie Django on this criterion alone, it would need a weight of 48 against the other criteria's 100, almost half of the whole decision. Even rescoring SvelteKit's admin from 1 to 3, on the grounds that the moderation console is only a few screens, leaves it at about 66 against 85.
+
+### B.3 Reading it honestly
+
+- The numbers say that TypeScript's type system is a real advantage but does not outweigh what Django provides first-party. SvelteKit's deficit comes mostly from longevity, upgrade churn, assembled authentication and jobs, and dependency footprint, not from the admin alone.
+- What the matrix cannot measure is the custodian. A one-person project that lasts decades depends on its maintainer wanting to keep working in the code. If writing Python would make the owner less willing to tend the archive, that is a custodial risk the weights do not capture, and it is the owner's call to weigh it.
+- The data model is less tied to the application language than it seems. The canonical schema is specified independently of the app (ADR 0006, #13), for example as JSON Schema. Types can be generated from it in either language, and the export test validates against it whatever the stack.
+- A hybrid is possible but has a cost. Archive tooling (schema, validator, edition renderer) in TypeScript and the operational app in Django gives the strongest types where the archive lives, at the price of two runtimes and two ecosystems to maintain for one person.
+- A candidate missing from section 6 is a deliberately minimal TypeScript stack: Node LTS, a small HTTP library, a typed SQL query builder and server-rendered templates, avoiding meta-framework churn. It would trade SvelteKit's conveniences for fewer moving parts, much as the Go option does, while keeping TypeScript's type system. It was not evaluated with sources and should be before it is chosen.
+

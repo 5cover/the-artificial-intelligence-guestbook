@@ -16,11 +16,15 @@ The owner judged defensive registrations unnecessary for a project of this scale
 
 1. The canonical domain is `theaiguestbook.org`.
 2. No defensive domains are registered for now.
-3. The registrar is an EU registrar different from the VPS provider. Gandi, OVHcloud and Infomaniak are shortlisted; live prices and registry-lock availability must be checked before choosing.
-4. Registration for the longest available term, with auto-renew, a registrar lock, DNSSEC, and expiry monitoring. The registrar account uses a project mailbox with hardware-key two-factor authentication, and its recovery material is part of the succession arrangements (#33).
+3. The registrar is an EU registrar different from the VPS provider: OVHcloud (owner's choice, 2026-11-15). It is French, the cheapest of the shortlist to start with, offers DNSSEC at no cost, and includes a free hosting plan with one mailbox. The VPS must therefore come from another provider (#9).
+4. Term: 1 year with auto-renew until public launch, then at least 5 years from launch onwards. The permanence obligation starts when the first testimony URL is published. Before that, a lapse would cost the name but break no citation, and prepaying a decade for a project without users is not proportionate (owner decision, 2026-11-15).
+5. Registrar lock, DNSSEC and expiry monitoring from day one. The registrar login uses a mailbox outside the domain, so that renewal and recovery mail still arrives if the domain fails. The account has hardware-key or TOTP two-factor authentication, and its recovery material is part of the succession arrangements (#33).
+6. The procedure is [register-and-configure-domain](../procedures/register-and-configure-domain.md).
 
 ## Consequences
 
 - The `<domain>` placeholder in the specifications becomes `theaiguestbook.org` once registered.
 - Registration is first come, first served. Until the owner registers it, the decision is at risk.
+- Domain, DNS and the project mailbox sit with one provider. A lockout of the OVHcloud account would affect all three, but not the site or the data on the VPS. Accepted for one custodian, with the account secured by two-factor authentication and backup codes kept in the succession envelope.
+- The public-launch gate (#34) must include extending the registration term.
 - Someone else may register `theaiguestbook.fr`, `.com` or `aiguestbook.org` and impersonate the project. Accepted. Revisit if impersonation or phishing appears, or if the project grows enough to be a target.

@@ -78,6 +78,19 @@ On the editorial/hosting line, the CJEU in C-291/13 Papasavvas (14 September 201
 - Does the email provider or backup provider count as a person storing data "processed directly" by the publisher (art. 1-1 I 5)? [uncertain]
 - Does a non-professional publisher with a hosting role need the decree 2021-1362 retention regime (section 6)? [uncertain]
 
+### Follow-up, 2026-11-15: no domicile under the art. 1-1 II route
+
+Requested by the owner, who recalled that no physical address is needed.
+
+- Current text of art. 1-1 II, as quoted from Legifrance in search results: "Les personnes éditant à titre non professionnel un service de communication au public en ligne peuvent ne tenir à la disposition du public, pour préserver leur anonymat, que le nom, la dénomination ou la raison sociale et l'adresse du fournisseur de services d'hébergement, sous réserve d'avoir communiqué à ce fournisseur les éléments d'identification personnelle mentionnés au I du présent article." [S, quotation of the Legifrance text; Legifrance chapter page: https://www.legifrance.gouv.fr/codes/section_lc/JORFTEXT000000801164/LEGISCTA000006117684/]
+- A lawyer's guide confirms the route, says the identification data "ne peuvent être divulguées que sur réquisition de l'autorité judiciaire", and proposes this wording: "ce site est édité à titre non professionnel par un particulier qui a communiqué à son hébergeur l'ensemble de ses éléments d'identification personnelle", followed by the host's name, address and phone number [S, https://www.simonnetavocat.fr/mentions-legales-dun-site-internet-obligations-sanctions-et-modele/].
+- The same section of the LCEN provides that, when a non-professional publisher stayed anonymous, a right-of-reply request goes to the host, which forwards it [S, same Legifrance quotation].
+- Practical guides agree that the route is closed to professionals, including micro-entrepreneurs, and some argue that advertising, affiliate links or any commercial activity makes a site professional. That second point is a guide's interpretation, not the text [S].
+
+Conclusion: the owner's recollection is correct for a non-professional publisher. The mentions légales can carry the art. 1-1 II statement and the host's details, with no domicile and no personal phone number. The Guestbook qualifies as long as it stays non-commercial: no ads, no affiliate links, no paid services. Whether donations would change this was not researched.
+
+Remaining uncertainty [inference]: no source discusses a non-professional publisher who uses the art. 1-1 II route for the mentions légales and also names themselves voluntarily elsewhere on the site, for example on the About page. The text grants a permission ("peuvent ne tenir à la disposition du public ... que"), not a prohibition on saying more. "Pour préserver leur anonymat" states a purpose, not a condition. Naming oneself voluntarily therefore looks compatible, but no authority confirming this was found.
+
 ## 2. GDPR legal bases
 
 ### What the law says

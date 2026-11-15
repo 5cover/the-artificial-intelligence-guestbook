@@ -53,6 +53,7 @@ Open decisions are gathered in the [decision queue](proposals/README.md).
 - [Archive failures](research/archive-failures.md): how archives and testimony collections failed (MySpace, Belfast Project, Domesday, Yahoo Groups and others), and requirements for editions.
 - [Privacy failures](research/privacy-failures.md): re-identification, stylometry, timing leaks, erasure and minors' data cases, and requirements for the data model, deletion, retention, minors and filters.
 - [Moderation failures](research/moderation-failures.md): how moderation breaks on small platforms, and the French and EU duties for illegal content.
+- [Institutional custodians](research/institutional-custodians.md): who could receive deposits of the editions or succeed as custodian, and how GDPR withdrawal interacts with each (#42).
 
 ## Specifications
 

@@ -12,6 +12,7 @@ Proposals present options for an owner decision. Once decided, a proposal stays 
 | [Legal bases, retention duty and minors](legal-bases-and-minors.md) | #12, #17, #18 | Awaiting decision: D1 to D7 |
 | [Licences for the project's own material and for editions](project-licensing.md) | #43 | Awaiting decision: L1 to L5 |
 | [Infrastructure](infrastructure.md) | #9, #10, #31 | Awaiting decision: VPS, backups, email |
+| [Context pages](context-pages.md) | #36 | Awaiting review: editorial rules and first set |
 
 ## Decision queue
 
@@ -54,6 +55,10 @@ Decisions waiting for the owner, grouped by the work they unblock. The recommend
 1. The review window, and who reviews while the custodian moderates alone ([publishing rules](../legal/publishing-rules.md)).
 2. A separate code for defamation ([publishing rules](../legal/publishing-rules.md)).
 3. The outside contact for wellbeing and qualification ([illegal-content protocol](../operations/illegal-content.md), section 8).
+
+### Context (#36)
+
+1. Editorial rules, first set of pages and who writes them ([context pages](context-pages.md)).
 
 ### Constitution (#2)
 

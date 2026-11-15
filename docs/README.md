@@ -41,12 +41,16 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 - [Stack RFP](proposals/stack-rfp.md), concluded by ADR 0010: pass/fail gates, then a weighted comparison of thirteen candidates (frameworks, WordPress, Next.js, bare Node.js, minimal TypeScript) against a reference anti-stack, with a sensitivity analysis on churn (#6, #7).
 - [Legal bases, retention duty and minors](proposals/legal-bases-and-minors.md): seven owner decisions on GDPR bases, decree 2021-1362, the DSA, age thresholds, parental consent, explicit consent and the DPIA (#12, #17, #18).
 - [Licences for the project's own material and for editions](proposals/project-licensing.md) (#43).
+- [Infrastructure](proposals/infrastructure.md): VPS, encrypted immutable backups at a second provider, transactional email without tracking, cost, and lessons from real incidents (#9, #10, #31).
 
 ## Research
 
 - [Custodial indie projects](research/custodial-indie-projects.md): how projects run by individuals handle continuity, abuse and GDPR, and what failed.
 - [Legal landscape](research/legal-landscape.md): GDPR, LCEN, DSA and copyright as they apply to the Guestbook. Research, not legal advice.
 - [Domain and persistence](research/domain-and-persistence.md): domain choice, registrars, succession, persistent identifiers and edition packaging.
+- [Archive failures](research/archive-failures.md): how archives and testimony collections failed (MySpace, Belfast Project, Domesday, Yahoo Groups and others), and requirements for editions.
+- [Privacy failures](research/privacy-failures.md): re-identification, stylometry, timing leaks, erasure and minors' data cases, and requirements for the data model, deletion, retention, minors and filters.
+- [Moderation failures](research/moderation-failures.md): how moderation breaks on small platforms, and the French and EU duties for illegal content.
 
 ## Specifications
 
@@ -55,10 +59,13 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 - [Data model and testimony lifecycle](specs/data-model.md) (#14)
 - [Withdrawal and deletion lifecycle](specs/deletion-lifecycle.md) (#16)
 - [Archive format and edition packaging](specs/archive-format.md) (#13), with its JSON Schemas in [archive/schema/](../archive/schema/)
+- [Retention schedule](specs/retention.md) (#18)
+- [Browsing, search and filters](specs/browsing-and-filters.md) (#27)
 
 ## Operations
 
 - [Domain](operations/domain.md): non-secret record of the domain's registration and configuration.
+- [Illegal content, threats and third-party notices](operations/illegal-content.md): draft custodian protocol (#41).
 
 ## Procedures
 
@@ -68,6 +75,5 @@ Step-by-step guides. See [procedures/README.md](procedures/README.md).
 
 ## Planned
 
-- `specs/`: retention schedule (#18).
 - `legal/`: register, DPIA, privacy notice, mentions légales, publishing rules, consent texts (#19).
 - `operations/`: runbook, recurring duties, recovery, succession (#33).

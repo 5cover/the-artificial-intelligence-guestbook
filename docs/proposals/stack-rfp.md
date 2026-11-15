@@ -18,7 +18,7 @@ The owner asked for a comparison of application stacks, not a build. The short v
 - Symfony 7.4 LTS (PHP) is the runner-up. It has the longest verified LTS window of the candidates, a first-party login-link (magic link) feature, strong XLIFF and ICU translation support and a Doctrine-backed job transport. It has no first-party admin and it is a PHP stack the owner does not currently use.
 - The strongest TypeScript option is SvelteKit with Drizzle and Paraglide. It is the best fit for no-JavaScript forms and for localized URLs, but it leaves admin, magic-link auth and background jobs to the operator. AdonisJS was evaluated but its first-party docs did not show magic-link auth and several details could not be verified.
 - Architecture is largely independent of the winner. ADR 0006 makes the archive format the primary artefact, so the framework choice is less consequential than usual. This document recommends the archive specification (issue #13) be written before the application scaffold.
-- Addendum A applies the criteria in reverse to design the worst possible stack, and derives five pass/fail gates from it. Addendum B tests the owner's point that TypeScript expresses complex data models better than Python.
+- Addendum A applies the criteria in reverse to design the worst possible stack, and derives five pass/fail gates from it. Addendum B tests the owner's point that TypeScript expresses complex data models better than Python. Addendum C evaluates having no framework at all (bare Node.js, JSDoc types, no build step). It scores 65.4 (66.5 with the type criterion), above every TypeScript framework, and lists the security plumbing it would have to hand-write.
 
 ## 2. Context and decided constraints
 
@@ -105,13 +105,13 @@ Each candidate section lists facts that were checked in this pass with source ta
 Verified facts:
 
 - Supported series on the download page: 5.2 LTS (mainstream support ended 3 December 2025, extended support to April 2028); 6.0 (mainstream to 4 August 2026, extended to April 2027); 6.1 (mainstream to April 2027, extended to December 2027). Django 6.2 is listed as the next LTS with a planned release in April 2027 [S1].
-- Release dates from the endoflife cross-check: 6.0 on 3 December 2025, 6.1 on 5 August 2026, latest 6.1.3 on 3 November 2026; 5.2 LTS EOL 30 April 2028 [S2][S3].
+- Release dates from the endoflife cross-check: 6.0 on 3 December 2025, 6.1 on 5 August 2026, latest 6.1.3 on 3 November 2026; 5.2 LTS EOL 30 April 2028 [S2] [S3].
 - Django 6.0 ships a built-in Tasks framework and built-in Content Security Policy support [S3].
 - The Tasks framework has no worker. Its built-in backends (ImmediateBackend and DummyBackend) are for development and testing only. Production needs a third-party backend with a worker process [S4].
 - Admin: documented as recommended for an organization's internal management tool. Provides list filters, search, bulk actions, list_editable, and per-model permission hooks (has_view, has_change, has_delete and so on) [S6].
 - i18n: gettext PO and MO files, makemessages and compilemessages, ngettext for plurals, i18n_patterns for locale-prefixed URLs, LocaleMiddleware and the LANGUAGES setting [S5]. The page does not describe the html lang attribute; it is normally set in the base template (not verified in docs).
 - PostgreSQL search: SearchVector, SearchQuery, SearchRank, SearchHeadline, a config parameter per field (for example 'french'), GeneratedField maintained by PostgreSQL, and trigram similarity via pg_trgm [S7].
-- Security policy: the two most recent release series and LTS releases receive security support. Reports go to security@djangoproject.com, acknowledgement within 3 working days, target resolution 90 days. Distributors get advance notice under embargo [S8].
+- Security policy: the two most recent release series and LTS releases receive security support. Reports go to <security@djangoproject.com>, acknowledgement within 3 working days, target resolution 90 days. Distributors get advance notice under embargo [S8].
 - Foundation: the Django Software Foundation is a nonprofit with an elected board [S9].
 - Magic-link packages (search results only, maintenance not verified): django-magiclink (PyPI shows 1.3.0) [S10]; django-magicauth from betagouv, version 1.0.2, which adds a second check via django-otp [S10]; django-magic-link appears to be unmaintained (metadata suggests about ten years old) [S10].
 - Not verified: Django's deprecation policy and typical upgrade effort; Python minimum for Django 6.x; a first-party rate limiter (none was found in the pages read); the admin's change-history storage details.
@@ -144,7 +144,7 @@ Verified facts:
 - Login links: built-in login-link authenticator with signed URLs, default lifetime 10 minutes, optional max_uses with a cache, and check_post_only recommended for single-use links because email scanners prefetch links. The docs warn that login links are less secure than password login and are not recommended for security-critical applications [S25].
 - Translation: XLIFF and YAML files supported; ICU MessageFormat supported, but non-English ICU needs the PHP intl extension; locale in routes via the _locale parameter [S26].
 - Messenger: a Doctrine transport stores messages in a database table; workers run via messenger:consume under a process manager [S27].
-- Security: report to security@symfony.com; login throttling bypasses and similar hardening items are handled as regular bug fixes rather than security issues; patches go to all maintained versions [S28].
+- Security: report to <security@symfony.com>; login throttling bypasses and similar hardening items are handled as regular bug fixes rather than security issues; patches go to all maintained versions [S28].
 - Admin: EasyAdmin is an active third-party bundle (5.10.1 on 14 November) [S29]. There is no first-party admin.
 - Governance: the 2018 Symfony blog post, found through search, describes Symfony SAS as the company managing the project, with SensioLabs sponsorship [S30]. This is an old source and must be refreshed.
 
@@ -173,7 +173,7 @@ Verified facts:
 - Policy: major releases annually; bug fixes for 18 months and security fixes for 2 years per release [S17].
 - Localization: strings in PHP array files or JSON files; pluralization with pipe syntax, ranges and trans_choice; no XLIFF or gettext mention on the page read [S18].
 - Queues: database driver, Redis, SQS and others; the worker is queue:work [S19].
-- Security policy: security@laravel.com; no response timeline stated [S20].
+- Security policy: <security@laravel.com>; no response timeline stated [S20].
 - Magic links: several community packages (for example harrisonclewis/laravel-passwordless, SpykApp/passwordless-login, webteractive/laravel-passwordless) appear in search results; their maintenance was not verified [S22].
 - Admin: Filament 5.11.3 is the active community admin panel (13 November) [S23]. Nova is listed as a Laravel product on the official site [S17]; its licence was not verified.
 - License: MIT, copyright held by Taylor Otwell [S21]. The company that sells hosting and products is named differently in different sources (Laravel LLC or Laravel Holdings Inc.); the legal name was not verified.
@@ -197,7 +197,7 @@ Verified facts:
 - Rails 8.1 was released 22 October 2025 [S11]. Bug fixes for 8.1.x ended 10 October 2026, and security fixes run to 10 October 2027 [S12]. Rails 8.0.x security fixes ended 7 November 2026, eight days before this document's date [S12]. Endoflife lists 8.1.4.1 and 8.0.5.2 as released 3 November 2026 [S11].
 - Policy: each minor release gets one year of bug fixes and two years of security fixes [S12].
 - Rails 8.0 was released 7 November 2024 [S13].
-- Rails 8 ships a built-in authentication generator for password-based sign-in and password reset [S13][S14]. Magic-link sign-in is not part of the generator (the security guide describes passwords only) [S14].
+- Rails 8 ships a built-in authentication generator for password-based sign-in and password reset [S13] [S14]. Magic-link sign-in is not part of the generator (the security guide describes passwords only) [S14].
 - Built-in rate limiting in controllers: rate_limit to: 10, within: 3.minutes is documented [S14]. CSRF protection is on by default [S14].
 - Solid Queue (background jobs on PostgreSQL with SKIP LOCKED), Solid Cache and Kamal 2 deployment are part of Rails 8 [S13].
 - Security: reports go privately through GitHub or HackerOne; acknowledgement "before or during our monthly security meeting depending on severity"; no fixed fix deadline [S15].
@@ -221,7 +221,7 @@ Weaknesses:
 
 Verified facts:
 
-- Phoenix documentation for v1.8.16 [S54][S55].
+- Phoenix documentation for v1.8.16 [S54] [S55].
 - mix phx.gen.auth generates email-based (magic-link) authentication. The docs describe the assumption that the email owner controls the account. Password handling is described as something added if the developer wants it [S54].
 - Requires Elixir 1.17 or later and Erlang 25 or later [S55].
 - Phoenix is MIT licensed [S56].
@@ -245,7 +245,7 @@ Weaknesses:
 
 Verified facts:
 
-- .NET 10 is LTS, released November 2025, supported until November 2028 [S31][S32].
+- .NET 10 is LTS, released November 2025, supported until November 2028 [S31] [S32].
 - .NET 11 is STS, released November 2026, supported until November 2028 [S31].
 - .NET 8 and .NET 9 reached end of support on 10 November 2026 [S32]. Microsoft's support page lists only .NET 10 and 11 as currently supported [S31].
 - Servicing updates ship monthly; security fixes ship on patch Tuesday [S31].
@@ -270,7 +270,7 @@ Weaknesses:
 Verified facts:
 
 - Go 1.27 was released 19 August 2026, Go 1.26 on 10 February 2026, and Go 1.25 reaches end of life on 19 August 2026 [S34]. The policy is that each major release is supported until two newer major releases exist [S34].
-- Security: report to security@golang.org; fixes go to the two most recent major releases and the head of the repository; the stated commitment is that issues are fixed or made public within 90 days of acknowledgement [S35].
+- Security: report to <security@golang.org>; fixes go to the two most recent major releases and the head of the repository; the stated commitment is that issues are fixed or made public within 90 days of acknowledgement [S35].
 - Go 1.25 adds net/http CrossOriginProtection, a CSRF protection based on Fetch metadata that does not need tokens or cookies [S36].
 - Go 1.22 adds method and wildcard patterns to net/http.ServeMux [S37].
 - golang.org/x/text/message (v0.44.0 as shown) provides localized formatting and message catalogs; plural and gender forms come from translator-supplied alternatives, with a gotext extraction tool [S38].
@@ -499,65 +499,65 @@ If the owner decides that TypeScript familiarity should dominate: SvelteKit with
 
 Numbered sources. "Fetched" means the page was read in this pass through a fetch tool, and the stated facts are the ones the summaries returned. "Search result" means only the search snippet or listing was read.
 
-- [S1] https://www.djangoproject.com/download/ - fetched. Django supported series and end-of-support dates; 6.2 LTS roadmap. Release dates not shown on this page.
-- [S2] https://endoflife.date/django - fetched. Django release dates and EOL dates.
-- [S3] https://www.djangoproject.com/weblog/2025/dec/03/django-60-released/ - fetched. Django 6.0 release, built-in tasks framework, CSP support.
-- [S4] https://docs.djangoproject.com/en/6.0/topics/tasks/ - fetched. Tasks framework has no worker; development and testing backends only.
-- [S5] https://docs.djangoproject.com/en/6.0/topics/i18n/translation/ - fetched. gettext, makemessages, compilemessages, ngettext, i18n_patterns, LocaleMiddleware, LANGUAGES.
-- [S6] https://docs.djangoproject.com/en/6.0/ref/contrib/admin/ - fetched. Admin scope and features; page truncated, LogEntry details not read.
-- [S7] https://docs.djangoproject.com/en/6.0/ref/contrib/postgres/search/ - fetched. PostgreSQL full-text search, config parameter, GeneratedField, trigram.
-- [S8] https://docs.djangoproject.com/en/6.0/internals/security/ and https://docs.djangoproject.com/en/dev/internals/security/ - fetched. Django security policy. The fetched page included text addressed to AI tools; it was ignored and is not relied on.
-- [S9] https://www.djangoproject.com/foundation/ - fetched. Django Software Foundation as a nonprofit with a board.
-- [S10] https://pypi.org/project/django-magiclink/ ; https://github.com/betagouv/django-magicauth ; https://github.com/wejhink/django-magic-link - search results only. Magic-link packages; maintenance not verified.
-- [S11] https://endoflife.date/rails - fetched. Rails release dates, EOL, latest patches.
-- [S12] https://rubyonrails.org/maintenance - fetched. Rails support table and policy (1 year bug fixes, 2 years security per minor).
-- [S13] https://rubyonrails.org/2024/11/7/rails-8-no-paas-required - fetched. Rails 8.0 release, Solid Queue, Solid Cable, Kamal 2, authentication generator.
-- [S14] https://guides.rubyonrails.org/security.html - fetched (first 100,000 characters). Authentication generator (password-based), rate_limit, CSRF default.
-- [S15] https://rubyonrails.org/security - fetched. Rails security reporting and disclosure process.
-- [S16] https://endoflife.date/php - fetched. PHP branch support dates.
-- [S17] https://laravel.com/docs/releases - fetched. Laravel support table, Laravel 13 release, support policy, product list (Nova).
-- [S18] https://laravel.com/docs/13.x/localization - fetched. Laravel translation files, pluralization.
-- [S19] https://laravel.com/docs/13.x/queues - fetched (first 100,000 characters). Queue drivers and queue:work.
-- [S20] https://github.com/laravel/framework/security/policy - fetched. Laravel security contact.
-- [S21] https://laravel.com/docs/13.x/license - search result only. MIT licence and copyright holder.
-- [S22] https://packagist.org/packages/harrisonclewis/laravel-passwordless ; https://github.com/SpykApp/passwordless-login - search results only. Laravel magic-link packages.
-- [S23] https://github.com/filamentphp/filament/releases - fetched. Filament 5.11.3.
-- [S24] https://symfony.com/releases - fetched. Symfony release and support table; "Today" on the page read as November 15, 2026.
-- [S25] https://symfony.com/doc/current/security/login_link.html - fetched. Login links, expiry, max_uses, warnings.
-- [S26] https://symfony.com/doc/current/translation.html - fetched. XLIFF, ICU MessageFormat, _locale routing.
-- [S27] https://symfony.com/doc/current/messenger.html - fetched (first 100,000 characters). Doctrine transport and messenger:consume.
-- [S28] https://symfony.com/doc/current/contributing/code/security.html - fetched. Symfony security reporting and classification.
-- [S29] https://github.com/EasyCorp/EasyAdminBundle/releases - fetched. EasyAdmin 5.10.1.
-- [S30] https://symfony.com/blog/a-business-model-for-symfony - search result only (2018 post). Symfony SAS and SensioLabs; dated.
-- [S31] https://learn.microsoft.com/en-us/dotnet/core/releases-and-support - fetched. .NET supported versions, LTS and STS windows, servicing.
-- [S32] https://endoflife.date/dotnet - fetched. .NET release and EOL table.
-- [S33] https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity - fetched (first 100,000 characters). No passwordless or magic-link terms found in the fetched text.
-- [S34] https://endoflife.date/go - fetched. Go release dates and support rule.
-- [S35] https://go.dev/security/policy - fetched. Go security reporting, versions receiving fixes, 90-day commitment.
-- [S36] https://go.dev/doc/go1.25 - fetched. net/http CrossOriginProtection.
-- [S37] https://go.dev/doc/go1.22 - fetched. net/http.ServeMux patterns.
-- [S38] https://pkg.go.dev/golang.org/x/text/message - fetched. Localized formatting and catalogs; v0.44.0 shown.
-- [S39] https://github.com/alexedwards/scs - fetched. MIT, stability statement, backend policy.
-- [S40] https://riverqueue.com/ - fetched. River background jobs on PostgreSQL; vendor and Pro licence link.
-- [S41] https://www.postgresql.org/support/versioning/ - fetched. PostgreSQL major versions, final release dates, 19 RC.
-- [S42] https://www.postgresql.org/docs/current/textsearch-dictionaries.html#TEXTSEARCH-SNOWBALL-DICTIONARY - fetched. Snowball stemmers for many languages; French not confirmed on the page.
-- [S43] https://sqlite.org/fts5.html - fetched (first 100,000 characters). FTS5 tokenizers; porter English only.
-- [S44] https://endoflife.date/nodejs - fetched. Node release lines.
-- [S45] https://endoflife.date/python - fetched. Python 3.12 EOL.
-- [S46] https://github.com/withastro/astro/releases ; https://docs.astro.build/en/guides/internationalization/ - fetched. Astro version and i18n routing.
-- [S47] https://github.com/sveltejs/kit/releases ; https://svelte.dev/docs/kit/form-actions - fetched. SvelteKit release; form actions and progressive enhancement.
-- [S48] https://paraglidejs.com/ - fetched. Paraglide JS v2, MIT, plurals and URL localization.
-- [S49] https://github.com/drizzle-team/drizzle-orm/releases - fetched. Drizzle stable and pre-release tags.
-- [S50] https://docs.adonisjs.com/guides/digging-deeper/i18n ; https://docs.adonisjs.com/guides/auth/introduction ; https://github.com/adonisjs/core/releases - fetched. AdonisJS i18n, auth guards, release listing.
-- [S51] https://github.com/altcha-org/altcha ; https://altcha.org/ - fetched. ALTCHA widget MIT; Sentinel and server libraries.
-- [S52] https://github.com/disposable-email-domains/disposable-email-domains - fetched. CC0 licence and maintenance model.
-- [S53] https://gettext.hexdocs.pm/Gettext.html - fetched. Gettext for Elixir v1.0.2.
-- [S54] https://phoenix.hexdocs.pm/Mix.Tasks.Phx.Gen.Auth.html ; https://phoenix.hexdocs.pm/overview.html - fetched. Phoenix v1.8.16 docs; phx.gen.auth email-based authentication.
-- [S55] https://phoenix.hexdocs.pm/installation.html - fetched. Elixir 1.17 and Erlang 25 requirement.
-- [S56] https://github.com/phoenixframework/phoenix - fetched. MIT licence.
-- [S57] https://endoflife.date/wagtail - fetched. Wagtail release and support table.
-- [S58] https://github.com/thoughtbot/administrate - fetched. Maintenance statement; no release date visible.
-- [S59] https://rubyonrails.org/foundation ; https://rubyonrails.org/foundation/37signals - search results only. Rails Foundation governance; not verified on the pages.
+- [S1] <https://www.djangoproject.com/download/> - fetched. Django supported series and end-of-support dates; 6.2 LTS roadmap. Release dates not shown on this page.
+- [S2] <https://endoflife.date/django> - fetched. Django release dates and EOL dates.
+- [S3] <https://www.djangoproject.com/weblog/2025/dec/03/django-60-released/> - fetched. Django 6.0 release, built-in tasks framework, CSP support.
+- [S4] <https://docs.djangoproject.com/en/6.0/topics/tasks/> - fetched. Tasks framework has no worker; development and testing backends only.
+- [S5] <https://docs.djangoproject.com/en/6.0/topics/i18n/translation/> - fetched. gettext, makemessages, compilemessages, ngettext, i18n_patterns, LocaleMiddleware, LANGUAGES.
+- [S6] <https://docs.djangoproject.com/en/6.0/ref/contrib/admin/> - fetched. Admin scope and features; page truncated, LogEntry details not read.
+- [S7] <https://docs.djangoproject.com/en/6.0/ref/contrib/postgres/search/> - fetched. PostgreSQL full-text search, config parameter, GeneratedField, trigram.
+- [S8] <https://docs.djangoproject.com/en/6.0/internals/security/> and <https://docs.djangoproject.com/en/dev/internals/security/> - fetched. Django security policy. The fetched page included text addressed to AI tools; it was ignored and is not relied on.
+- [S9] <https://www.djangoproject.com/foundation/> - fetched. Django Software Foundation as a nonprofit with a board.
+- [S10] <https://pypi.org/project/django-magiclink/> ; <https://github.com/betagouv/django-magicauth> ; <https://github.com/wejhink/django-magic-link> - search results only. Magic-link packages; maintenance not verified.
+- [S11] <https://endoflife.date/rails> - fetched. Rails release dates, EOL, latest patches.
+- [S12] <https://rubyonrails.org/maintenance> - fetched. Rails support table and policy (1 year bug fixes, 2 years security per minor).
+- [S13] <https://rubyonrails.org/2024/11/7/rails-8-no-paas-required> - fetched. Rails 8.0 release, Solid Queue, Solid Cable, Kamal 2, authentication generator.
+- [S14] <https://guides.rubyonrails.org/security.html> - fetched (first 100,000 characters). Authentication generator (password-based), rate_limit, CSRF default.
+- [S15] <https://rubyonrails.org/security> - fetched. Rails security reporting and disclosure process.
+- [S16] <https://endoflife.date/php> - fetched. PHP branch support dates.
+- [S17] <https://laravel.com/docs/releases> - fetched. Laravel support table, Laravel 13 release, support policy, product list (Nova).
+- [S18] <https://laravel.com/docs/13.x/localization> - fetched. Laravel translation files, pluralization.
+- [S19] <https://laravel.com/docs/13.x/queues> - fetched (first 100,000 characters). Queue drivers and queue:work.
+- [S20] <https://github.com/laravel/framework/security/policy> - fetched. Laravel security contact.
+- [S21] <https://laravel.com/docs/13.x/license> - search result only. MIT licence and copyright holder.
+- [S22] <https://packagist.org/packages/harrisonclewis/laravel-passwordless> ; <https://github.com/SpykApp/passwordless-login> - search results only. Laravel magic-link packages.
+- [S23] <https://github.com/filamentphp/filament/releases> - fetched. Filament 5.11.3.
+- [S24] <https://symfony.com/releases> - fetched. Symfony release and support table; "Today" on the page read as November 15, 2026.
+- [S25] <https://symfony.com/doc/current/security/login_link.html> - fetched. Login links, expiry, max_uses, warnings.
+- [S26] <https://symfony.com/doc/current/translation.html> - fetched. XLIFF, ICU MessageFormat, _locale routing.
+- [S27] <https://symfony.com/doc/current/messenger.html> - fetched (first 100,000 characters). Doctrine transport and messenger:consume.
+- [S28] <https://symfony.com/doc/current/contributing/code/security.html> - fetched. Symfony security reporting and classification.
+- [S29] <https://github.com/EasyCorp/EasyAdminBundle/releases> - fetched. EasyAdmin 5.10.1.
+- [S30] <https://symfony.com/blog/a-business-model-for-symfony> - search result only (2018 post). Symfony SAS and SensioLabs; dated.
+- [S31] <https://learn.microsoft.com/en-us/dotnet/core/releases-and-support> - fetched. .NET supported versions, LTS and STS windows, servicing.
+- [S32] <https://endoflife.date/dotnet> - fetched. .NET release and EOL table.
+- [S33] <https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity> - fetched (first 100,000 characters). No passwordless or magic-link terms found in the fetched text.
+- [S34] <https://endoflife.date/go> - fetched. Go release dates and support rule.
+- [S35] <https://go.dev/security/policy> - fetched. Go security reporting, versions receiving fixes, 90-day commitment.
+- [S36] <https://go.dev/doc/go1.25> - fetched. net/http CrossOriginProtection.
+- [S37] <https://go.dev/doc/go1.22> - fetched. net/http.ServeMux patterns.
+- [S38] <https://pkg.go.dev/golang.org/x/text/message> - fetched. Localized formatting and catalogs; v0.44.0 shown.
+- [S39] <https://github.com/alexedwards/scs> - fetched. MIT, stability statement, backend policy.
+- [S40] <https://riverqueue.com/> - fetched. River background jobs on PostgreSQL; vendor and Pro licence link.
+- [S41] <https://www.postgresql.org/support/versioning/> - fetched. PostgreSQL major versions, final release dates, 19 RC.
+- [S42] <https://www.postgresql.org/docs/current/textsearch-dictionaries.html#TEXTSEARCH-SNOWBALL-DICTIONARY> - fetched. Snowball stemmers for many languages; French not confirmed on the page.
+- [S43] <https://sqlite.org/fts5.html> - fetched (first 100,000 characters). FTS5 tokenizers; porter English only.
+- [S44] <https://endoflife.date/nodejs> - fetched. Node release lines.
+- [S45] <https://endoflife.date/python> - fetched. Python 3.12 EOL.
+- [S46] <https://github.com/withastro/astro/releases> ; <https://docs.astro.build/en/guides/internationalization/> - fetched. Astro version and i18n routing.
+- [S47] <https://github.com/sveltejs/kit/releases> ; <https://svelte.dev/docs/kit/form-actions> - fetched. SvelteKit release; form actions and progressive enhancement.
+- [S48] <https://paraglidejs.com/> - fetched. Paraglide JS v2, MIT, plurals and URL localization.
+- [S49] <https://github.com/drizzle-team/drizzle-orm/releases> - fetched. Drizzle stable and pre-release tags.
+- [S50] <https://docs.adonisjs.com/guides/digging-deeper/i18n> ; <https://docs.adonisjs.com/guides/auth/introduction> ; <https://github.com/adonisjs/core/releases> - fetched. AdonisJS i18n, auth guards, release listing.
+- [S51] <https://github.com/altcha-org/altcha> ; <https://altcha.org/> - fetched. ALTCHA widget MIT; Sentinel and server libraries.
+- [S52] <https://github.com/disposable-email-domains/disposable-email-domains> - fetched. CC0 licence and maintenance model.
+- [S53] <https://gettext.hexdocs.pm/Gettext.html> - fetched. Gettext for Elixir v1.0.2.
+- [S54] <https://phoenix.hexdocs.pm/Mix.Tasks.Phx.Gen.Auth.html> ; <https://phoenix.hexdocs.pm/overview.html> - fetched. Phoenix v1.8.16 docs; phx.gen.auth email-based authentication.
+- [S55] <https://phoenix.hexdocs.pm/installation.html> - fetched. Elixir 1.17 and Erlang 25 requirement.
+- [S56] <https://github.com/phoenixframework/phoenix> - fetched. MIT licence.
+- [S57] <https://endoflife.date/wagtail> - fetched. Wagtail release and support table.
+- [S58] <https://github.com/thoughtbot/administrate> - fetched. Maintenance statement; no release date visible.
+- [S59] <https://rubyonrails.org/foundation> ; <https://rubyonrails.org/foundation/37signals> - search results only. Rails Foundation governance; not verified on the pages.
 - Repository documents: docs/plans/main.md; docs/decisions/0002-single-eu-vps.md; 0003-email-magic-link-auth.md; 0006-archive-first-replaceable-application.md; 0007-privacy-review-path.md; docs/research/domain-and-persistence.md; docs/constitution/archival-model.md; AGENTS.md.
 
 Not verified in this pass (listed so they are not mistaken for facts): Django deprecation policy and upgrade history; Django rate limiting; Django admin change-history storage; Python minimum for Django 6.x; Phoenix governance and security policy; Oban and Ecto full-text search; Laravel scheduler; Laravel and Rails i18n URL handling; ASP.NET localization and jobs; Go html/template, pgx and migration tools; AdonisJS Node requirement, Lucid, jobs and governance; SvelteKit magic-link and job libraries; Drizzle full-text search; Symfony full-text search; the licences of altcha-lib packages and the Sentinel server; Rails Foundation structure; Symfony governance today.
@@ -652,5 +652,110 @@ For SvelteKit to tie Django on this criterion alone, it would need a weight of 4
 - What the matrix cannot measure is the custodian. A one-person project that lasts decades depends on its maintainer wanting to keep working in the code. If writing Python would make the owner less willing to tend the archive, that is a custodial risk the weights do not capture, and it is the owner's call to weigh it.
 - The data model is less tied to the application language than it seems. The canonical schema is specified independently of the app (ADR 0006, #13), for example as JSON Schema. Types can be generated from it in either language, and the export test validates against it whatever the stack.
 - A hybrid is possible but has a cost. Archive tooling (schema, validator, edition renderer) in TypeScript and the operational app in Django gives the strongest types where the archive lives, at the price of two runtimes and two ecosystems to maintain for one person.
-- A candidate missing from section 6 is a deliberately minimal TypeScript stack: Node LTS, a small HTTP library, a typed SQL query builder and server-rendered templates, avoiding meta-framework churn. It would trade SvelteKit's conveniences for fewer moving parts, much as the Go option does, while keeping TypeScript's type system. It was not evaluated with sources and should be before it is chosen.
+- A candidate missing from section 6 is a deliberately minimal TypeScript stack: Node LTS, a small HTTP library, a typed SQL query builder and server-rendered templates, avoiding meta-framework churn. It would trade SvelteKit's conveniences for fewer moving parts, much as the Go option does, while keeping TypeScript's type system. It was not evaluated with sources and should be before it is chosen. Addendum C evaluates its extreme form.
 
+## Addendum C: no framework at all
+
+Added 2026-11-15 at the owner's request. The hypothetical: only Node.js. No framework, no runtime dependencies, nothing built in except what Node ships. No build step: plain JavaScript with types written as JSDoc comments.
+
+### C.1 Verified facts
+
+- Node.js 26 is the current LTS line, first released 2026-05-05. LTS lines typically receive critical fixes for 30 months in total. From Node.js 27 onwards, majors move to an annual cycle, each reaching LTS after six months as Current and six as Alpha [C1].
+- `node:sqlite` is at stability 1.2, "Release candidate" (since v25.7.0), not yet Stable. It supports loading SQLite extensions when explicitly allowed at construction [C2].
+- Tested locally on 2026-11-15 with Node v26.13.0, which bundles SQLite 3.54.0:
+  - FTS5 is available with the `unicode61`, `porter` and `trigram` tokenizers. Third-party reports say some Node distributions ship without FTS5, so this must be probed at startup [C3].
+  - With `remove_diacritics 2`, `eleve` matches "élève". `eleves` does not match "élève", and only the prefix query `elev*` finds both. There is no French stemming, as section 5 predicted.
+  - `PRAGMA secure_delete` is 0 by default, so deleted content can remain readable in free pages of the database file until it is overwritten or vacuumed.
+- Type stripping, which runs `.ts` files directly with no build step, is Stable since v25.2.0 and v24.12.0, and enabled by default. It accepts only erasable syntax (no enums, runtime namespaces, parameter properties or import aliases) and performs no type checking [C4].
+- TypeScript 7, the native compiler (7.0 stable in July 2026 according to secondary sources), rewrote JavaScript and JSDoc checking. It dropped several legacy JSDoc behaviours, including special handling of `@enum` and `@constructor` and Closure-style function types, and type-checking `.js` files became stricter [C5][C6].
+
+Built into Node and usable directly: an HTTP server, `fetch` (enough to call a transactional email provider's HTTP API, so no SMTP client is needed), `crypto` (random tokens, hashing, constant-time comparison), `dns` (MX checks for ADR 0003), `Intl` (plural rules, dates, locales, segmentation), `URLSearchParams` (form parsing), the `node:test` runner, `--watch` and `--env-file`. Judgement, not verified per API: these core modules have been stable for many years.
+
+### C.2 What would have to be written by hand
+
+Everything a framework normally provides. This is the useful output of the exercise: the list of what any chosen stack must supply, or what we must audit if it does not.
+
+| Concern | Risk if hand-written | Standard involved |
+| --- | --- | --- |
+| Routing, request and response helpers | Low | - |
+| Cookie parsing and serialization | Medium | RFC 6265 |
+| Sessions and their storage | High | - |
+| CSRF protection | High | - |
+| HTML templating with context-aware escaping | High: every escaping mistake is a stored XSS | HTML |
+| Magic-link token issuance, confirmation POST and expiry | High | - |
+| Admin second factor (WebAuthn) | Very high: unrealistic to hand-write correctly | WebAuthn |
+| Security headers and CSP | Medium | CSP |
+| Form validation and error re-rendering | Medium | - |
+| Locale negotiation from `Accept-Language` | Low to medium | RFC 9110, RFC 4647 |
+| Message catalogs and translator workflow | Medium: no PO or XLIFF tooling | - |
+| Proof-of-work challenge (server and widget) | Medium | - |
+| Rate limiting | Low | - |
+| JSON Schema validation of exports | Medium | JSON Schema |
+| Moderation console, redaction, privacy-request handling | Medium, but large | - |
+| Migrations | Medium | - |
+
+Several rows implement standards. Using libraries for standardized formats and protocols is an established practice of this project, and this option contradicts it in those rows.
+
+### C.3 Gates (Addendum A)
+
+| Gate | Result |
+| --- | --- |
+| G1 Erasure | Pass, provided `secure_delete` is enabled, the database is vacuumed after deletions, and the backup lifecycle is respected. |
+| G2 Lossless export | Pass. |
+| G3 EU processing | Pass. |
+| G4 No-JS core | Pass. Server rendering is the natural mode. |
+| G5 Supported line | Conditional. Node LTS passes, but `node:sqlite` is still a release candidate, so its API may change before it becomes Stable. |
+
+### C.4 Scores
+
+Judgement, using the same scale as section 7:
+
+| # | Criterion | Weight | Bare Node | Reason |
+| --- | --- | --- | --- | --- |
+| 1 | Longevity | 11 | 4 | OpenJS Foundation runtime with a predictable LTS; no third-party code to be abandoned |
+| 2 | Upgrade burden | 9 | 4 | Core APIs are stable; one runtime major per year from Node 27; the release-candidate SQLite API may still move |
+| 3 | Admin | 8 | 1 | Everything is built by hand |
+| 4 | i18n | 8 | 3 | `Intl` is excellent for formatting and plurals; no catalogs, translator workflow or locale routing |
+| 5 | Magic link | 7 | 2 | Primitives exist; the security-critical flow is hand-written |
+| 6 | Forms and no-JS | 7 | 3 | Server-rendered by nature, but no auto-escaping templates (Go's `html/template` has them) |
+| 7 | Database | 6 | 2 | SQLite only, release candidate, FTS5 without French stemming; no PostgreSQL without a driver dependency |
+| 8 | Security | 9 | 2 | Node has a security process, but sessions, CSRF, escaping and auth are written by one person, with no external review |
+| 9 | Jobs | 5 | 3 | systemd timers running Node scripts, like the Django recommendation |
+| 10 | Operations | 6 | 5 | One process, one SQLite file, low memory |
+| 11 | Successor | 6 | 3 | JavaScript is ubiquitous and the code is small, but it is a bespoke framework |
+| 12 | Dependency footprint | 5 | 5 | Zero runtime dependencies |
+| 13 | Testing | 3 | 4 | `node:test` built in |
+| 14 | Archive-first fit | 10 | 5 | No ORM between the domain model and the export; the same code renders edition HTML; what runs is what is archived |
+| | Weighted total | 100 | **65.4** | |
+| 15 | Type expressiveness (Addendum B) | 8 | 4 | JSDoc checked by `tsc` gives most of TypeScript's power, more verbosely |
+| | With criterion 15 | 108 | **66.5** | |
+
+Updated order with criterion 15: Django 85.0, Symfony 77.4, ASP.NET Core 69.8, Go 69.1, **bare Node 66.5**, Laravel 63.5, SvelteKit 62.8, Rails 62.6, Phoenix 62.4, AdonisJS 58.9.
+
+Variants:
+
+- With native `.ts` type stripping instead of JSDoc, criterion 15 rises to 5: 68.0.
+- Allowing one audited dependency, a PostgreSQL driver, raises the database score to 4: 67.8 without criterion 15, 68.7 with it.
+
+### C.5 What it teaches
+
+1. **Fewer moving parts beat more features under these criteria.** With no framework at all, bare Node outranks every TypeScript framework evaluated, including SvelteKit. This supports Addendum B's intuition that a minimal TypeScript stack is the strongest TypeScript-family option.
+2. **Zero dependencies does not mean zero maintenance.** The dependency moves into the custodian's own code. The project becomes the sole maintainer of a small security-critical framework, with no external security process, no advisories and no other users finding its bugs. Section C.2 is that framework's backlog.
+3. **A framework's real value here is its security plumbing and its admin.** Sessions, CSRF, escaping, authentication and a moderation console are what would have to be rebuilt. Whatever is chosen should be judged mostly on how well it provides these.
+4. **Deletion is never immediate at the storage layer.** SQLite keeps deleted content in free pages unless `secure_delete` is on, and PostgreSQL keeps dead row versions until vacuum and in its write-ahead log. The deletion lifecycle (#16) must cover storage-level remnants, not just rows. This applies to every candidate.
+5. **No build step is an archival virtue.** The code that runs is the code that is read and preserved, and plain JavaScript will run on future engines without tooling. But types as comments depend on the checker's JSDoc dialect, which TypeScript 7 just tightened. The code ages well; its type annotations may need maintenance. Native type stripping makes types first-class syntax, at the price of tying execution to runtimes that strip them.
+6. **French search is a recurring gap.** Every SQLite-based option lacks French stemming. With fewer than a few thousand testimonies, prefix and accent-folded matching may be acceptable, but that is a product decision, not a technical accident.
+
+### C.6 Verdict
+
+Not recommended in its pure form. It is the most transparent option and the lightest to operate. It is also the one where a single person carries the whole security surface. Its most defensible form is "Node plus a short allow-list of small, audited libraries", covering at least sessions or cookies, templating with auto-escaping, WebAuthn for admin, and optionally a PostgreSQL driver. That is the minimal TypeScript candidate from Addendum B, which should be evaluated with sources if the owner wants a TypeScript-family stack.
+
+### C.7 Sources
+
+- [C1] https://nodejs.org/en/about/previous-releases - fetched 2026-11-15.
+- [C2] https://nodejs.org/api/sqlite.html - fetched 2026-11-15 (documentation for v26.13.1).
+- [C3] https://github.com/nodejs/node/issues/56951 and https://github.com/openclaw/openclaw/issues/20987 - search results only; reports of FTS5 missing in some builds.
+- [C4] https://nodejs.org/api/typescript.html - fetched 2026-11-15.
+- [C5] https://devblogs.microsoft.com/typescript/progress-on-typescript-7-december-2025/ - search result summary; JSDoc support rewritten, `@enum` and `@constructor` not recognized.
+- [C6] https://typescriptdocs.com/release-notes/TypeScript%207.0 - search result summary; release timeline and removed JSDoc behaviours.
+- Local test, 2026-11-15: Node v26.13.0, SQLite 3.54.0, FTS5 tokenizers, diacritics folding, absence of stemming, `secure_delete` default.

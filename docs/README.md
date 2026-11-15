@@ -33,10 +33,12 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 - [0007. Privacy review path for the MVP](decisions/0007-privacy-review-path.md)
 - [0008. Canonical domain: theaiguestbook.org, no defensive registrations](decisions/0008-canonical-domain.md)
 - [0009. Testimonies are licensed CC BY 4.0, separately from the project's own intellectual property](decisions/0009-testimony-licensing.md)
+- [0010. Application stack: Django 5.2 LTS on PostgreSQL 18](decisions/0010-stack-django-postgresql.md)
+- [0011. The interface calls a contribution a "testimony" ("témoignage")](decisions/0011-testimony-in-the-interface.md)
 
 ## Proposals
 
-- [Stack RFP](proposals/stack-rfp.md): pass/fail gates, then a weighted comparison of thirteen candidates (frameworks, WordPress, Next.js, bare Node.js, minimal TypeScript) against a reference anti-stack, with a sensitivity analysis on churn (#6, #7).
+- [Stack RFP](proposals/stack-rfp.md), concluded by ADR 0010: pass/fail gates, then a weighted comparison of thirteen candidates (frameworks, WordPress, Next.js, bare Node.js, minimal TypeScript) against a reference anti-stack, with a sensitivity analysis on churn (#6, #7).
 
 ## Research
 
@@ -48,6 +50,10 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 
 - [Identifiers and permanent URLs](specs/identifiers.md) (#15)
 - [Threat model](specs/threat-model.md) (#20)
+
+## Operations
+
+- [Domain](operations/domain.md): non-secret record of the domain's registration and configuration.
 
 ## Procedures
 

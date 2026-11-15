@@ -14,14 +14,17 @@ Operator and publisher: Raphaël Bardini, a private individual in France. GDPR a
 
 ## Current state
 
-Pre-implementation. Phase A (constitution) and Phase B (data and privacy design) are in progress. The application stack is not chosen yet (see [docs/proposals/stack-rfp.md](docs/proposals/stack-rfp.md) and issue #7). Do not scaffold application code before that decision is recorded.
+Pre-implementation. Phase A (constitution) and Phase B (data and privacy design) are in progress.
+
+- Stack: Django 5.2 LTS on PostgreSQL 18 ([ADR 0010](docs/decisions/0010-stack-django-postgresql.md)). The archive specification (#13) comes before the application scaffold (#21), as the RFP recommends.
+- Domain: `theaiguestbook.org`, registered at OVHcloud on 2026-11-15 ([ADR 0008](docs/decisions/0008-canonical-domain.md), [docs/operations/domain.md](docs/operations/domain.md)).
 
 ## Knowledge lives in the repository
 
 Session transcripts, chat logs and agent memories are dispensable. Anything worth keeping must be written into `docs/`:
 
 - findings from research go to `docs/research/`;
-- options awaiting an owner decision go to `docs/proposals/`;
+- options for an owner decision go to `docs/proposals/`, and stay there once decided;
 - decisions go to `docs/decisions/` as ADRs;
 - issue threads may hold discussion, but the conclusion must be copied into a document.
 
@@ -34,7 +37,7 @@ The agent working on the project is the primary custodian of the organization of
 | `docs/plans/main.md` | Founding plan. Requirements source. | Owner |
 | `docs/constitution/` | Short authoritative principles (Phase A). | Highest. Changes need explicit owner approval. |
 | `docs/decisions/` | Architecture and policy decision records (ADRs). | Binding once Accepted. |
-| `docs/proposals/` | RFPs and options awaiting a decision. | None until decided. |
+| `docs/proposals/` | RFPs and options, awaiting or reached. Decided proposals stay as the record of the reasoning. | None; the concluding ADR is binding. |
 | `docs/research/` | Findings with sources. Dated. | Informative only. |
 | `docs/specs/` | Specifications: archive format, data model, lifecycle, threat model. | Binding for implementation. |
 | `docs/legal/` | Drafts of privacy notice, register, DPIA, mentions légales, consent texts. | Binding once published. |
@@ -55,9 +58,11 @@ Directories that do not exist yet are created when their first document is writt
 
 ## Terminology
 
-The individual contribution is a **testimony** (plural "testimonies") in code, URLs, identifiers and documentation. The plan's earlier "voices" was a terminology mistake and must not reappear. Other terms: "contributor", "archival record", "edition" (public: "time capsule"), "context", "reference shelf".
+The individual contribution is a **testimony** (plural "testimonies"; French "témoignage") everywhere: interface, code, URLs, identifiers and documentation ([ADR 0011](docs/decisions/0011-testimony-in-the-interface.md)). "Voices" and "entry" were earlier wordings and must not reappear. Other terms: "contributor", "archival record", "edition" (public: "time capsule"), "context", "reference shelf".
 
-Public interface copy uses plain wording: "sign the guestbook", "read the guestbook", "time capsule". Whether visible interface text calls a single contribution "testimony" or "entry" (plan section 38) is an open owner question. Until it is settled, "entry" may appear only in interface copy, never in code, URLs or documentation.
+Public interface copy stays plain: "sign the guestbook", "leave a testimony", "read the guestbook", "time capsule". Methodology terms such as "corpus", "archival record" or "Zeitzeugnis" belong in methodology pages and internal documentation.
+
+Decided proposals stay in `docs/proposals/` as the record of how a decision was reached, with a status line pointing to the ADR that concluded them.
 
 Dated research documents in `docs/research/` keep the wording of their date and are not rewritten for terminology. Data model names should be consistent with [docs/specs/](docs/specs/).
 

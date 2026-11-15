@@ -1,6 +1,6 @@
 # Stack RFP: choosing the application framework for The Artificial Intelligence Guestbook
 
-Status: Proposal - awaiting owner decision (criteria revised 2026-11-15, section 4.3)
+Status: Concluded (2026-11-15). Django 5.2 LTS on PostgreSQL 18 adopted: [ADR 0010](../decisions/0010-stack-django-postgresql.md). Kept as the record of the decision (criteria revised 2026-11-15, section 4.3; owner answers in section 13).
 
 Date: 2026-11-15
 
@@ -797,7 +797,7 @@ Even with churn ignored entirely, Next.js stays second to last and SvelteKit sta
 - **About a third of the weight measures what the stack provides first-party for one person:** admin 8, i18n 8, magic links 6, database and search 6, jobs 4, which is 32 points. Next.js, SvelteKit and WordPress are popular for work where those pieces come from elsewhere: a team, hosted services or plugins. Here, every missing piece is assembled and maintained by one person.
 - **A 55 is not a failure.** On a 20 to 100 scale the midpoint is 60, so the popular frameworks sit around the middle: adequate with significant gaps for this use.
 - **Bare Node.js survives because the sum is compensatory.** Its fives on operations, dependencies and archive fit pay for its ones and twos on admin, magic links, database and security. The real cost of the second group is not linear. Hand-written sessions, CSRF protection, escaping and WebAuthn are a permanent security liability for one person, and a 2 out of 5 understates that. This is the limit of a weighted-sum method, and the reason for the gates.
-- **Option, not applied by default (question 13):** a non-compensatory floor of 3 on security. It would exclude bare Node.js in its pure form, WordPress and Next.js, and leave the other ten candidates. Minimal TypeScript (section 6.13) scores 3 and clears it.
+- **Option, declined by the owner (question 13):** a non-compensatory floor of 3 on security. It would exclude bare Node.js in its pure form, WordPress and Next.js, and leave the other ten candidates. Minimal TypeScript (section 6.13) scores 3 and clears it.
 
 ## 8. Architecture sketch (applies to any winner)
 
@@ -923,6 +923,17 @@ If the owner decides that TypeScript should dominate, the strongest direction is
 13. Should security be a non-compensatory floor, so that a candidate scoring below 3 is excluded however well it does elsewhere (section 7.3)?
 14. Do you accept the revised criteria and weights of section 4.3?
 15. If TypeScript should dominate, is minimal TypeScript (section 6.13) acceptable, given its hand-built admin and its reliance on several single-maintainer libraries without published security policies?
+
+Owner answers (2026-11-15):
+
+- 1: Django is adopted.
+- 2: PostgreSQL 18.
+- 3: Django 5.2 LTS, tracking the latest 5.2 patch release.
+- 13: no security floor.
+- 14: the revised criteria and weights are accepted.
+- 15: minimal TypeScript was a possible axis, not adopted.
+- 12 no longer applies.
+- Questions 4 to 11 are implementation choices, carried as follow-ups in [ADR 0010](../decisions/0010-stack-django-postgresql.md). Question 11 is settled there too: the archive specification comes before the scaffold.
 
 ## 14. Sources
 

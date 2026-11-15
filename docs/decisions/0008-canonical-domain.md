@@ -1,6 +1,6 @@
 # 0008. Canonical domain: theaiguestbook.org, no defensive registrations
 
-Status: Accepted (2026-11-15). Takes effect when the domain is registered.
+Status: Accepted (2026-11-15). In effect: registered at OVHcloud on 2026-11-15 ([operations record](../operations/domain.md)).
 
 Issue: #8
 
@@ -23,8 +23,7 @@ The owner judged defensive registrations unnecessary for a project of this scale
 
 ## Consequences
 
-- The `<domain>` placeholder in the specifications becomes `theaiguestbook.org` once registered.
-- Registration is first come, first served. Until the owner registers it, the decision is at risk.
+- The specifications use `theaiguestbook.org` in place of the earlier `<domain>` placeholder.
 - Domain, DNS and the project mailbox sit with one provider. A lockout of the OVHcloud account would affect all three, but not the site or the data on the VPS. Accepted for one custodian, with the account secured by two-factor authentication and backup codes kept in the succession envelope.
 - The public-launch gate (#34) must include extending the registration term.
 - Someone else may register `theaiguestbook.fr`, `.com` or `aiguestbook.org` and impersonate the project. Accepted. Revisit if impersonation or phishing appears, or if the project grows enough to be a target.

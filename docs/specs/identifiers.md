@@ -6,7 +6,7 @@ Issue: #15
 
 Basis: plan sections 12, 14, 19, 22 and 33; [Archival model](../constitution/archival-model.md); [ADR 0006](../decisions/0006-archive-first-replaceable-application.md); [domain and persistence research](../research/domain-and-persistence.md), section 3.
 
-Identifiers belong to the archive, not to the application. They must survive redesigns, re-implementations and changes of custodian. The domain is written `<domain>` below until #8 is decided.
+Identifiers belong to the archive, not to the application. They must survive redesigns, re-implementations and changes of custodian. The domain is `theaiguestbook.org` ([ADR 0008](../decisions/0008-canonical-domain.md)).
 
 ## 1. Testimony identifiers
 
@@ -40,11 +40,11 @@ Readers copy IDs by hand. Lookups normalize input before matching: case-insensit
 
 | Resource | Permanent URL | Notes |
 | --- | --- | --- |
-| Testimony | `https://<domain>/testimonies/<public-id>` | Language-neutral. This is the form used in citations and archives. |
-| Testimony, localized interface | `https://<domain>/<locale>/testimonies/<public-id>` | `<locale>` is `en` or `fr`, later more. Linked with `hreflang`. The neutral URL redirects (302, `Vary: Accept-Language`) to the visitor's preferred interface locale. |
-| Edition | `https://<domain>/time-capsules/<edition-id>` | See section 4. |
-| Context document | `https://<domain>/context/<slug>` | See section 5. |
-| Reference record | `https://<domain>/references/<slug>` | See section 5. |
+| Testimony | `https://theaiguestbook.org/testimonies/<public-id>` | Language-neutral. This is the form used in citations and archives. |
+| Testimony, localized interface | `https://theaiguestbook.org/<locale>/testimonies/<public-id>` | `<locale>` is `en` or `fr`, later more. Linked with `hreflang`. The neutral URL redirects (302, `Vary: Accept-Language`) to the visitor's preferred interface locale. |
+| Edition | `https://theaiguestbook.org/time-capsules/<edition-id>` | See section 4. |
+| Context document | `https://theaiguestbook.org/context/<slug>` | See section 5. |
+| Reference record | `https://theaiguestbook.org/references/<slug>` | See section 5. |
 
 Rules:
 
@@ -81,13 +81,12 @@ Private views of a contributor's own unpublished testimonies are reachable only 
 Each testimony page offers a copyable citation that respects the contributor's chosen public identity:
 
 ```text
-<Display name | "Anonymous">, testimony <public-id>, The Artificial Intelligence Guestbook, <publication date, ISO 8601>. https://<domain>/testimonies/<public-id>
+<Display name | "Anonymous">, testimony <public-id>, The Artificial Intelligence Guestbook, <publication date, ISO 8601>. https://theaiguestbook.org/testimonies/<public-id>
 ```
 
 A pseudonym is cited as given. An anonymous testimony is cited as "Anonymous" and never with any other identifying metadata. When an edition is cited, ` Time capsule <edition-id>.` is appended.
 
 ## Open questions
 
-- The exact domain (#8).
 - How translations are addressed: one per language, or several per language (human and machine) with their own identifiers. To be settled in the data model (#14).
 - Whether testimony fragments get stable anchors for quoting (plan section 14 says optional).

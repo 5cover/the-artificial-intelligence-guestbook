@@ -238,6 +238,8 @@ Privacy point: a sequential ID exposed at submission time would let anyone who s
 - BagIt (RFC 8493, Informational, October 2018): a bag has bagit.txt, a data/ directory, and manifest files with checksums; SHA-256 and SHA-512 are required and SHA-512 is the default [verified, rfc-editor]. Lesson: a self-describing transfer unit that does not need the application. Recommended for each edition as the transfer container.
 - OCFL 1.1 (October 2022; 1.1.1 editorial update November 2024): each object has an inventory.json, version directories are "expected to be immutable" (section 3.3), sha512 is recommended and sha256 is also allowed, and the layout works on plain disk storage without a database [verified, ocfl.io 1.1 spec]. Lesson: OCFL keeps every edition readable without the application. Its immutability is a conflict with the withdrawal design in plan section 20: a privacy revision must remove content from earlier version directories through a deliberate purge that is recorded as a tombstone. That procedure is not defined by the spec and must be designed (open question).
 
+Update, 2026-11-15: the OCFL layout below is superseded. The [archive format](../specs/archive-format.md) (section 10) makes each revision a separate BagIt bag, because OCFL 1.1 treats versions as immutable and defines no purge; the [archive-failures research](archive-failures.md), section 4.3, reaches the same conclusion. The text below is kept as it was written.
+
 Suggested edition layout (illustrative, to be refined):
 
 - An OCFL object `the-ai-guestbook-editions`, with versions 2027.0, 2027.1 and so on.

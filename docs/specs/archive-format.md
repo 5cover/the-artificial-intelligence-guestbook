@@ -26,10 +26,12 @@ the-ai-guestbook-2027.0/
   bagit.txt
   bag-info.txt
   manifest-sha512.txt
+  manifest-sha256.txt
   tagmanifest-sha512.txt
+  tagmanifest-sha256.txt
   tagmanifest-sha512.txt.sig          detached signature (section 6)
   data/
-    README.txt                        what this archive is, in English
+    README.txt                        what this archive is and covers, in English (section 2.2)
     README.fr.txt                     the same in French
     LICENSE.txt                       licences of the compilation and its parts (section 7)
     CHANGELOG.txt                     revision history of this edition
@@ -44,9 +46,13 @@ the-ai-guestbook-2027.0/
       <public-id>.txt                 plain-text rendering (section 4)
     index.json                        list of testimonies with summary fields
     index.csv                         the same, for spreadsheets (RFC 4180)
+    paths.csv                         every public ID ever published, with its path or "withdrawn"
     withdrawals.json                  withdrawal list (section 5)
+    withdrawals.csv                   the same, as CSV
     context/
-      <slug>.<language>.md            context documents as authored (CommonMark)
+      <slug>.<language>.html          context documents, canonical form
+      <slug>.<language>.txt           plain-text rendering
+      <slug>.<language>.md            source as authored, a derived copy (CommonMark)
     references/
       <slug>.json                     reference shelf records
     snapshots/
@@ -87,6 +93,27 @@ Payload-Oxum: <octets>.<files>
 
 The BagIt fields come from RFC 8493. The `Edition-*` and `Format-Version` fields are this project's own extension. They are documented in `data/schema/README.txt`.
 
+Bag rules ([archive-failures research](../research/archive-failures.md), section 4.1):
+
+- payload and tag manifests are written in both SHA-512 and SHA-256, so that either common validator can check the bag;
+- there is no `fetch.txt`: the bag is complete, and every payload file appears in every manifest;
+- canonical content is UTF-8 plain text, JSON, CSV and HTML. Markdown is never canonical, because it is not in the Library of Congress Recommended Formats Statement and has no single standard; it ships only as a derived copy. No database dump or application-specific serialization is canonical.
+
+### 2.2 README coverage statement
+
+`README.txt` and `README.fr.txt` state, in plain language:
+
+- what the archive is;
+- the period and cutoff the edition covers;
+- how many testimonies it contains;
+- what it excludes: unmoderated, rejected and withdrawn testimonies, and all private data;
+- its licences;
+- how to verify the package (section 6), and how to cite the edition and a testimony;
+- its relation to earlier revisions;
+- the withdrawal policy, including that copies distributed before a revision cannot be recalled.
+
+A collection that does not say what it holds cannot be trusted later (archive-failures research, lessons on coverage).
+
 ## 3. Testimony record
 
 One JSON object per testimony, `data/testimonies/<public-id>.json`. Field names and values are the `public` fields of the [data model](data-model.md). Absent optional fields are omitted, never written as `null`, so that "not given" is unambiguous.
@@ -94,6 +121,7 @@ One JSON object per testimony, `data/testimonies/<public-id>.json`. Field names 
 ```json
 {
   "format_version": 0,
+  "edition_id": "2027.0",
   "public_id": "7q4km2xd",
   "url": "https://theaiguestbook.org/testimonies/7q4km2xd",
   "language": "fr",
@@ -186,9 +214,22 @@ Nothing else is listed: no text, identity or reason ([deletion lifecycle](deleti
 
 ## 6. Integrity and signature
 
-1. `manifest-sha512.txt` and `tagmanifest-sha512.txt` follow RFC 8493. SHA-512 is the BagIt default (domain research, section 4).
+1. The manifests and tag manifests follow RFC 8493, in SHA-512 (the BagIt default; domain research, section 4) and SHA-256.
 2. Proposal: `tagmanifest-sha512.txt` is signed with an OpenPGP detached signature (RFC 9580), which libraries and archives recognize widely. The public key is published in the repository, on the website and in each edition's `README.txt`. Key custody and succession belong to #33.
-3. The project keeps a public registry of editions (proposal: `https://theaiguestbook.org/time-capsules/editions.json`, also in the repository). It lists every revision ever published, including superseded ones, with its edition ID, build date, state and the SHA-512 of its `tar.gz`. A mirror can then tell exactly which revision it holds, even after the project has deleted it.
+3. The project keeps a public registry of editions (proposal: `https://theaiguestbook.org/time-capsules/editions.json`, also in the repository). For every revision ever published, including superseded ones, it lists the edition ID, build date and state, the SHA-512 of its `tar.gz`, and the SHA-256 of each manifest. A mirror can then tell exactly which revision it holds, even after the project has deleted it. The digests must live outside the bag, because a bag can be regenerated together with altered content (archive-failures research, section 4.2).
+4. The full file list of each edition, with sizes and SHA-256 digests, is published alongside the registry.
+
+### 6.1 Copies and fixity
+
+1. Proposal: each current edition revision exists in at least three copies, in at least two places, under at least two custodies:
+   - project hosting;
+   - the off-site backup storage (#31);
+   - deposit with at least one independent institution (#42).
+
+   One copy is not preservation: MySpace lost a decade of uploads in a migration without a second copy (archive-failures research, lesson 1).
+2. Every copy is checked against the published digests at a fixed interval (proposal: yearly, and after any migration), and the result is logged in `docs/operations/`.
+3. A damaged copy is repaired only from a copy that matches the published digests. Manifests are never regenerated to fit a changed file.
+4. Editions are downloadable in bulk, without login, CAPTCHA or per-item requests (archive-failures research, the Yahoo Groups case).
 
 ## 7. Licence file
 
@@ -219,6 +260,8 @@ It never records who moderated what.
 4. Round-trip test: the edition is imported into an empty database and re-exported. The two packages must be identical apart from `Bagging-Date` and the signature.
 5. The test suite asserts that no `private`, `operational` or `evidence` field name appears anywhere in the package.
 6. The static HTML is checked to work from the file system with no network access.
+7. Independent reader: before publication, the edition is read by a separate program written from `data/schema/README.txt` alone, in a different language from the exporter. It must reconstruct every testimony and the withdrawal list. Since the exporter is Python (ADR 0010), the reader is written in another language, for example TypeScript. This proves that the documentation, not the application, is sufficient (archive-failures research, section 4.2).
+8. Yearly drill: one edition is restored from one copy into an empty directory, verified, and read by the independent reader. The elapsed time is recorded together with the result.
 
 ## 10. Privacy revisions
 
@@ -238,4 +281,7 @@ It never records who moderated what.
 - Package serialization (`tar.gz` proposed) and signature scheme (OpenPGP proposed).
 - Whether editions also include a single concatenated plain-text file of all testimonies, for readers without any tooling.
 - The permanent URLs of the live withdrawal list and the editions registry. They extend the [identifiers](identifiers.md) spec once decided.
-- Lessons from the archive-failures research, to be incorporated.
+- Whether canonical testimony bodies are also rendered as PDF/A or an XML format, which the Library of Congress lists as preferred, while plain text is only in its acceptable tier (archive-failures research, question 4).
+- Whether contributors may choose an embargo, publication after a dated delay, as oral-history archives offer. If so, each record needs an access field, and the consent text must say that an embargo may not hold against a court order (archive-failures research, section 4.4, the Belfast Project case).
+- The number of copies, the institution for deposit (#42), and the fixity interval.
+- Whether editions receive a DOI (domain research, section 3.3: DOI records survive deletion).

@@ -44,6 +44,8 @@ Open decisions are gathered in the [decision queue](proposals/README.md).
 - [Legal bases, retention duty and minors](proposals/legal-bases-and-minors.md): seven owner decisions on GDPR bases, decree 2021-1362, the DSA, age thresholds, parental consent, explicit consent and the DPIA (#12, #17, #18).
 - [Licences for the project's own material and for editions](proposals/project-licensing.md) (#43).
 - [Infrastructure](proposals/infrastructure.md): VPS, encrypted immutable backups at a second provider, transactional email without tracking, cost, and lessons from real incidents (#9, #10, #31).
+- [Context pages](proposals/context-pages.md): editorial rules and a first set of nine pages (#36).
+- [Reference shelf](proposals/reference-shelf.md): record format, selection criteria and 22 verified external resources (#37).
 
 ## Research
 

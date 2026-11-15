@@ -13,6 +13,7 @@ Proposals present options for an owner decision. Once decided, a proposal stays 
 | [Licences for the project's own material and for editions](project-licensing.md) | #43 | Awaiting decision: L1 to L5 |
 | [Infrastructure](infrastructure.md) | #9, #10, #31 | Awaiting decision: VPS, backups, email |
 | [Context pages](context-pages.md) | #36 | Awaiting review: editorial rules and first set |
+| [Reference shelf](reference-shelf.md) | #37 | Awaiting review: record format, selection criteria, 22 verified records |
 
 ## Decision queue
 
@@ -59,6 +60,11 @@ Decisions waiting for the owner, grouped by the work they unblock. The recommend
 ### Context (#36)
 
 1. Editorial rules, first set of pages and who writes them ([context pages](context-pages.md)).
+
+### Reference shelf (#37)
+
+1. The record format, including the five added fields and naming against plan section 18 ([reference shelf](reference-shelf.md), section 7).
+2. Whether all-rights-reserved resources are listed as metadata only, and whether sources run by individuals are allowed ([reference shelf](reference-shelf.md), section 7).
 
 ### Constitution (#2)
 

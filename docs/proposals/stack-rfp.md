@@ -17,6 +17,7 @@ The owner asked for a comparison of application stacks, not a build. The short v
 - Django (Python, with PostgreSQL 18) scores highest on the weighted criteria, mainly because of its first-party admin, its gettext-based i18n, its PostgreSQL full-text search with French and English configurations, a clear foundation governance model and a security policy that was verified. Its weak points are the lack of a first-party magic-link flow, no production worker for its new Tasks framework, and no first-party rate limiter found in this pass.
 - Symfony 7.4 LTS (PHP) is the runner-up. It has the longest verified LTS window of the candidates, a first-party login-link (magic link) feature, strong XLIFF and ICU translation support and a Doctrine-backed job transport. It has no first-party admin and it is a PHP stack the owner does not currently use.
 - The strongest TypeScript option is SvelteKit with Drizzle and Paraglide. It is the best fit for no-JavaScript forms and for localized URLs, but it leaves admin, magic-link auth and background jobs to the operator. AdonisJS was evaluated but its first-party docs did not show magic-link auth and several details could not be verified.
+- WordPress (added 2026-11-15) scores 57.8, between SvelteKit and AdonisJS. It has an excellent editor, native "pending review" moderation, core privacy-request tools and the largest successor pool. Against that: no PostgreSQL or real full-text search, every other requirement delivered by plugins (where 91 to 97% of ecosystem vulnerabilities are), no LTS, governance under antitrust litigation, and a post-centred data model that fights the archive-first principle.
 - Architecture is largely independent of the winner. ADR 0006 makes the archive format the primary artefact, so the framework choice is less consequential than usual. This document recommends the archive specification (issue #13) be written before the application scaffold.
 - Addendum A applies the criteria in reverse to design the worst possible stack, and derives five pass/fail gates from it. Addendum B tests the owner's point that TypeScript expresses complex data models better than Python. Addendum C evaluates having no framework at all (bare Node.js, JSDoc types, no build step). It scores 65.4 (66.5 with the type criterion), above every TypeScript framework, and lists the security plumbing it would have to hand-write.
 
@@ -298,7 +299,7 @@ Verified facts:
 - Form actions: they work without client-side JavaScript; use:enhance is a progressive enhancement that emulates the browser's native submission [S47]. This is the strongest verified fit for R14 among the TypeScript candidates.
 - Paraglide JS: MIT-licensed compile-time i18n, v2 core package; typed message functions; plurals through Intl.PluralRules; ICU through a plugin; built-in locale URL mapping such as /en/about and /de/ueber [S48].
 - Drizzle ORM: the latest stable tag on the releases page is 0.45.4 (8 October); 1.0.0-rc.5 is a pre-release (21 October) [S49]. A stable 1.0 has not shipped as of this check.
-- Astro (considered, see 6.10): i18n routing verified, no message catalogs or pluralization on the routing page [S46].
+- Astro (considered, see 6.11): i18n routing verified, no message catalogs or pluralization on the routing page [S46].
 - Not verified: magic-link libraries for SvelteKit, background job libraries for Node/PostgreSQL, the SvelteKit upgrade guide, and any admin framework.
 
 Strengths:
@@ -335,13 +336,65 @@ Weaknesses:
 
 Verdict: AdonisJS is a credible TypeScript option, but the verified gaps are on the critical path (magic link, background jobs) and the succession risk is not yet assessed. On verified evidence it is behind SvelteKit in the TypeScript comparison (section 7).
 
-### 6.10 Astro (considered, not a primary candidate)
+### 6.10 WordPress (PHP CMS)
+
+Added 2026-11-15 at the owner's request, evaluated on the same criteria as the frameworks above. WordPress is a content management system rather than a framework: the question is whether the testimony lifecycle can be built on it as plugins and a theme.
+
+Verified facts:
+
+- Releases: WordPress 7.0 shipped on 20 May 2026 after a six-week delay; 7.1 on 19 August 2026; 7.1.4, a security release, on 28 October 2026; 7.2 reportedly planned for December 2026 [S60, secondary summaries].
+- Requirements for 7.0: minimum PHP raised from 7.2.24 to 7.4. The hosting handbook recommends PHP 8.4 or 8.5 for new installs, and MySQL 8.4 or MariaDB 10.11 [S61, search summary].
+- Security policy: "officially only the latest version of WordPress is supported". Fixes are backported to older branches "as a courtesy". Branches 4.1 to 4.6 stopped receiving updates in July 2025. There is no LTS line [S62, search summary].
+- Ecosystem vulnerabilities, from Patchstack's yearly reports:
+  - 2023: 97% in plugins, 3% in themes, 0.2% in core [S63].
+  - 2024: 7,966 new vulnerabilities, 96% in plugins, 7 in core [S63].
+  - 2025: 11,334 new vulnerabilities, 91% in plugins, 9% in themes, 6 in core [S64, secondary coverage of the 2026 report].
+- Governance: WordPress.org is effectively controlled by Automattic's chief executive. The WP Engine v. Automattic litigation started in 2024. On 24 September 2026 a federal judge reinstated antitrust claims that Automattic used its control of WordPress.org to raise prices and force competitors to pay for previously free access. The case remains open. Automattic's own board briefly put its chief executive on leave in September 2026 [S65, secondary].
+- Known from general knowledge, not verified in this pass:
+  - Core supports only MySQL and MariaDB; SQLite only through a feature plugin, and no PostgreSQL.
+  - Core search uses SQL pattern matching, with no stemming or relevance ranking.
+  - Core has a "pending review" post status and a Contributor role that can write but not publish.
+  - Core has had privacy tools for exporting and erasing personal data since 4.9.6.
+  - Post revisions are stored, and WP-Cron runs on page visits unless replaced by system cron.
+  - WP-CLI exists.
+  - Interface translation uses gettext. Multilingual content and locale URLs need a plugin such as Polylang or WPML.
+  - Comments, pingbacks and XML-RPC are enabled by default.
+
+Strengths:
+
+- Its moderation primitives map naturally onto the plan: a "pending" status and a role that can submit but not publish.
+- The most polished editing interface of any candidate. It would make Context pages and the reference shelf easy to maintain (plan sections 16, 18).
+- Core privacy tools for data-subject export and erasure exist, which no framework provides out of the box.
+- The largest talent pool on the web. A successor who knows WordPress is the easiest to find of any candidate.
+- Core itself has a good security record, automatic background updates, and strong backward compatibility.
+
+Weaknesses:
+
+- It is built for publishing posts, not for a privacy-separated archive. Testimonies, authorship disclosures, translation provenance and public identity would be forced into posts plus key-value metadata. Private and public fields would share tables. Redaction that preserves the original privately would be custom code fighting post revisions.
+- Nearly every requirement beyond core is a plugin, and therefore a vendor and a vulnerability stream:
+  - FR/EN content and locale URLs;
+  - magic links and admin second factor;
+  - search with French support;
+  - a no-JavaScript front-end contribution form, since contributors must not land in the JavaScript block editor;
+  - rate limiting and proof-of-work.
+  
+  That is where 91 to 97% of ecosystem vulnerabilities are.
+- No PostgreSQL, and no real full-text search in core.
+- The most attacked web software. Its default login and XML-RPC endpoints draw constant automated scanning (judgement).
+- Social features are on by default and must be disabled, and kept disabled, against the "no social network" principle (plan section 15).
+- No LTS. Only the latest release is supported, so updates are continuous. Automatic updates mitigate this for core, not for plugins.
+- Governance is concentrated in one person, and that power is the subject of unresolved antitrust litigation. Every plugin and core update passes through WordPress.org.
+- Archive-first fit is poor. Content is stored with editor block markup embedded in the post body, and the native export format is not the archive schema. A custom exporter and a custom data layer would carry the whole archive-first principle.
+
+Verdict: WordPress is strongest where the plan asks least (editing context pages, finding a successor) and weakest where the plan asks most: the privacy-separated data model, the archive export, multilingual testimonies, passwordless authentication and a small attack surface. Not recommended as the application. Using it only for Context pages would add a second system holding an admin login and personal data, contrary to [privacy assumption](../constitution/privacy-assumptions.md) 10.
+
+### 6.11 Astro (considered, not a primary candidate)
 
 - Astro's current major is 7 (astro@7.4.12 on 13 November in the GitHub releases page) [S46].
 - Built-in i18n routing: locale folders, prefixDefaultLocale, fallback and domain mapping [S46]. No message catalogs or pluralization are covered on that page [S46].
 - Astro is an excellent static-HTML generator. It fits the "static HTML for published testimonies and editions" idea (ADR 0006) well, but a dynamic app (magic links, admin, moderation queue) is not its centre of gravity. It is noted as a possible companion for Context and editions, not as the application.
 
-### 6.11 CMS-on-framework options for Context pages (optional, not mandatory)
+### 6.12 CMS-on-framework options for Context pages (optional, not mandatory)
 
 - Wagtail (on Django): Wagtail 7.4 is LTS (released 4 May 2026) with security support until 2 November 2027; Wagtail 8.1 was released 2 November 2026 [S57]. A page-tree CMS would add an editor UI for Context pages. The cost is another dependency stream and another upgrade stream. Judgement: markdown files in the repository, rendered by the app, are simpler and more archive-friendly. Not required.
 - Filament (on Laravel): 5.11.3 active (13 November) [S23]. Relevant only if Laravel were chosen.
@@ -352,30 +405,31 @@ Verdict: AdonisJS is a credible TypeScript option, but the verified gaps are on 
 
 Scores are 1 to 5 (5 best). They are judgements based on the verified facts above and on general experience where marked "not verified". Weighted total = sum of (score times weight) divided by 5, so the maximum is 100.
 
-| # | Criterion | Weight | Django | Symfony 7.4 | Go | ASP.NET Core | Rails 8.1 | Laravel 13 | Phoenix | SvelteKit | AdonisJS |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Longevity | 11 | 5 | 4 | 4 | 4 | 3 | 3 | 3 | 3 | 2 |
-| 2 | Upgrade burden | 9 | 4 | 4 | 5 | 3 | 2 | 3 | 3 | 2 | 3 |
-| 3 | Admin | 8 | 5 | 3 | 1 | 2 | 2 | 3 | 2 | 1 | 2 |
-| 4 | i18n | 8 | 5 | 5 | 3 | 4 | 3 | 3 | 4 | 4 | 4 |
-| 5 | Magic-link ecosystem | 7 | 3 | 4 | 2 | 2 | 3 | 3 | 4 | 2 | 2 |
-| 6 | Forms and no-JS | 7 | 5 | 4 | 4 | 4 | 4 | 4 | 3 | 5 | 3 |
-| 7 | PostgreSQL integration | 6 | 5 | 3 | 3 | 4 | 4 | 3 | 4 | 3 | 3 |
-| 8 | Security defaults and process | 9 | 5 | 4 | 4 | 4 | 4 | 3 | 3 | 3 | 3 |
-| 9 | Jobs without extra infra | 5 | 3 | 5 | 3 | 3 | 5 | 4 | 3 | 2 | 2 |
-| 10 | Operations on one VPS | 6 | 4 | 4 | 5 | 4 | 4 | 4 | 4 | 4 | 4 |
-| 11 | Successor-friendliness | 6 | 5 | 4 | 3 | 3 | 4 | 4 | 2 | 3 | 3 |
-| 12 | Dependency footprint | 5 | 4 | 3 | 5 | 3 | 3 | 3 | 4 | 2 | 2 |
-| 13 | Testing | 3 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 3 |
-| 14 | Archive-first fit | 10 | 4 | 4 | 4 | 4 | 3 | 3 | 3 | 4 | 3 |
-| | Weighted total (out of 100) | 100 | 88.6 | 78.8 | 71.4 | 69.0 | 66.0 | 65.4 | 64.2 | 59.8 | 55.6 |
+| # | Criterion | Weight | Django | Symfony 7.4 | Go | ASP.NET Core | Rails 8.1 | Laravel 13 | Phoenix | SvelteKit | AdonisJS | WordPress |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Longevity | 11 | 5 | 4 | 4 | 4 | 3 | 3 | 3 | 3 | 2 | 3 |
+| 2 | Upgrade burden | 9 | 4 | 4 | 5 | 3 | 2 | 3 | 3 | 2 | 3 | 4 |
+| 3 | Admin | 8 | 5 | 3 | 1 | 2 | 2 | 3 | 2 | 1 | 2 | 4 |
+| 4 | i18n | 8 | 5 | 5 | 3 | 4 | 3 | 3 | 4 | 4 | 4 | 3 |
+| 5 | Magic-link ecosystem | 7 | 3 | 4 | 2 | 2 | 3 | 3 | 4 | 2 | 2 | 2 |
+| 6 | Forms and no-JS | 7 | 5 | 4 | 4 | 4 | 4 | 4 | 3 | 5 | 3 | 3 |
+| 7 | PostgreSQL integration | 6 | 5 | 3 | 3 | 4 | 4 | 3 | 4 | 3 | 3 | 1 |
+| 8 | Security defaults and process | 9 | 5 | 4 | 4 | 4 | 4 | 3 | 3 | 3 | 3 | 2 |
+| 9 | Jobs without extra infra | 5 | 3 | 5 | 3 | 3 | 5 | 4 | 3 | 2 | 2 | 3 |
+| 10 | Operations on one VPS | 6 | 4 | 4 | 5 | 4 | 4 | 4 | 4 | 4 | 4 | 4 |
+| 11 | Successor-friendliness | 6 | 5 | 4 | 3 | 3 | 4 | 4 | 2 | 3 | 3 | 5 |
+| 12 | Dependency footprint | 5 | 4 | 3 | 5 | 3 | 3 | 3 | 4 | 2 | 2 | 2 |
+| 13 | Testing | 3 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 3 | 2 |
+| 14 | Archive-first fit | 10 | 4 | 4 | 4 | 4 | 3 | 3 | 3 | 4 | 3 | 2 |
+| | Weighted total (out of 100) | 100 | 88.6 | 78.8 | 71.4 | 69.0 | 66.0 | 65.4 | 64.2 | 59.8 | 55.6 | 57.8 |
 
-Ranking: Django (88.6), Symfony (78.8), Go (71.4), ASP.NET Core (69.0), Rails (66.0), Laravel (65.4), Phoenix (64.2), SvelteKit (59.8), AdonisJS (55.6).
+Ranking: Django (88.6), Symfony (78.8), Go (71.4), ASP.NET Core (69.0), Rails (66.0), Laravel (65.4), Phoenix (64.2), SvelteKit (59.8), WordPress (57.8), AdonisJS (55.6).
 
 Reading the matrix:
 
 - Django's lead over Symfony comes mainly from admin (+3 points times weight 8), search and PostgreSQL integration, security process, longevity and successor-friendliness. Symfony leads on jobs and magic-link ecosystem, which are real but smaller in weight.
 - Go ranks third mostly because of upgrade burden, dependency footprint and operations. It scores 1 on admin and 2 on magic links, which the one-person constraint makes expensive. A reasonable owner who values minimal dependencies more than first-party features could reasonably put Go higher.
+- WordPress has the most uneven profile in the matrix. It scores 4 on admin and 5 on successor-friendliness, among the best of all candidates, but 1 on database, 2 on security, 2 on archive fit and 2 on dependency footprint. Its strengths are in content editing, which the plan needs least; its weaknesses are in the privacy-separated data model and the export, which the plan needs most.
 - The scores are judgements. A score of 3 means "adequate with known gaps", not "average". The matrix does not weigh the owner's TypeScript familiarity, the local tooling on Windows, or personal taste; those are discussed in section 10.
 - No formal sensitivity analysis was run. Django leads Symfony by 9.8 points, and the lead depends mostly on the admin, PostgreSQL and security weights. Treat the order from third place down as unstable; it is within the range that different judgements could move.
 
@@ -558,6 +612,12 @@ Numbered sources. "Fetched" means the page was read in this pass through a fetch
 - [S57] <https://endoflife.date/wagtail> - fetched. Wagtail release and support table.
 - [S58] <https://github.com/thoughtbot/administrate> - fetched. Maintenance statement; no release date visible.
 - [S59] <https://rubyonrails.org/foundation> ; <https://rubyonrails.org/foundation/37signals> - search results only. Rails Foundation governance; not verified on the pages.
+- [S60] https://wp-umbrella.com/blog/wordpress-7-0-release-status-and-timeline/ and https://atlasum.net/blog/wordpress-7-1-4-security-release - search result summaries, 2026-11-15. WordPress 7.0, 7.1 and 7.1.4 release dates; 7.2 plan.
+- [S61] https://make.wordpress.org/hosting/handbook/compatibility/version/7-0/ - search result summary. PHP and database requirements for 7.0.
+- [S62] https://make.wordpress.org/security/ - search result summary. "Only the latest version" support policy, courtesy backports, end of 4.1-4.6 updates.
+- [S63] https://patchstack.com/whitepaper/state-of-wordpress-security-in-2024/ and https://patchstack.com/whitepaper/state-of-wordpress-security-in-2025/ - search result summaries. Plugin, theme and core vulnerability shares.
+- [S64] https://wp-content.co/patchstack-wordpress-security-report-2026-vulnerabilities-rises-hosting-defenses-struggles/ - secondary coverage of Patchstack's 2026 report.
+- [S65] https://techcrunch.com/2026/02/12/automattic-planned-to-target-10-competitors-with-royalty-fees-wp-engine-claims-in-new-filing/ and https://www.therepository.email/wp-engines-antitrust-claims-against-automattic-are-back-on-after-judge-reverses-earlier-dismissal - secondary. WP Engine v. Automattic status and the September 2026 ruling.
 - Repository documents: docs/plans/main.md; docs/decisions/0002-single-eu-vps.md; 0003-email-magic-link-auth.md; 0006-archive-first-replaceable-application.md; 0007-privacy-review-path.md; docs/research/domain-and-persistence.md; docs/constitution/archival-model.md; AGENTS.md.
 
 Not verified in this pass (listed so they are not mistaken for facts): Django deprecation policy and upgrade history; Django rate limiting; Django admin change-history storage; Python minimum for Django 6.x; Phoenix governance and security policy; Oban and Ecto full-text search; Laravel scheduler; Laravel and Rails i18n URL handling; ASP.NET localization and jobs; Go html/template, pgx and migration tools; AdonisJS Node requirement, Lucid, jobs and governance; SvelteKit magic-link and job libraries; Drizzle full-text search; Symfony full-text search; the licences of altcha-lib packages and the Sentinel server; Rails Foundation structure; Symfony governance today.
@@ -613,7 +673,7 @@ Lesson 8 means some criteria should be gates rather than weights. A candidate, a
 | G4 No-JS core | Reading testimonies and contributing work without client-side JavaScript. | Plan section 27; editorial principles |
 | G5 Supported line | A released, supported version line with a published security process and a known end-of-support date. | Plan sections 26, 28 |
 
-Judgement, not verified per candidate: all nine candidates in section 6 are self-hostable frameworks and can pass G1 to G5, so the gates do not change the ranking. Their value is in protecting future decisions about services added around the application.
+Judgement, not verified per candidate: the nine framework candidates in section 6 are self-hostable and can pass G1 to G5. WordPress passes G1 to G3 with care: erasure must reach post revisions, metadata and plugin tables. It is conditional on G4, because contributors must use a custom no-JavaScript front-end form, never the block editor. It is also conditional on G5, because only the latest release is supported and plugins have no support commitment at all. The gates therefore do not change the ranking. Their value is in protecting future decisions about services added around the application.
 
 ## Addendum B: data-model expressiveness and the TypeScript question
 
@@ -630,7 +690,7 @@ Judgement, from general knowledge of the languages rather than sourced in this p
 
 ### B.2 Sensitivity: adding the criterion
 
-Criterion 15, "type system and data-model expressiveness", scored 1 to 5 (judgement): SvelteKit 5, AdonisJS 5, ASP.NET Core 4, Symfony 3, Django 2, Go 2, Laravel 2, Phoenix 2, Rails 1. Totals are recomputed out of 100 with the original 14 weights unchanged.
+Criterion 15, "type system and data-model expressiveness", scored 1 to 5 (judgement): SvelteKit 5, AdonisJS 5, ASP.NET Core 4, Symfony 3, Django 2, Go 2, Laravel 2, Phoenix 2, Rails 1, WordPress 1 (PHP plus array-shaped hooks and key-value post metadata). Totals are recomputed out of 100 with the original 14 weights unchanged.
 
 | Candidate | Original | With criterion 15 at weight 8 |
 | --- | --- | --- |
@@ -643,6 +703,7 @@ Criterion 15, "type system and data-model expressiveness", scored 1 to 5 (judgem
 | Rails 8.1 | 66.0 | 62.6 |
 | Phoenix | 64.2 | 62.4 |
 | AdonisJS | 55.6 | 58.9 |
+| WordPress | 57.8 | 55.0 |
 
 For SvelteKit to tie Django on this criterion alone, it would need a weight of 48 against the other criteria's 100, almost half of the whole decision. Even rescoring SvelteKit's admin from 1 to 3, on the grounds that the moderation console is only a few screens, leaves it at about 66 against 85.
 
@@ -730,7 +791,7 @@ Judgement, using the same scale as section 7:
 | 15 | Type expressiveness (Addendum B) | 8 | 4 | JSDoc checked by `tsc` gives most of TypeScript's power, more verbosely |
 | | With criterion 15 | 108 | **66.5** | |
 
-Updated order with criterion 15: Django 85.0, Symfony 77.4, ASP.NET Core 69.8, Go 69.1, **bare Node 66.5**, Laravel 63.5, SvelteKit 62.8, Rails 62.6, Phoenix 62.4, AdonisJS 58.9.
+Updated order with criterion 15: Django 85.0, Symfony 77.4, ASP.NET Core 69.8, Go 69.1, **bare Node 66.5**, Laravel 63.5, SvelteKit 62.8, Rails 62.6, Phoenix 62.4, AdonisJS 58.9, WordPress 55.0.
 
 Variants:
 

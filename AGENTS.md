@@ -87,6 +87,7 @@ Dated research documents in `docs/research/` keep the wording of their date and 
 - Status workflow: `Idea` (captured), `Ready` (specified enough to start), `In Progress`, `Pending` (blocked on a decision, an external party or another item), `Nope` (deliberately not doing, reason on the item), `Done`.
 - When starting work on an issue, set it to `In Progress`. When a document or commit completes it, close the issue and set `Done`. New work discovered along the way becomes a new issue rather than an unrecorded intention.
 - The `gh` CLI is used for project operations. Project node ID: `PVT_kwHOAmiDks4Brvf4`. Status field ID: `PVTSSF_lAHOAmiDks4Brvf4zhqAwAU`.
+- Set board statuses with `./scripts/set-project-status.ps1 -Status 'In Progress' -Issue 13, 14` (PowerShell). It retries the transient GitHub API failures that are common here.
 
 ## Commits
 

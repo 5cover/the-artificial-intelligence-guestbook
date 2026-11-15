@@ -55,7 +55,8 @@ Stack-independent. Controls marked **(required)** are launch requirements; the r
 - **Unicode abuse.** Text is normalized to NFC. Bidirectional override characters and excessive combining marks are flagged for moderation, not silently stripped, because legitimate right-to-left text must survive.
 - **Secrets and credentials in testimonies.** Submissions are scanned against known credential patterns before review, and hits are flagged to the moderator (plan section 25).
 - **Third-party personal data and doxxing.** Handled by moderation (constitution), helped by flags for emails, phone numbers and street addresses detected in text.
-- **Re-identification of anonymous contributors.** No public account linkage; filters suppressed below a population threshold; no exact timestamps finer than the date on public pages; no exact age for minors (legal research). Exports apply the same rules.
+- **Re-identification of anonymous contributors.** No public account linkage; filters suppressed below a population threshold ([browsing and filters](browsing-and-filters.md)); no timestamps finer than the date on public pages, and only the month on tombstones; no public age at all for minors ([data model](data-model.md), section 2.4.1). Exports apply the same rules.
+- **Identification by writing style.** Stylometry, increasingly assisted by language models, can attribute anonymous text to known authors ([privacy research](../research/privacy-failures.md), lesson 3). No technical control prevents it. The mitigation is honesty: the consent text and a warning to anonymous contributors say so before submission (legal-bases proposal, D6). The archive offers no "similar testimonies" or style statistics that would make it easier.
 
 ### 3.4 Availability and abuse at scale
 
@@ -73,7 +74,9 @@ Stack-independent. Controls marked **(required)** are launch requirements; the r
 - **Export leakage of private fields.** Exports are built from an explicit allow-list of public fields. Every field in the data model is classified (public, private, operational), and a test fails if an unclassified field exists or a private field appears in an export **(required)**.
 - **Logs.** Application logs do not contain testimony text, emails or full IP addresses. Reverse-proxy logs have short retention. Retention may be constrained by law (legal research, section 6); the final values go in the retention schedule (#18).
 - **Unpublished content sent to third parties.** Unpublished testimonies are never sent to external services, including machine translation or AI tools. Only published testimonies may be machine-translated, and only through an EU processor under a DPA or a self-hosted system **(required)**.
-- **Provider access and legal requests.** EU-controlled processors with DPAs. A documented procedure for answering legal requests, including the right to challenge them and to inform the contributor where lawful.
+- **Provider access and legal requests.** EU-controlled processors with DPAs. A documented procedure for answering legal requests, including the right to challenge them and to inform the contributor where lawful. Contributors are told before submitting that confidentiality holds only to the extent French and EU law allow: lawful requests can reach the account email the project holds. In the Belfast Project, oral-history confidentiality promises were overridden by subpoenas ([archive-failures research](../research/archive-failures.md)).
+- **Identity documents arriving by email.** People sometimes send identity documents unasked, for example with a withdrawal request. They are never requested by default, and are deleted on receipt under the request record ([deletion lifecycle](deletion-lifecycle.md), section 1).
+- **Suspected illegal content held by the project.** The `quarantined` state ([data model](data-model.md), section 3) hides the content without deleting it, keeps its text out of the moderation interface by default, and follows the [illegal-content protocol](../operations/illegal-content.md).
 
 ### 3.7 Backups and editions
 
@@ -84,7 +87,9 @@ Stack-independent. Controls marked **(required)** are launch requirements; the r
 ### 3.8 Custodian accounts and domain
 
 - **Takeover of email, registrar, VPS, DNS, GitHub or backup accounts.** Hardware-key two-factor authentication on each, unique passwords in a password manager, recovery codes in escrow **(required)**.
-- **Domain hijack or lapse.** Registrar lock, DNSSEC, long registration with auto-renew, expiry monitoring, registrar separate from the VPS host (domain research).
+- **Domain hijack or lapse.** Registrar lock, DNSSEC, auto-renew, a registration extended to at least 5 years at launch, expiry monitoring, and a registrar separate from the VPS host ([ADR 0008](../decisions/0008-canonical-domain.md)).
+- **Domain or account suspension after unanswered abuse reports.** A registrar or host may suspend a service whose abuse reports go unanswered; this happened to a Mastodon instance ([moderation research](../research/moderation-failures.md)). The registrar and host notification mailboxes are read daily, and abuse reports are answered within 24 hours ([recurring duties](../operations/recurring-duties.md)).
+- **Lockout of a provider account.** Providers have locked accounts after abuse reports, with disputed warnings ([infrastructure proposal](../proposals/infrastructure.md), section 6). Domain, VPS and backups sit with three different providers, so that no single lockout removes the archive. The recovery path never depends on one account.
 - **Email spoofing of the project.** SPF, DKIM and DMARC on the canonical domain; defensive domains parked with `p=reject`.
 
 ### 3.9 Structural controls

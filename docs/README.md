@@ -66,6 +66,11 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 
 - [Domain](operations/domain.md): non-secret record of the domain's registration and configuration.
 - [Illegal content, threats and third-party notices](operations/illegal-content.md): draft custodian protocol (#41).
+- [Recurring duties](operations/recurring-duties.md): the custodial obligation as a calendar, from daily checks to yearly drills (#33).
+
+## Legal drafts
+
+- [Publishing rules](legal/publishing-rules.md): the closed list of moderation grounds with stable codes, review and reporting (#19).
 
 ## Procedures
 
@@ -75,5 +80,5 @@ Step-by-step guides. See [procedures/README.md](procedures/README.md).
 
 ## Planned
 
-- `legal/`: register, DPIA, privacy notice, mentions légales, publishing rules, consent texts (#19).
-- `operations/`: runbook, recurring duties, recovery, succession (#33).
+- `legal/`: register, DPIA, privacy notice, mentions légales, consent texts (#19), once the legal-bases proposal is decided.
+- `operations/`: recovery runbook and succession arrangements (#33), once the infrastructure is chosen.

@@ -118,6 +118,7 @@ Recommendation: one separate, mandatory statement for every submission, distinct
 The consent screen must also state the honest limits plainly, before submission. The [privacy research](../research/privacy-failures.md), section 5, gives suggested wording. In particular:
 
 - anonymity applies towards the public, not towards the operator;
+- confidentiality holds only to the extent French and EU law allow: a court or authority can lawfully obtain the account email the project holds, as the Belfast Project's interviewees learned ([archive-failures research](../research/archive-failures.md));
 - writing style, described events and the people mentioned can identify an author, and machine-assisted stylometry is improving;
 - each optional detail makes identification easier;
 - withdrawal cannot reach copies others already hold;

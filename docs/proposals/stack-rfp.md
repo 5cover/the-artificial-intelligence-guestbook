@@ -1,6 +1,6 @@
 # Stack RFP: choosing the application framework for The Artificial Intelligence Guestbook
 
-Status: Proposal - awaiting owner decision
+Status: Proposal - awaiting owner decision (criteria revised 2026-11-15, section 4.3)
 
 Date: 2026-11-15
 
@@ -12,15 +12,22 @@ Source tags such as [S12] refer to the numbered list in the Sources section. Any
 
 ## 1. Summary
 
-The owner asked for a comparison of application stacks, not a build. The short version:
+The owner asked for a comparison of application stacks, not a build. Thirteen options are scored on the same scale:
 
-- Django (Python, with PostgreSQL 18) scores highest on the weighted criteria, mainly because of its first-party admin, its gettext-based i18n, its PostgreSQL full-text search with French and English configurations, a clear foundation governance model and a security policy that was verified. Its weak points are the lack of a first-party magic-link flow, no production worker for its new Tasks framework, and no first-party rate limiter found in this pass.
-- Symfony 7.4 LTS (PHP) is the runner-up. It has the longest verified LTS window of the candidates, a first-party login-link (magic link) feature, strong XLIFF and ICU translation support and a Doctrine-backed job transport. It has no first-party admin and it is a PHP stack the owner does not currently use.
-- The strongest TypeScript option is SvelteKit with Drizzle and Paraglide. It is the best fit for no-JavaScript forms and for localized URLs, but it leaves admin, magic-link auth and background jobs to the operator. AdonisJS was evaluated but its first-party docs did not show magic-link auth and several details could not be verified.
-- WordPress (added 2026-11-15) scores 57.8, between SvelteKit and AdonisJS. It has an excellent editor, native "pending review" moderation, core privacy-request tools and the largest successor pool. Against that: no PostgreSQL or real full-text search, every other requirement delivered by plugins (where 91 to 97% of ecosystem vulnerabilities are), no LTS, governance under antitrust litigation, and a post-centred data model that fights the archive-first principle.
-- Next.js self-hosted (added 2026-11-15) scores 49.6, the lowest: the highest upgrade churn, a CVSS 10.0 exploited remote-code-execution bug in its Server Components protocol (December 2025), and nothing first-party beyond rendering. Vercel, its natural host, fails the EU-processing gate (G3): its DPA places primary processing in the US.
-- Architecture is largely independent of the winner. ADR 0006 makes the archive format the primary artefact, so the framework choice is less consequential than usual. This document recommends the archive specification (issue #13) be written before the application scaffold.
-- Addendum A applies the criteria in reverse to design the worst possible stack, and derives five pass/fail gates from it. Addendum B tests the owner's point that TypeScript expresses complex data models better than Python. Addendum C evaluates having no framework at all (bare Node.js, JSDoc types, no build step). It scores 65.4 (66.5 with the type criterion), above every TypeScript framework, and lists the security plumbing it would have to hand-write.
+- eleven real candidates;
+- the bare-runtime extreme (Node.js with no framework);
+- a deliberately terrible reference stack that marks the floor of the scale.
+
+The criteria were revised on 2026-11-15 after owner review (section 4.3): pass/fail gates were added, the upgrade criterion was redefined as the cost of staying supported, a type-system criterion was added, and the weights were rebalanced. The short version:
+
+- **Gates come first** (section 4.1): erasure, lossless export, EU processing, a no-JavaScript core and a supported release line. Vercel fails the EU-processing gate, so Next.js is scored self-hosted only.
+- **Django** (Python, with PostgreSQL 18) leads with 86.4. Its strengths are a first-party admin, gettext-based i18n, PostgreSQL full-text search with French and English configurations, foundation governance and a verified security policy. Its gaps: no first-party magic-link flow, no production worker for its new Tasks framework, no first-party rate limiter, and the weakest static typing of the leading group.
+- **Symfony 7.4 LTS** (PHP) is second with 77.4. It has the longest verified LTS window, a first-party login-link feature, XLIFF and ICU translations and a database-backed job transport, but no first-party admin.
+- **ASP.NET Core** (70.0) and **Go** (69.0) follow closely.
+- **Bare Node.js** (65.6) is fifth. It is above every TypeScript framework, because it scores high on operations, dependencies and archive fit. But it would hand-write all its security plumbing, so it is not recommended in its pure form (section 6.12). Its realistic variant, "Node plus a short audited allow-list", is the strongest TypeScript-family direction and has not been evaluated with sources yet.
+- **SvelteKit** (62.4) is the strongest TypeScript framework. **WordPress** (54.8) and **Next.js self-hosted** (52.8) are at the bottom of the real candidates. Each excels at jobs this project does not have: content editing for WordPress, interactive client applications for Next.js.
+- **Churn does not decide the ranking.** Setting the cost-of-staying-supported weight to zero leaves the top four unchanged (section 7.2). Low scores for popular frameworks come from how little they provide first-party for a single custodian, not from their release cadence (section 7.3).
+- **Architecture is largely independent of the winner.** ADR 0006 makes the archive format the primary artefact, so the framework choice is less consequential than usual. This document recommends writing the archive specification (issue #13) before the application scaffold.
 
 ## 2. Context and decided constraints
 
@@ -33,8 +40,7 @@ These are owner decisions already recorded in the repository or stated for this 
 - Database: PostgreSQL is the presumptive choice for full-text search in French and English. A challenge to it is required (section 6).
 - One operator, for decades. Successor-friendliness, low dependency churn and low supply-chain surface matter ([plan section 28 and 29](../plans/main.md)).
 - Server-rendered, accessible HTML that works without JavaScript is preferred. French and English are first-class interface languages, and testimonies may be in any language ([plan sections 8 and 27](../plans/main.md)).
-- The owner is comfortable with TypeScript and values its type system for expressing complex data models (see Addendum B). Local tooling is not a constraint: the owner can install whatever is needed and can develop on other machines, so missing tools are an immediate setup step, not a risk (owner clarification, 2026-11-15).
-- Git: this document is not committed. The owner asked for no commit in this pass.
+- The owner is comfortable with TypeScript and values its type system for expressing complex data models (criterion 15). Local tooling is not a constraint: the owner can install whatever is needed and can develop on other machines, so missing tools are an immediate setup step, not a risk (owner clarification, 2026-11-15).
 
 ## 3. Requirements derived from the plan
 
@@ -63,28 +69,74 @@ Each requirement is a condition the stack must satisfy or make practical. "Must"
 - R21. Editable context and reference-shelf records with translations, exportable with the archive (plan sections 16, 18, 24).
 - R22. Documentation a competent successor can follow: where data lives, how editions are built, how deletion works, how to restore (plan section 29).
 
-## 4. Criteria and weights
+## 4. Gates, criteria and weights
 
-Weights sum to 100. They reflect the plan and the ADRs. Each criterion is scored 1 to 5 (5 is best) in section 7.
+### 4.1 Gates
 
-| # | Criterion | Weight | Why this weight |
-| --- | --- | --- | --- |
-| 1 | Longevity: governance, release cadence, support windows | 11 | The plan is for decades and a successor must inherit the stack ([plan 28, 29](../plans/main.md)). |
-| 2 | Upgrade burden over 10+ years | 9 | Every forced major or minor upgrade is recurring custodial work ([plan 28](../plans/main.md)). |
-| 3 | Built-in or first-party admin for one-person moderation | 8 | Moderation, redaction, privacy requests and translations are routine duties ([plan 24](../plans/main.md)). |
-| 4 | i18n and l10n maturity | 8 | FR and EN are first-class and testimonies may be in any language ([plan 8](../plans/main.md)). |
-| 5 | Magic-link auth ecosystem (library maintenance, sessions, CSRF, rate limits) | 7 | Owner decision ([ADR 0003](../decisions/0003-email-magic-link-auth.md)), but libraries can be swapped. |
-| 6 | Forms, server-side validation, accessible no-JS rendering | 7 | Accessibility and no-JS are explicit ([plan 27](../plans/main.md)). Important, but most stacks can do it. |
-| 7 | PostgreSQL integration (ORM, migrations, full-text search) | 6 | PostgreSQL is presumptive; search quality matters ([plan 13](../plans/main.md)). |
-| 8 | Security defaults and security-release process | 9 | Unpublished testimony, auth identifiers and privacy requests are held ([plan 26](../plans/main.md)). |
-| 9 | Background jobs and scheduled tasks without extra infrastructure | 5 | Exports, email and backups run on one VPS ([ADR 0002](../decisions/0002-single-eu-vps.md)). |
-| 10 | Deployment and operations on one VPS (runtime upgrades, memory, process model) | 6 | ADR 0002 requires a small VPS to run it comfortably. |
-| 11 | Successor-friendliness: talent pool and documentation | 6 | Explicit in plan section 29. |
-| 12 | Dependency footprint and supply-chain exposure | 5 | Low churn and low supply-chain surface are owner requirements. |
-| 13 | Testing | 3 | Important, but every candidate has a mature test story. |
-| 14 | Fit with the archive-first principle (domain model and export kept clean) | 10 | ADR 0006 makes the export the primary product; this is the criterion the owner cares about most. |
+A weighted sum is compensatory: strength on one criterion pays for weakness on another. Some failures cannot be paid for. A stack scoring 5 everywhere except erasure would score about 95 while being unlawful to operate. The requirements below are therefore pass/fail and are checked before scoring. They apply to every candidate, and to anything added around the application later, such as a CDN, a translation service or a search engine.
 
-Justification in short: the highest weights go to longevity (11) and archive fit (10), which determine whether the archive outlives the operator's attention, followed by upgrade burden and security (9 each). Admin and i18n come next (8 each) because they are daily or near-daily tasks. Operations, jobs and testing are real but cheaper to change later.
+| Gate | Requirement | Source |
+| --- | --- | --- |
+| G1 Erasure | Any personal data held anywhere in the system can be deleted within the defined lifecycle, backups and storage-level remnants included. | [Deletion philosophy](../constitution/deletion-philosophy.md); plan sections 21, 22 |
+| G2 Lossless export | All archival data can be exported to the open, documented archive format without the vendor's cooperation. | ADR 0006; plan section 23 |
+| G3 EU processing | Personal data is processed and stored by EU-controlled infrastructure under processor agreements. | ADR 0002; [privacy assumption](../constitution/privacy-assumptions.md) 11; [legal research](../research/legal-landscape.md), section 9 |
+| G4 No-JS core | Reading testimonies and contributing work without client-side JavaScript. | Plan section 27; editorial principles |
+| G5 Supported line | A released, supported version line with a published security process and a known end-of-support date. Abandoned software fails here. | Plan sections 26, 28 |
+
+Results (judgement, not verified per candidate):
+
+- The framework candidates in section 6 pass, including Next.js when self-hosted.
+- Next.js on Vercel fails G3 (section 6.11).
+- WordPress passes G1 to G3 with care: erasure must reach post revisions, metadata and plugin tables. It is conditional on G4, because contributors must use a custom no-JavaScript front-end form, never the block editor. It is also conditional on G5, because only the latest release is supported and plugins carry no support commitment.
+- Bare Node.js is conditional on G5, because `node:sqlite` is still a release candidate (section 6.12).
+- The reference anti-stack fails all five (section 6.13). It is scored only to mark the floor.
+
+### 4.2 Criteria and weights
+
+Weights sum to 100. Each criterion is scored 1 to 5 (5 is best) in section 7. A score of 1 on every criterion gives 20, the floor of the scale.
+
+| # | Criterion | Weight | Original | Why this weight |
+| --- | --- | --- | --- | --- |
+| 1 | Longevity and governance: who controls the project, how it is funded, whether it is actively maintained and improving, and whether it will plausibly exist and be supported in 10 to 20 years | 10 | 11 | The plan is for decades, and a successor must inherit the stack ([plan 28, 29](../plans/main.md)). Active improvement is credited here. Support-window length moved to criterion 2. |
+| 2 | Cost of staying supported: expected effort per year to remain on a supported, patched version. This covers the length of support windows, the size and frequency of breaking changes, the deprecation policy and migration tooling. It measures cost, not activity. | 7 | 9 | Redefined (section 4.3). Breaking change consumes custodial attention ([plan 28](../plans/main.md)). Updates themselves are not penalized. |
+| 3 | Built-in or first-party admin for one-person moderation | 8 | 8 | Moderation, redaction, privacy requests and translations are routine duties ([plan 24](../plans/main.md)). |
+| 4 | i18n and l10n maturity | 8 | 8 | FR and EN are first-class and testimonies may be in any language ([plan 8](../plans/main.md)). |
+| 5 | Magic-link auth ecosystem: library maintenance, sessions, CSRF, rate limits | 6 | 7 | Owner decision ([ADR 0003](../decisions/0003-email-magic-link-auth.md)), but libraries can be swapped. |
+| 6 | Forms, server-side validation, accessible rendering without JavaScript | 6 | 7 | Accessibility is explicit ([plan 27](../plans/main.md)). G4 now carries the veto; this criterion measures ergonomics. |
+| 7 | Database and search: PostgreSQL integration, ORM, migrations, French and English full-text search | 6 | 6 | Search quality matters ([plan 13](../plans/main.md)). |
+| 8 | Security defaults and security-release process | 10 | 9 | Unpublished testimony, auth identifiers and privacy requests are held ([plan 26](../plans/main.md)). Raised because a weighted sum compensates, and real security failures do not. |
+| 9 | Background jobs and scheduled tasks without extra infrastructure | 4 | 5 | Real, but cheap to change later (ADR 0002). |
+| 10 | Deployment and operations on one VPS: runtime upgrades, memory, process model | 5 | 6 | ADR 0002. Real, but cheaper to change than the framework. |
+| 11 | Successor-friendliness: talent pool and documentation | 6 | 6 | Explicit in plan section 29. |
+| 12 | Dependency footprint and supply-chain exposure | 5 | 5 | Supply-chain surface is an owner requirement. |
+| 13 | Testing | 3 | 3 | Important, but nearly every candidate has a mature test story. |
+| 14 | Fit with the archive-first principle: domain model and export kept clean | 10 | 10 | ADR 0006 makes the export the primary product. |
+| 15 | Type system and data-model expressiveness | 6 | - | New, on owner input. See below. |
+
+Criterion 15. The archive's core is a data model with real structure. A testimony moves through states, each with different valid fields. Authorship disclosure is a closed set of codes with conditional details. Translations carry provenance that differs by producer. Public identity is optional field by field, some fields are forbidden for minors, and some must never be exported. A type system that makes invalid states unrepresentable, and flags every place a new state must be handled, lowers the risk of the failures the plan fears most, such as a private field leaking into an export. Judgement, from general knowledge rather than sourced in this pass:
+
+- TypeScript has structural typing, discriminated unions with exhaustiveness checking, literal and template literal types, and mapped and conditional types, all checked on every build. Types are erased at runtime, so external data still needs runtime validation. Schema-first libraries derive static types from runtime validators.
+- Python has optional type hints (`Literal`, unions, `TypedDict`, `Protocol`, dataclasses, `match`, `assert_never`), checked by external tools such as mypy or pyright. The checkers are good in strict mode, but library adoption is uneven. Django's ORM is dynamic, and its static typing depends on third-party stubs and a checker plugin.
+
+The weight is 6 rather than higher because the canonical schema is specified independently of the application (ADR 0006, #13), for example as JSON Schema. Types can be generated from it in any language, and the export test validates against it whatever the stack.
+
+### 4.3 Revision of 2026-11-15
+
+The first version had 14 criteria, with "upgrade burden over 10+ years" at weight 9. On review, the owner pointed out two problems:
+
+- A framework that is never updated would have scored 5 on that criterion, although updates normally bring security fixes and improvements.
+- Popular frameworks scored surprisingly low, while pure Node.js was not catastrophic.
+
+Changes made:
+
+1. **Gates added** (section 4.1). Abandoned software now fails G5, so no criterion needs to reward or punish activity as such.
+2. **Upgrade burden redefined** as the cost of staying supported (criterion 2). It measures breaking change and support-window length, not the number of releases. The scores did not need to change under the new definition, because the original judgements were already about breaking changes. What changed is the reasoning and the weight.
+3. **Double counting removed.** Churn appeared under longevity (support windows), upgrade burden, and partly under dependency footprint: 25 of 100 points. It now accounts for 22 points, and support windows are counted only in criterion 2.
+4. **Security raised** from 9 to 10, because compensation is most dangerous there.
+5. **Criterion 15 added** at weight 6.
+6. **Minor weights trimmed** to keep the sum at 100: magic links, forms, jobs and operations.
+
+The effect of each change is shown in section 7: the matrix keeps the original totals for comparison, and section 7.2 tests the weight of churn directly.
 
 ## 5. Database choice: PostgreSQL, and the challenge to it
 
@@ -95,6 +147,7 @@ PostgreSQL is presumed. The challenge was asked for, so the tradeoff is stated h
 - The case for PostgreSQL: Snowball stemmers are documented for many languages [S42]; Django's own documentation uses config="french" in its search examples [S7], so PostgreSQL search configurations per testimony language are a practical option. PostgreSQL also gives row-level concurrency, LISTEN/NOTIFY and SKIP LOCKED for a job table. Rails' Solid Queue uses PostgreSQL's SKIP LOCKED [S13], and River runs on PostgreSQL [S40].
 - Costs of PostgreSQL: one more service to install, patch and back up on the VPS. Local development needs a PostgreSQL install, which is a one-time setup step.
 - Version: PostgreSQL 18 is the current major (18.7 on the versioning page). PostgreSQL 14's final release is 12 November 2026, three days before this document's date, so a new deployment should not start on 14 [S41]. PostgreSQL 19 is at release-candidate stage and is not supported yet [S41].
+- Verified locally on Node 26 (section 6.12): its bundled SQLite has FTS5 with accent folding but no French stemming, which confirms the point above.
 
 Recommendation for this section: keep PostgreSQL 18. Keep SQLite as a documented fallback only if the owner decides that the one-server simplicity outweighs French stemming. No candidate argued for SQLite in this pass.
 
@@ -300,7 +353,7 @@ Verified facts:
 - Form actions: they work without client-side JavaScript; use:enhance is a progressive enhancement that emulates the browser's native submission [S47]. This is the strongest verified fit for R14 among the TypeScript candidates.
 - Paraglide JS: MIT-licensed compile-time i18n, v2 core package; typed message functions; plurals through Intl.PluralRules; ICU through a plugin; built-in locale URL mapping such as /en/about and /de/ueber [S48].
 - Drizzle ORM: the latest stable tag on the releases page is 0.45.4 (8 October); 1.0.0-rc.5 is a pre-release (21 October) [S49]. A stable 1.0 has not shipped as of this check.
-- Astro (considered, see 6.12): i18n routing verified, no message catalogs or pluralization on the routing page [S46].
+- Astro (considered, see 6.14): i18n routing verified, no message catalogs or pluralization on the routing page [S46].
 - Not verified: magic-link libraries for SvelteKit, background job libraries for Node/PostgreSQL, the SvelteKit upgrade guide, and any admin framework.
 
 Strengths:
@@ -391,7 +444,7 @@ Verdict: WordPress is strongest where the plan asks least (editing context pages
 
 ### 6.11 Next.js (TypeScript, React), and Vercel as a host
 
-Added 2026-11-15 at the owner's request. Next.js, the framework, is scored self-hosted on the VPS like every other candidate. Vercel, the hosting platform it is designed around, is tested separately against the gates (Addendum A) and ADR 0002.
+Added 2026-11-15 at the owner's request. Next.js, the framework, is scored self-hosted on the VPS like every other candidate. Vercel, the hosting platform it is designed around, is tested separately against the gates (section 4.1) and ADR 0002.
 
 Verified facts (search summaries; the official support-policy page is cited by those summaries):
 
@@ -415,7 +468,7 @@ Vercel as a host [S70]:
 
 Strengths:
 
-- TypeScript end to end, with the type-system advantage of Addendum B (criterion 15: 5).
+- TypeScript end to end, with the type-system advantage measured by criterion 15 (score 5).
 - The largest React talent pool. Popular enough that it will not disappear.
 - Server Components and Server Actions can render HTML on the server and accept form posts without client JavaScript when written carefully.
 - A stable Adapter API and documented self-hosting.
@@ -429,15 +482,133 @@ Weaknesses:
 - The largest dependency tree of the candidates (React, the framework, the bundler and the libraries above).
 - Its centre of gravity is interactive client-side applications, while this archive is mostly documents and forms. The server and client boundary of Server Components makes it harder to see what runs where, which matters for G4 and for keeping private data out of client payloads.
 
-Verdict: the lowest score in the matrix. Next.js solves problems this project does not have (rich client interactivity, edge rendering at scale) and adds churn and security surface where the project is most sensitive. Vercel is excluded by G3. Among TypeScript options, SvelteKit, and better still the minimal TypeScript stack of Addenda B and C, are stronger.
+Verdict: the lowest score among the real candidates. Next.js solves problems this project does not have (rich client interactivity, edge rendering at scale) and adds churn and security surface where the project is most sensitive. Vercel is excluded by G3. Among TypeScript options, SvelteKit, and better still the minimal TypeScript stack of section 6.12, are stronger.
 
-### 6.12 Astro (considered, not a primary candidate)
+### 6.12 Bare Node.js (no framework, no build step)
+
+Added 2026-11-15 at the owner's request. The option: only Node.js. No framework, no runtime dependencies, nothing built in except what Node ships. No build step: plain JavaScript with types written as JSDoc comments.
+
+Verified facts:
+
+- Node.js 26 is the current LTS line, first released 2026-05-05. LTS lines typically receive critical fixes for 30 months in total. From Node.js 27 onwards, majors move to an annual cycle, each reaching LTS after six months as Current and six as Alpha [S71].
+- `node:sqlite` is at stability 1.2, "Release candidate" (since v25.7.0), not yet Stable. It can load SQLite extensions when this is explicitly allowed at construction [S72].
+- Tested locally on 2026-11-15 with Node v26.13.0, which bundles SQLite 3.54.0:
+  - FTS5 is available with the `unicode61`, `porter` and `trigram` tokenizers. Some Node distributions reportedly ship without FTS5, so it must be probed at startup [S73].
+  - With `remove_diacritics 2`, `eleve` matches "élève". `eleves` does not match "élève", and only the prefix query `elev*` finds both, so there is no French stemming (section 5).
+  - `PRAGMA secure_delete` is 0 by default, so deleted content can remain readable in free pages of the database file until it is overwritten or vacuumed.
+- Type stripping, which runs `.ts` files directly with no build step, is Stable since v25.2.0 and v24.12.0, and enabled by default. It accepts only erasable syntax and performs no type checking [S74].
+- TypeScript 7, the native compiler (7.0 stable in July 2026 according to secondary sources), rewrote JavaScript and JSDoc checking. It dropped several legacy JSDoc behaviours, including special handling of `@enum` and `@constructor` and Closure-style function types [S75] [S76].
+- Built into Node and usable directly:
+  - an HTTP server;
+  - `fetch`, enough to call a transactional email provider's HTTP API without an SMTP client;
+  - `crypto`, `dns` (MX checks) and `Intl` (plural rules, dates, locales);
+  - `URLSearchParams`, the `node:test` runner, `--watch` and `--env-file`.
+
+What would have to be written by hand: everything a framework normally provides. This list is also a checklist of what any chosen stack must supply, or what must be audited if it does not.
+
+| Concern | Risk if hand-written | Standard involved |
+| --- | --- | --- |
+| Routing, request and response helpers | Low | - |
+| Cookie parsing and serialization | Medium | RFC 6265 |
+| Sessions and their storage | High | - |
+| CSRF protection | High | - |
+| HTML templating with context-aware escaping | High: every escaping mistake is a stored XSS | HTML |
+| Magic-link token issuance, confirmation POST and expiry | High | - |
+| Admin second factor (WebAuthn) | Very high: unrealistic to hand-write correctly | WebAuthn |
+| Security headers and CSP | Medium | CSP |
+| Form validation and error re-rendering | Medium | - |
+| Locale negotiation from `Accept-Language` | Low to medium | RFC 9110, RFC 4647 |
+| Message catalogs and translator workflow | Medium: no PO or XLIFF tooling | - |
+| Proof-of-work challenge (server and widget) | Medium | - |
+| Rate limiting | Low | - |
+| JSON Schema validation of exports | Medium | JSON Schema |
+| Moderation console, redaction, privacy-request handling | Medium, but large | - |
+| Migrations | Medium | - |
+
+Several rows implement standards. Using libraries for standardized formats and protocols is an established practice of this project, and this option contradicts it in those rows.
+
+Gates: G1 passes provided `secure_delete` is on, the database is vacuumed after deletions and the backup lifecycle is respected. G2, G3 and G4 pass. G5 is conditional on `node:sqlite` becoming Stable.
+
+Strengths:
+
+- The most transparent option: everything that runs is the project's own small code on a foundation-governed runtime with a predictable LTS.
+- Zero runtime dependencies, one process, one SQLite file, low memory.
+- The best archive fit. There is no ORM between the domain model and the export, the same code renders edition HTML, and with no build step the code that runs is the code that is preserved.
+- Most of TypeScript's checking through JSDoc, or all of it through native type stripping.
+
+Weaknesses:
+
+- The custodian becomes the sole maintainer of a small security-critical framework, with no external security process, no advisories and no other users finding its bugs. The table above is that framework's backlog.
+- SQLite only, with no French stemming, and its Node binding is still a release candidate. PostgreSQL would need a driver dependency.
+- No admin, no translator workflow, and no auto-escaping templates.
+- Types as comments depend on the checker's JSDoc dialect, which TypeScript 7 just tightened. The code ages well; its annotations may need maintenance.
+
+Variants, under the weights of section 4.2:
+
+- Native `.ts` type stripping instead of JSDoc: criterion 15 rises to 5, total 66.8.
+- One audited dependency, a PostgreSQL driver: criterion 7 rises to 4, total 68.0. With both: 69.2.
+
+What it teaches, for every candidate:
+
+- Zero dependencies does not mean zero maintenance. It moves the maintenance into the custodian's code.
+- A framework's real value here is its security plumbing and its admin. Whatever is chosen should be judged mostly on how well it provides those.
+- Deletion is never immediate at the storage layer. SQLite keeps deleted content in free pages unless `secure_delete` is on, and PostgreSQL keeps dead row versions until vacuum and in its write-ahead log. The deletion lifecycle (#16) must cover storage-level remnants, not just rows.
+- French search is a recurring gap for every SQLite-based option. With a few thousand testimonies, prefix and accent-folded matching may be acceptable, but that is a product decision.
+
+Verdict: not recommended in its pure form, because one person would carry the whole security surface. Its defensible form is "Node plus a short allow-list of small, audited libraries": sessions or cookies, templating with auto-escaping, WebAuthn for admin, and optionally a PostgreSQL driver. That minimal TypeScript stack keeps most of this option's strengths and removes its worst weaknesses. It has not been evaluated with sources, and should be before it is chosen.
+
+### 6.13 Reference anti-stack (scale floor)
+
+Added 2026-11-15 at the owner's request: the criteria applied in reverse, to design the worst possible stack. It is a deliberate composite of real categories, not a review of any particular product. It fails all five gates and is scored only to mark the floor of the scale (20).
+
+The stack:
+
+- A client-rendered single-page app on a 0.x meta-framework maintained by one venture-funded developer, shipping breaking changes weekly.
+- A dozen microservices on Kubernetes spread across three US clouds.
+- Testimonies in a proprietary schemaless serverless document store. "For permanence", each one is also written in full to a public blockchain and pinned on IPFS.
+- Sign-in through a social network whose profile photo and name appear next to the testimony by default.
+- An interface machine-translated at runtime by a third-party AI API, which also receives drafts "to suggest improvements".
+- Moderation in the database vendor's web console. Jobs on a queue SaaS triggered by a cron SaaS.
+- Session-replay analytics recording every keystroke in the contribution form "for UX insights".
+- A lockfile resolving to 2,000 packages, and no tests.
+
+| # | Criterion | Anti-stack choice |
+| --- | --- | --- |
+| 1 | Longevity and governance | 0.x framework, one maintainer, dependent on funding |
+| 2 | Cost of staying supported | Weekly breaking changes across a dozen services |
+| 3 | Admin | The database vendor's console: no redaction, no audit, no privacy workflow |
+| 4 | i18n | Runtime machine translation; no catalogs, no review, no plural rules |
+| 5 | Auth | Social login that publishes the account identity, the opposite of plan section 4 |
+| 6 | Forms and no-JS | Nothing renders without JavaScript; validation only on the client |
+| 7 | Database and search | Schemaless proprietary store, no French search, personal data duplicated across documents |
+| 8 | Security | Keystroke recording, drafts sent to a third party, unpatched 0.x dependencies |
+| 9 | Jobs | Two extra SaaS dependencies for what a timer could do |
+| 10 | Operations | Kubernetes across three clouds, for one person |
+| 11 | Successor | Nobody can understand it, including its author six months later |
+| 12 | Dependency footprint | 2,000 packages plus a dozen external services |
+| 13 | Testing | None |
+| 14 | Archive-first fit | Data locked in a vendor format; the only "permanent" copy can never be corrected or erased |
+| 15 | Type system | Untyped JavaScript |
+
+What it teaches:
+
+1. **Permanence is not immutability.** The blockchain is the most instructive mistake because it maximizes the property people naively associate with archives. It makes erasure impossible, which turns every withdrawal request into an unresolvable GDPR violation and contradicts the [deletion philosophy](../constitution/deletion-philosophy.md) at its root. The archive needs stable identity with revisable content: identifiers that never change, and editions that can be revised for privacy.
+2. **The export is the product.** A platform that cannot be left losslessly fails ADR 0006, whatever else it does well. Vendor lock-in is a preservation failure, not just a cost.
+3. **Jurisdiction is part of the stack.** US clouds, a US identity provider and a US AI API make the CLOUD Act and transfer questions ([legal research](../research/legal-landscape.md), section 9) unavoidable.
+4. **Server-rendered HTML is an archival format in itself.** A page that needs a JavaScript runtime to show its text is inaccessible to some people, invisible to some search engines, and poorly captured by the BnF and Wayback crawlers.
+5. **Every system holding personal data multiplies the cost of deletion.** Each extra service is one more place deletion must reach, one more processor agreement and one more breach surface ([privacy assumption](../constitution/privacy-assumptions.md) 10).
+6. **Breaking change is a tax paid in custodial attention.** Over ten years, a framework that breaks weekly costs more than any feature it offers (plan section 37).
+7. **"Helpful" AI integrations leak unpublished testimony.** The [threat model](../specs/threat-model.md) (section 3.6) forbids sending unpublished content to third parties.
+
+These lessons are the origin of the gates in section 4.1.
+
+### 6.14 Astro (considered, not a primary candidate)
 
 - Astro's current major is 7 (astro@7.4.12 on 13 November in the GitHub releases page) [S46].
 - Built-in i18n routing: locale folders, prefixDefaultLocale, fallback and domain mapping [S46]. No message catalogs or pluralization are covered on that page [S46].
 - Astro is an excellent static-HTML generator. It fits the "static HTML for published testimonies and editions" idea (ADR 0006) well, but a dynamic app (magic links, admin, moderation queue) is not its centre of gravity. It is noted as a possible companion for Context and editions, not as the application.
 
-### 6.13 CMS-on-framework options for Context pages (optional, not mandatory)
+### 6.15 CMS-on-framework options for Context pages (optional, not mandatory)
 
 - Wagtail (on Django): Wagtail 7.4 is LTS (released 4 May 2026) with security support until 2 November 2027; Wagtail 8.1 was released 2 November 2026 [S57]. A page-tree CMS would add an editor UI for Context pages. The cost is another dependency stream and another upgrade stream. Judgement: markdown files in the repository, rendered by the app, are simpler and more archive-friendly. Not required.
 - Filament (on Laravel): 5.11.3 active (13 November) [S23]. Relevant only if Laravel were chosen.
@@ -446,36 +617,83 @@ Verdict: the lowest score in the matrix. Next.js solves problems this project do
 
 ## 7. Scoring matrix
 
-Scores are 1 to 5 (5 best). They are judgements based on the verified facts above and on general experience where marked "not verified". Weighted total = sum of (score times weight) divided by 5, so the maximum is 100.
+Scores are 1 to 5 (5 best). They are judgements based on the verified facts in section 6, and on general experience where marked "not verified". Weighted total = sum of (score times weight) divided by 5, so the maximum is 100 and the floor, a score of 1 everywhere, is 20. Columns are ordered by weighted total. The last row keeps the totals of the first version (14 criteria, original weights; section 4.3) for comparison.
 
-| # | Criterion | Weight | Django | Symfony 7.4 | Go | ASP.NET Core | Rails 8.1 | Laravel 13 | Phoenix | SvelteKit | AdonisJS | WordPress | Next.js |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Longevity | 11 | 5 | 4 | 4 | 4 | 3 | 3 | 3 | 3 | 2 | 3 | 3 |
-| 2 | Upgrade burden | 9 | 4 | 4 | 5 | 3 | 2 | 3 | 3 | 2 | 3 | 4 | 1 |
-| 3 | Admin | 8 | 5 | 3 | 1 | 2 | 2 | 3 | 2 | 1 | 2 | 4 | 1 |
-| 4 | i18n | 8 | 5 | 5 | 3 | 4 | 3 | 3 | 4 | 4 | 4 | 3 | 3 |
-| 5 | Magic-link ecosystem | 7 | 3 | 4 | 2 | 2 | 3 | 3 | 4 | 2 | 2 | 2 | 3 |
-| 6 | Forms and no-JS | 7 | 5 | 4 | 4 | 4 | 4 | 4 | 3 | 5 | 3 | 3 | 3 |
-| 7 | PostgreSQL integration | 6 | 5 | 3 | 3 | 4 | 4 | 3 | 4 | 3 | 3 | 1 | 3 |
-| 8 | Security defaults and process | 9 | 5 | 4 | 4 | 4 | 4 | 3 | 3 | 3 | 3 | 2 | 2 |
-| 9 | Jobs without extra infra | 5 | 3 | 5 | 3 | 3 | 5 | 4 | 3 | 2 | 2 | 3 | 2 |
-| 10 | Operations on one VPS | 6 | 4 | 4 | 5 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 3 |
-| 11 | Successor-friendliness | 6 | 5 | 4 | 3 | 3 | 4 | 4 | 2 | 3 | 3 | 5 | 4 |
-| 12 | Dependency footprint | 5 | 4 | 3 | 5 | 3 | 3 | 3 | 4 | 2 | 2 | 2 | 1 |
-| 13 | Testing | 3 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 3 | 2 | 3 |
-| 14 | Archive-first fit | 10 | 4 | 4 | 4 | 4 | 3 | 3 | 3 | 4 | 3 | 2 | 3 |
-| | Weighted total (out of 100) | 100 | 88.6 | 78.8 | 71.4 | 69.0 | 66.0 | 65.4 | 64.2 | 59.8 | 55.6 | 57.8 | 49.6 |
+| # | Criterion | Weight | Django | Symfony 7.4 | ASP.NET Core | Go | Bare Node.js | Laravel 13 | Rails 8.1 | Phoenix | SvelteKit | AdonisJS | WordPress | Next.js (self-hosted) | Anti-stack |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Longevity and governance | 10 | 5 | 4 | 4 | 4 | 4 | 3 | 3 | 3 | 3 | 2 | 3 | 3 | 1 |
+| 2 | Cost of staying supported | 7 | 4 | 4 | 3 | 5 | 4 | 3 | 2 | 3 | 2 | 3 | 4 | 1 | 1 |
+| 3 | Admin | 8 | 5 | 3 | 2 | 1 | 1 | 3 | 2 | 2 | 1 | 2 | 4 | 1 | 1 |
+| 4 | i18n | 8 | 5 | 5 | 4 | 3 | 3 | 3 | 3 | 4 | 4 | 4 | 3 | 3 | 1 |
+| 5 | Magic-link ecosystem | 6 | 3 | 4 | 2 | 2 | 2 | 3 | 3 | 4 | 2 | 2 | 2 | 3 | 1 |
+| 6 | Forms and no-JS | 6 | 5 | 4 | 4 | 4 | 3 | 4 | 4 | 3 | 5 | 3 | 3 | 3 | 1 |
+| 7 | Database and search | 6 | 5 | 3 | 4 | 3 | 2 | 3 | 4 | 4 | 3 | 3 | 1 | 3 | 1 |
+| 8 | Security defaults and process | 10 | 5 | 4 | 4 | 4 | 2 | 3 | 4 | 3 | 3 | 3 | 2 | 2 | 1 |
+| 9 | Jobs without extra infrastructure | 4 | 3 | 5 | 3 | 3 | 3 | 4 | 5 | 3 | 2 | 2 | 3 | 2 | 1 |
+| 10 | Operations on one VPS | 5 | 4 | 4 | 4 | 5 | 5 | 4 | 4 | 4 | 4 | 4 | 4 | 3 | 1 |
+| 11 | Successor-friendliness | 6 | 5 | 4 | 3 | 3 | 3 | 4 | 4 | 2 | 3 | 3 | 5 | 4 | 1 |
+| 12 | Dependency footprint | 5 | 4 | 3 | 3 | 5 | 5 | 3 | 3 | 4 | 2 | 2 | 2 | 1 | 1 |
+| 13 | Testing | 3 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 3 | 2 | 3 | 1 |
+| 14 | Archive-first fit | 10 | 4 | 4 | 4 | 4 | 5 | 3 | 3 | 3 | 4 | 3 | 2 | 3 | 1 |
+| 15 | Type system and data-model expressiveness | 6 | 2 | 3 | 4 | 2 | 4 | 2 | 1 | 2 | 5 | 5 | 1 | 5 | 1 |
+| | **Weighted total** | 100 | **86.4** | **77.4** | **70.0** | **69.0** | **65.6** | **63.6** | **63.4** | **62.6** | **62.4** | **58.4** | **54.8** | **52.8** | **20.0** |
+| | Total with the original 14 criteria and weights | | 88.6 | 78.8 | 69.0 | 71.4 | 65.4 | 65.4 | 66.0 | 64.2 | 59.8 | 55.6 | 57.8 | 49.6 | 20.0 |
 
-Ranking: Django (88.6), Symfony (78.8), Go (71.4), ASP.NET Core (69.0), Rails (66.0), Laravel (65.4), Phoenix (64.2), SvelteKit (59.8), WordPress (57.8), AdonisJS (55.6), Next.js self-hosted (49.6). Next.js on Vercel is excluded by gate G3.
+Ranking:
 
-Reading the matrix:
+1. Django 86.4
+2. Symfony 77.4
+3. ASP.NET Core 70.0
+4. Go 69.0
+5. Bare Node.js 65.6
+6. Laravel 63.6
+7. Rails 63.4
+8. Phoenix 62.6
+9. SvelteKit 62.4
+10. AdonisJS 58.4
+11. WordPress 54.8
+12. Next.js self-hosted 52.8
 
-- Django's lead over Symfony comes mainly from admin (+3 points times weight 8), search and PostgreSQL integration, security process, longevity and successor-friendliness. Symfony leads on jobs and magic-link ecosystem, which are real but smaller in weight.
-- Go ranks third mostly because of upgrade burden, dependency footprint and operations. It scores 1 on admin and 2 on magic links, which the one-person constraint makes expensive. A reasonable owner who values minimal dependencies more than first-party features could reasonably put Go higher.
-- WordPress has the most uneven profile in the matrix. It scores 4 on admin and 5 on successor-friendliness, among the best of all candidates, but 1 on database, 2 on security, 2 on archive fit and 2 on dependency footprint. Its strengths are in content editing, which the plan needs least; its weaknesses are in the privacy-separated data model and the export, which the plan needs most.
-- Next.js scores lowest because its costs fall on the heaviest criteria: upgrade churn (1, weight 9), security history (2, weight 9) and missing first-party pieces (admin 1, jobs 2). Its benefits, interactive client rendering and edge delivery, are not requirements here. Popularity shows up only in successor-friendliness (4).
-- The scores are judgements. A score of 3 means "adequate with known gaps", not "average". The matrix does not weigh the owner's TypeScript familiarity, the local tooling on Windows, or personal taste; those are discussed in section 10.
-- No formal sensitivity analysis was run. Django leads Symfony by 9.8 points, and the lead depends mostly on the admin, PostgreSQL and security weights. Treat the order from third place down as unstable; it is within the range that different judgements could move.
+Next.js on Vercel is excluded by G3. The anti-stack fails every gate and appears only as the floor.
+
+### 7.1 Reading the matrix
+
+- Django's lead over Symfony comes mainly from admin (+2 points at weight 8), database and search, security process, longevity and successor-friendliness. Symfony leads on jobs, magic links and types.
+- ASP.NET Core and Go swapped places compared with the first version. The type criterion favours ASP.NET Core, and the lower weight of criterion 2 costs Go some of its compatibility advantage. A reasonable owner who values minimal dependencies more than first-party features could still put Go higher.
+- Bare Node.js scores 5 on operations, dependencies and archive fit, and 4 on longevity, cost of staying supported, testing and types. It scores 1 or 2 on admin, magic links, database and security. Section 7.3 explains why that profile does not collapse.
+- WordPress has the most uneven profile of the real candidates: 4 on admin and 5 on successor-friendliness, but 1 on database and 2 on security, archive fit and dependencies. Its strengths are in content editing, which the plan needs least.
+- Next.js loses on cost of staying supported (1), security history (2), first-party completeness (admin 1, jobs 2) and dependency footprint (1). Its benefits, interactive client rendering and edge delivery, are not requirements here.
+- The scores are judgements. A 3 means "adequate with known gaps". Differences of about 2 points or less are within the range that different reasonable judgements could move. Django and Symfony are clearly separated from the rest; the order from third place down is not.
+
+### 7.2 Sensitivity: does churn decide the ranking?
+
+Totals with criterion 2 (cost of staying supported) at weight 0, at the adopted 7, and doubled to 14, with all other weights unchanged and totals renormalized to 100:
+
+| Candidate | Criterion 2 at weight 0 | At 7 (adopted) | At 14 |
+| --- | --- | --- | --- |
+| Django | 86.9 | 86.4 | 86.0 |
+| Symfony 7.4 | 77.2 | 77.4 | 77.6 |
+| ASP.NET Core | 70.8 | 70.0 | 69.3 |
+| Go | 66.7 | 69.0 | 71.0 |
+| Bare Node.js | 64.5 | 65.6 | 66.5 |
+| Laravel 13 | 63.9 | 63.6 | 63.4 |
+| Rails 8.1 | 65.2 | 63.4 | 61.9 |
+| Phoenix | 62.8 | 62.6 | 62.4 |
+| SvelteKit | 64.1 | 62.4 | 60.9 |
+| AdonisJS | 58.3 | 58.4 | 58.5 |
+| WordPress | 52.9 | 54.8 | 56.4 |
+| Next.js (self-hosted) | 55.3 | 52.8 | 50.7 |
+| Anti-stack | 20.0 | 20.0 | 20.0 |
+
+Removing the criterion entirely leaves the top four unchanged. The largest movements are Go (down 2.3), and SvelteKit and Next.js (up 1.7 and 2.5). Even with churn ignored entirely, Next.js stays second to last and SvelteKit stays in the second half. Churn is not why these frameworks score low.
+
+### 7.3 Why popular frameworks score low, and why bare Node.js does not collapse
+
+- **The criteria measure fit, not quality.** They describe one custodian keeping a privacy-sensitive archive alive for decades. Popularity enters only through successor-friendliness (weight 6). A framework can be excellent and still be a poor fit.
+- **About a third of the weight measures what the stack provides first-party for one person:** admin 8, i18n 8, magic links 6, database and search 6, jobs 4, which is 32 points. Next.js, SvelteKit and WordPress are popular for work where those pieces come from elsewhere: a team, hosted services or plugins. Here, every missing piece is assembled and maintained by one person.
+- **A 55 is not a failure.** On a 20 to 100 scale the midpoint is 60, so the popular frameworks sit around the middle: adequate with significant gaps for this use.
+- **Bare Node.js survives because the sum is compensatory.** Its fives on operations, dependencies and archive fit pay for its ones and twos on admin, magic links, database and security. The real cost of the second group is not linear. Hand-written sessions, CSRF protection, escaping and WebAuthn are a permanent security liability for one person, and a 2 out of 5 understates that. This is the limit of a weighted-sum method, and the reason for the gates.
+- **Option, not applied by default (question 13):** a non-compensatory floor of 3 on security. It would exclude bare Node.js in its pure form, WordPress and Next.js, and leave the other nine candidates. The minimal TypeScript variant of section 6.12 is designed to clear it.
 
 ## 8. Architecture sketch (applies to any winner)
 
@@ -524,31 +742,37 @@ PostgreSQL 18               job runner (systemd timers -> management commands)
 - The archive format must not depend on the application's serialization. Framework-native serialization (pickle, PHP serialize, Marshal) must never be used for exports.
 - Outbound links are rel="ugc nofollow" by policy (ADR 0003). This is trivial in any stack.
 - The admin must not expose the export of unpublished submissions. Export builds read published testimonies only.
+- Deletion is never immediate at the storage layer. SQLite keeps deleted content in free pages unless `secure_delete` is on, and PostgreSQL keeps dead row versions until vacuum and in its write-ahead log. The deletion lifecycle (#16) must cover these remnants (section 6.12).
 
 ## 10. Owner context (noted, not scored)
 
 - Local tooling is not a constraint (owner clarification, 2026-11-15). Any runtime, PostgreSQL or Docker can be installed, and development can happen on other machines. Missing tools are a setup step, not a risk, and do not favour any candidate.
-- Python 3.12 is supported until 31 October 2028 [S45].
-- Node 26 is installed. Node 26 is the current LTS line, released 5 May 2026, with active LTS support until 27 October 2027 and maintenance support until 30 April 2029 [S44]. This matters only for the TypeScript options.
-- The owner is comfortable with TypeScript. If that comfort is weighted heavily, SvelteKit (with its assembly cost) becomes the best TypeScript choice. Under the current weights it does not overturn Django's lead. This should be the owner's explicit decision.
-- Because ADR 0006 makes the archive the primary deliverable, a later move between stacks is less costly than usual if the archive specification and exporter are done first. This is the strongest argument for making a provisional choice now and recording it as an ADR that can be superseded.
+- Python 3.12 is supported until 31 October 2028 [S45]. Node 26 is the current LTS line, released 5 May 2026, with active LTS support until 27 October 2027 and maintenance support until 30 April 2029 [S44].
+- The owner values TypeScript for expressing complex data models, and finds Python more complicated. Criterion 15 measures the technical side of this. What the matrix cannot measure is the custodian: a project that lasts decades depends on its maintainer wanting to keep working in the code. If writing Python would make the owner less willing to tend the archive, that is a custodial risk the weights do not capture, and it is the owner's call to weigh it.
+- A hybrid is possible but has a cost: archive tooling (schema, validator, edition renderer) in TypeScript, and the operational app in Django. It gives the strongest types where the archive lives, at the price of two runtimes and two ecosystems for one person.
+- Because ADR 0006 makes the archive the primary deliverable, a later move between stacks is less costly than usual if the archive specification and exporter are done first. This is the strongest argument for making a provisional choice now, and recording it as an ADR that can be superseded.
 
 ## 11. Recommendation
 
-Top recommendation: Django 6.x (or Django 5.2 LTS if the owner prefers the longer already-published LTS window to April 2028), with PostgreSQL 18.
+Top recommendation: Django 6.x (or Django 5.2 LTS if the owner prefers the longer already-published LTS window to April 2028), with PostgreSQL 18. It scores 86.4, and was first under the original criteria as well.
 
 Why:
 
 - It scores highest on the criteria that matter most under this plan: longevity, archive fit, security, admin and i18n.
 - Django's admin provides the one-person moderation surface with no extra product (R10).
 - gettext plus i18n_patterns is a mature FR and EN workflow with a translator-friendly file format (R13).
-- PostgreSQL search with per-language configurations can cover French and English (Django's documented examples use 'french' and 'english' [S7]; the full PostgreSQL configuration list was not verified [S42]), and a generated search column follows the row on deletion (R11, R12).
+- PostgreSQL search with per-language configurations can cover French and English (Django's documented examples use 'french' and 'english' [S7]; the full PostgreSQL configuration list was not verified [S42]). A generated search column follows the row on deletion (R11, R12).
 - The DSF governance, the published security policy and the release cadence were verified (S1, S8, S9; R20).
-- The gaps are known and bounded: choose and audit a magic-link library; build the job runner from management commands and systemd timers (or a database-backed package); add rate limits at the proxy and in a small Postgres-backed counter; treat admin 2FA as a deliberate addition.
+- The gaps are known and bounded:
+  - choose and audit a magic-link library;
+  - build the job runner from management commands and systemd timers, or a database-backed package;
+  - add rate limits at the proxy and in a small Postgres-backed counter;
+  - treat admin second factor as a deliberate addition;
+  - use strict type checking with stubs, and generate types from the archive schema, to narrow the typing gap.
 
 Upgrade plan (judgement): target 6.2 LTS when it ships (planned for April 2027 per the download page [S1]); until then use 6.1 or 5.2 LTS. Verify the 6.2 support window when released.
 
-Runner-up: Symfony 7.4 LTS (PHP).
+Runner-up: Symfony 7.4 LTS (PHP), at 77.4.
 
 A reasonable owner might pick Symfony instead of Django for these reasons:
 
@@ -556,11 +780,11 @@ A reasonable owner might pick Symfony instead of Django for these reasons:
 - Symfony has a first-party login-link feature, strong translation tooling with XLIFF and ICU, and a database-backed job transport with no extra service (S25, S26, S27).
 - Its typed component model may suit a long-lived codebase with a strict domain model.
 
-Reasons not to pick it: no first-party admin, and the owner would be learning a stack without TypeScript in it. (The Symfony login-link caution applies to magic links in any stack; see section 12.)
+Reasons not to pick it: no first-party admin, and the owner would be learning a stack without TypeScript in it. The Symfony login-link caution applies to magic links in any stack; see section 12.
 
-Honourable mention: Go, if the owner values minimal dependencies and a single binary more than first-party features and accepts building the admin, magic-link flow and job runner from the standard library and a few libraries. This is a larger one-person build than the verified facts for Django and Symfony suggest.
+Close behind: ASP.NET Core (70.0) and Go (69.0). Go suits an owner who values minimal dependencies and a single binary more than first-party features, and accepts building the admin, magic-link flow and job runner. That is a larger one-person build than the verified facts for Django and Symfony suggest.
 
-If the owner decides that TypeScript familiarity should dominate: SvelteKit with Drizzle and Paraglide is the strongest TypeScript option on the verified evidence. The cost is that admin, magic-link auth and background jobs are assembled from third-party packages, which the matrix scores against. AdonisJS is the more complete TypeScript framework, but the verified gaps (magic link, unverified job and ORM details, unassessed maintainer depth) keep it behind SvelteKit.
+If the owner decides that TypeScript should dominate, the strongest direction is not a TypeScript framework. It is the minimal TypeScript stack: Node LTS plus a short allow-list of audited libraries (section 6.12), which inherits bare Node.js's operations, dependency and archive-fit scores while removing its worst security weaknesses. It needs a sourced evaluation before it is chosen. Among frameworks, SvelteKit with Drizzle and Paraglide (62.4) is the strongest TypeScript option. Its admin, magic-link auth and background jobs are assembled from third-party packages.
 
 ## 12. Risks
 
@@ -592,6 +816,9 @@ If the owner decides that TypeScript familiarity should dominate: SvelteKit with
 10. Testimonies in any language: is it acceptable that languages without a PostgreSQL search configuration use the "simple" configuration (no stemming)?
 11. Do you want the archive specification (issue #13) to be written before the framework is scaffolded? This document recommends yes.
 12. Is the Symfony login-link caveat acceptable if Symfony is chosen?
+13. Should security be a non-compensatory floor, so that a candidate scoring below 3 is excluded however well it does elsewhere (section 7.3)?
+14. Do you accept the revised criteria and weights of section 4.3?
+15. If TypeScript should dominate, should the minimal TypeScript stack of section 6.12 get a full sourced evaluation before the decision?
 
 ## 14. Sources
 
@@ -656,217 +883,24 @@ Numbered sources. "Fetched" means the page was read in this pass through a fetch
 - [S57] <https://endoflife.date/wagtail> - fetched. Wagtail release and support table.
 - [S58] <https://github.com/thoughtbot/administrate> - fetched. Maintenance statement; no release date visible.
 - [S59] <https://rubyonrails.org/foundation> ; <https://rubyonrails.org/foundation/37signals> - search results only. Rails Foundation governance; not verified on the pages.
-- [S60] https://wp-umbrella.com/blog/wordpress-7-0-release-status-and-timeline/ and https://atlasum.net/blog/wordpress-7-1-4-security-release - search result summaries, 2026-11-15. WordPress 7.0, 7.1 and 7.1.4 release dates; 7.2 plan.
-- [S61] https://make.wordpress.org/hosting/handbook/compatibility/version/7-0/ - search result summary. PHP and database requirements for 7.0.
-- [S62] https://make.wordpress.org/security/ - search result summary. "Only the latest version" support policy, courtesy backports, end of 4.1-4.6 updates.
-- [S63] https://patchstack.com/whitepaper/state-of-wordpress-security-in-2024/ and https://patchstack.com/whitepaper/state-of-wordpress-security-in-2025/ - search result summaries. Plugin, theme and core vulnerability shares.
-- [S64] https://wp-content.co/patchstack-wordpress-security-report-2026-vulnerabilities-rises-hosting-defenses-struggles/ - secondary coverage of Patchstack's 2026 report.
-- [S65] https://techcrunch.com/2026/02/12/automattic-planned-to-target-10-competitors-with-royalty-fees-wp-engine-claims-in-new-filing/ and https://www.therepository.email/wp-engines-antitrust-claims-against-automattic-are-back-on-after-judge-reverses-earlier-dismissal - secondary. WP Engine v. Automattic status and the September 2026 ruling.
-- [S66] https://nextjs.org/support-policy - cited through search result summaries, 2026-11-15; release and end-of-support dates from third-party summaries (endoflife.ai, digitalapplied.com, creuto.com).
-- [S67] https://github.com/vercel/next.js/security/advisories/GHSA-9qr9-h5gf-34mp ; https://projectdiscovery.io/blog/nextjs-middleware-authorization-bypass ; https://threatdefence.com/article/react-server-components-rce-ghsa-xqc2-xf4c-x3h3-patching-hunting - search result summaries. CVE-2025-29927, CVE-2025-55182 and the October 2026 Server Components fix.
-- [S68] https://www.reactsquad.io/blog/nextjs-16-2-adapter-api ; https://github.com/vercel/next.js/discussions/77740 - search result summaries. Adapter API, self-hosting parity, Node and TypeScript requirements.
-- [S69] https://www.better-auth.com/blog/authjs-joins-better-auth ; https://startwithidentity.com/vendors/open-source/authjs/ - search result summaries. Auth.js maintenance status; the Vercel acquisition of Better Auth is from secondary sources only.
-- [S70] https://vercel.com/security ; https://vercel.com/legal/dpa ; https://www.dataprivacyframework.gov/participant/6847 - search result summaries. DPF certification, DPA processing locations, EU regions caching only.
+- [S60] <https://wp-umbrella.com/blog/wordpress-7-0-release-status-and-timeline/> and <https://atlasum.net/blog/wordpress-7-1-4-security-release> - search result summaries, 2026-11-15. WordPress 7.0, 7.1 and 7.1.4 release dates; 7.2 plan.
+- [S61] <https://make.wordpress.org/hosting/handbook/compatibility/version/7-0/> - search result summary. PHP and database requirements for 7.0.
+- [S62] <https://make.wordpress.org/security/> - search result summary. "Only the latest version" support policy, courtesy backports, end of 4.1-4.6 updates.
+- [S63] <https://patchstack.com/whitepaper/state-of-wordpress-security-in-2024/> and <https://patchstack.com/whitepaper/state-of-wordpress-security-in-2025/> - search result summaries. Plugin, theme and core vulnerability shares.
+- [S64] <https://wp-content.co/patchstack-wordpress-security-report-2026-vulnerabilities-rises-hosting-defenses-struggles/> - secondary coverage of Patchstack's 2026 report.
+- [S65] <https://techcrunch.com/2026/02/12/automattic-planned-to-target-10-competitors-with-royalty-fees-wp-engine-claims-in-new-filing/> and <https://www.therepository.email/wp-engines-antitrust-claims-against-automattic-are-back-on-after-judge-reverses-earlier-dismissal> - secondary. WP Engine v. Automattic status and the September 2026 ruling.
+- [S66] <https://nextjs.org/support-policy> - cited through search result summaries, 2026-11-15; release and end-of-support dates from third-party summaries (endoflife.ai, digitalapplied.com, creuto.com).
+- [S67] <https://github.com/vercel/next.js/security/advisories/GHSA-9qr9-h5gf-34mp> ; <https://projectdiscovery.io/blog/nextjs-middleware-authorization-bypass> ; <https://threatdefence.com/article/react-server-components-rce-ghsa-xqc2-xf4c-x3h3-patching-hunting> - search result summaries. CVE-2025-29927, CVE-2025-55182 and the October 2026 Server Components fix.
+- [S68] <https://www.reactsquad.io/blog/nextjs-16-2-adapter-api> ; <https://github.com/vercel/next.js/discussions/77740> - search result summaries. Adapter API, self-hosting parity, Node and TypeScript requirements.
+- [S69] <https://www.better-auth.com/blog/authjs-joins-better-auth> ; <https://startwithidentity.com/vendors/open-source/authjs/> - search result summaries. Auth.js maintenance status; the Vercel acquisition of Better Auth is from secondary sources only.
+- [S70] <https://vercel.com/security> ; <https://vercel.com/legal/dpa> ; <https://www.dataprivacyframework.gov/participant/6847> - search result summaries. DPF certification, DPA processing locations, EU regions caching only.
+- [S71] <https://nodejs.org/en/about/previous-releases> - fetched 2026-11-15. Node.js release lines, LTS length, annual cycle from Node.js 27.
+- [S72] <https://nodejs.org/api/sqlite.html> - fetched 2026-11-15 (documentation for v26.13.1). `node:sqlite` stability and extension loading.
+- [S73] <https://github.com/nodejs/node/issues/56951> ; <https://github.com/openclaw/openclaw/issues/20987> - search results only. Reports of FTS5 missing in some Node builds.
+- [S74] <https://nodejs.org/api/typescript.html> - fetched 2026-11-15. Type stripping stability and limits.
+- [S75] <https://devblogs.microsoft.com/typescript/progress-on-typescript-7-december-2025/> - search result summary. JSDoc support rewritten; `@enum` and `@constructor` not recognized.
+- [S76] <https://typescriptdocs.com/release-notes/TypeScript%207.0> - search result summary. TypeScript 7 release timeline and removed JSDoc behaviours.
+- Local test, 2026-11-15: Node v26.13.0 with SQLite 3.54.0; FTS5 tokenizers, diacritics folding, absence of French stemming, `secure_delete` default.
 - Repository documents: docs/plans/main.md; docs/decisions/0002-single-eu-vps.md; 0003-email-magic-link-auth.md; 0006-archive-first-replaceable-application.md; 0007-privacy-review-path.md; docs/research/domain-and-persistence.md; docs/constitution/archival-model.md; AGENTS.md.
 
 Not verified in this pass (listed so they are not mistaken for facts): Django deprecation policy and upgrade history; Django rate limiting; Django admin change-history storage; Python minimum for Django 6.x; Phoenix governance and security policy; Oban and Ecto full-text search; Laravel scheduler; Laravel and Rails i18n URL handling; ASP.NET localization and jobs; Go html/template, pgx and migration tools; AdonisJS Node requirement, Lucid, jobs and governance; SvelteKit magic-link and job libraries; Drizzle full-text search; Symfony full-text search; the licences of altcha-lib packages and the Sentinel server; Rails Foundation structure; Symfony governance today.
-
-## Addendum A: the worst possible stack
-
-Added 2026-11-15 at the owner's request: apply the criteria in reverse, "for fun, but maybe we'd learn a bit". The stack below is a deliberate composite of real categories, not a review of any particular product.
-
-### A.1 The anti-stack
-
-A client-rendered single-page app built on a 0.x meta-framework maintained by one venture-funded developer, shipping breaking changes weekly. It runs as a dozen microservices on Kubernetes spread across three US clouds. Testimonies live in a proprietary schemaless serverless document store and, "for permanence", each one is also written in full to a public blockchain and pinned on IPFS. Contributors sign in with a social network whose profile photo and name appear next to their testimony by default. The interface is machine-translated at runtime by a third-party AI API, which also receives drafts "to suggest improvements". Moderation happens in the database vendor's web console. Jobs run on a queue SaaS triggered by a cron SaaS. Session-replay analytics record every keystroke in the contribution form "for UX insights". The lockfile resolves to 2,000 packages, and there are no tests.
-
-### A.2 How it scores
-
-| # | Criterion | Anti-stack choice | Score |
-| --- | --- | --- | --- |
-| 1 | Longevity | 0.x framework, one maintainer, funding-dependent | 1 |
-| 2 | Upgrade burden | Weekly breaking changes, across a dozen services | 1 |
-| 3 | Admin | The database vendor's console: no redaction, no audit, no privacy workflow | 1 |
-| 4 | i18n | Runtime machine translation of the UI; no catalogs, no review, no plural rules | 1 |
-| 5 | Auth | Social login that publishes the account identity, the opposite of plan section 4 | 1 |
-| 6 | Forms and no-JS | Nothing renders without JavaScript; validation only on the client | 1 |
-| 7 | Database | Schemaless proprietary store, no French search, personal data duplicated across documents | 1 |
-| 8 | Security | Keystroke recording, drafts sent to a third party, no CSRF story, unpatched 0.x dependencies | 1 |
-| 9 | Jobs | Two extra SaaS dependencies for what a timer could do | 1 |
-| 10 | Operations | Kubernetes across three clouds, for one person | 1 |
-| 11 | Successor | Nobody can understand it, including the author six months later | 1 |
-| 12 | Dependency footprint | 2,000 packages plus a dozen external services | 1 |
-| 13 | Testing | None | 1 |
-| 14 | Archive-first fit | Data locked in a vendor format; the only "permanent" copy is one that can never be corrected or erased | 1 |
-| | Weighted total | | 20 / 100 |
-
-### A.3 What it teaches
-
-1. **Permanence is not immutability.** The blockchain is the most instructive mistake because it maximizes the property people naively associate with archives. It makes erasure impossible, which turns every withdrawal request into an unresolvable GDPR violation and contradicts the [deletion philosophy](../constitution/deletion-philosophy.md) at its root. What the archive needs is *stable identity with revisable content*: identifiers that never change, plus editions that can be revised for privacy.
-2. **The export is the product.** A platform that cannot be left losslessly fails ADR 0006, whatever else it does well. Vendor lock-in is a preservation failure, not just a cost.
-3. **Jurisdiction is part of the stack.** Three US clouds, a US identity provider and a US AI API make the CLOUD Act and transfer questions ([legal research](../research/legal-landscape.md), section 9) unavoidable.
-4. **Server-rendered HTML is an archival format in itself.** A page that needs a JavaScript runtime to show its text is inaccessible to some people, invisible to some search engines, and poorly captured by the BnF and Wayback crawlers that might preserve the site.
-5. **Every system holding personal data multiplies the cost of deletion.** Each extra service is one more place deletion must reach, one more processor agreement, and one more breach surface. This is [privacy assumption](../constitution/privacy-assumptions.md) 10 in concrete form.
-6. **Churn is a tax paid in custodial attention.** Over ten years, a framework that breaks weekly costs more than any feature it offers. The scarce resource is attention (plan section 37).
-7. **"Helpful" AI integrations leak unpublished testimony.** The [threat model](../specs/threat-model.md) (section 3.6) already forbids sending unpublished content to third parties.
-8. **A weighted sum cannot express a veto.** The worst stack still scores 20, not 0. A stack scoring 5 everywhere except erasure would score about 95 while being unlawful to operate.
-
-### A.4 Consequence: pass/fail gates before scoring
-
-Lesson 8 means some criteria should be gates rather than weights. A candidate, and any later addition to the stack such as a CDN, a translation service or a search engine, must pass all of these before it is scored:
-
-| Gate | Requirement | Source |
-| --- | --- | --- |
-| G1 Erasure | Any personal data held anywhere in the system can be deleted within the defined lifecycle, backups included. | Deletion philosophy; plan sections 21, 22 |
-| G2 Lossless export | All archival data can be exported to the open, documented archive format without the vendor's cooperation. | ADR 0006; plan section 23 |
-| G3 EU processing | Personal data is processed and stored by EU-controlled infrastructure under processor agreements. | ADR 0002; privacy assumption 11 |
-| G4 No-JS core | Reading testimonies and contributing work without client-side JavaScript. | Plan section 27; editorial principles |
-| G5 Supported line | A released, supported version line with a published security process and a known end-of-support date. | Plan sections 26, 28 |
-
-Judgement, not verified per candidate: the framework candidates in section 6, including Next.js when self-hosted, can pass G1 to G5. Next.js on Vercel fails G3 (section 6.11). WordPress passes G1 to G3 with care: erasure must reach post revisions, metadata and plugin tables. It is conditional on G4, because contributors must use a custom no-JavaScript front-end form, never the block editor. It is also conditional on G5, because only the latest release is supported and plugins have no support commitment at all. The gates therefore do not change the ranking. Their value is in protecting future decisions about services added around the application.
-
-## Addendum B: data-model expressiveness and the TypeScript question
-
-Added 2026-11-15. The owner values TypeScript because it can express complex data models efficiently, finds Python more complicated, and considers this relevant. The original criteria do not measure it, so this addendum tests it.
-
-### B.1 The point is valid
-
-The archive's core is a data model with real structure. A testimony moves through states, each with different valid fields. Authorship disclosure is a closed set of codes with conditional details. Translations carry provenance that differs by producer. Public identity is optional at every field, and some fields are forbidden for minors. Some fields are private and must never be exported. A type system that makes invalid states unrepresentable, and that flags every place a new state must be handled, directly lowers the risk of the failures the plan cares most about, such as a private field leaking into an export or a withdrawn testimony being rendered.
-
-Judgement, from general knowledge of the languages rather than sourced in this pass:
-
-- **TypeScript** has structural typing, discriminated unions with exhaustiveness checking, literal and template literal types, and mapped and conditional types, all checked by the compiler on every build. Types are erased at runtime, so external data still needs runtime validation. Schema-first libraries can derive static types from runtime validators, which keeps one source of truth.
-- **Python** has optional type hints (`Literal`, unions, `TypedDict`, `Protocol`, dataclasses, `match`, `assert_never`), checked by external tools such as mypy or pyright rather than by the runtime. The checkers are good in strict mode, but adoption across libraries is uneven. Django's ORM in particular is dynamic, and its static typing depends on third-party stubs and a type-checker plugin.
-
-### B.2 Sensitivity: adding the criterion
-
-Criterion 15, "type system and data-model expressiveness", scored 1 to 5 (judgement): SvelteKit 5, AdonisJS 5, Next.js 5, ASP.NET Core 4, Symfony 3, Django 2, Go 2, Laravel 2, Phoenix 2, Rails 1, WordPress 1 (PHP plus array-shaped hooks and key-value post metadata). Totals are recomputed out of 100 with the original 14 weights unchanged.
-
-| Candidate | Original | With criterion 15 at weight 8 |
-| --- | --- | --- |
-| Django | 88.6 | 85.0 |
-| Symfony 7.4 | 78.8 | 77.4 |
-| ASP.NET Core | 69.0 | 69.8 |
-| Go | 71.4 | 69.1 |
-| Laravel 13 | 65.4 | 63.5 |
-| SvelteKit | 59.8 | 62.8 |
-| Rails 8.1 | 66.0 | 62.6 |
-| Phoenix | 64.2 | 62.4 |
-| AdonisJS | 55.6 | 58.9 |
-| WordPress | 57.8 | 55.0 |
-| Next.js (self-hosted) | 49.6 | 53.3 |
-
-For SvelteKit to tie Django on this criterion alone, it would need a weight of 48 against the other criteria's 100, almost half of the whole decision. Even rescoring SvelteKit's admin from 1 to 3, on the grounds that the moderation console is only a few screens, leaves it at about 66 against 85.
-
-### B.3 Reading it honestly
-
-- The numbers say that TypeScript's type system is a real advantage but does not outweigh what Django provides first-party. SvelteKit's deficit comes mostly from longevity, upgrade churn, assembled authentication and jobs, and dependency footprint, not from the admin alone.
-- What the matrix cannot measure is the custodian. A one-person project that lasts decades depends on its maintainer wanting to keep working in the code. If writing Python would make the owner less willing to tend the archive, that is a custodial risk the weights do not capture, and it is the owner's call to weigh it.
-- The data model is less tied to the application language than it seems. The canonical schema is specified independently of the app (ADR 0006, #13), for example as JSON Schema. Types can be generated from it in either language, and the export test validates against it whatever the stack.
-- A hybrid is possible but has a cost. Archive tooling (schema, validator, edition renderer) in TypeScript and the operational app in Django gives the strongest types where the archive lives, at the price of two runtimes and two ecosystems to maintain for one person.
-- A candidate missing from section 6 is a deliberately minimal TypeScript stack: Node LTS, a small HTTP library, a typed SQL query builder and server-rendered templates, avoiding meta-framework churn. It would trade SvelteKit's conveniences for fewer moving parts, much as the Go option does, while keeping TypeScript's type system. It was not evaluated with sources and should be before it is chosen. Addendum C evaluates its extreme form.
-
-## Addendum C: no framework at all
-
-Added 2026-11-15 at the owner's request. The hypothetical: only Node.js. No framework, no runtime dependencies, nothing built in except what Node ships. No build step: plain JavaScript with types written as JSDoc comments.
-
-### C.1 Verified facts
-
-- Node.js 26 is the current LTS line, first released 2026-05-05. LTS lines typically receive critical fixes for 30 months in total. From Node.js 27 onwards, majors move to an annual cycle, each reaching LTS after six months as Current and six as Alpha [C1].
-- `node:sqlite` is at stability 1.2, "Release candidate" (since v25.7.0), not yet Stable. It supports loading SQLite extensions when explicitly allowed at construction [C2].
-- Tested locally on 2026-11-15 with Node v26.13.0, which bundles SQLite 3.54.0:
-  - FTS5 is available with the `unicode61`, `porter` and `trigram` tokenizers. Third-party reports say some Node distributions ship without FTS5, so this must be probed at startup [C3].
-  - With `remove_diacritics 2`, `eleve` matches "élève". `eleves` does not match "élève", and only the prefix query `elev*` finds both. There is no French stemming, as section 5 predicted.
-  - `PRAGMA secure_delete` is 0 by default, so deleted content can remain readable in free pages of the database file until it is overwritten or vacuumed.
-- Type stripping, which runs `.ts` files directly with no build step, is Stable since v25.2.0 and v24.12.0, and enabled by default. It accepts only erasable syntax (no enums, runtime namespaces, parameter properties or import aliases) and performs no type checking [C4].
-- TypeScript 7, the native compiler (7.0 stable in July 2026 according to secondary sources), rewrote JavaScript and JSDoc checking. It dropped several legacy JSDoc behaviours, including special handling of `@enum` and `@constructor` and Closure-style function types, and type-checking `.js` files became stricter [C5][C6].
-
-Built into Node and usable directly: an HTTP server, `fetch` (enough to call a transactional email provider's HTTP API, so no SMTP client is needed), `crypto` (random tokens, hashing, constant-time comparison), `dns` (MX checks for ADR 0003), `Intl` (plural rules, dates, locales, segmentation), `URLSearchParams` (form parsing), the `node:test` runner, `--watch` and `--env-file`. Judgement, not verified per API: these core modules have been stable for many years.
-
-### C.2 What would have to be written by hand
-
-Everything a framework normally provides. This is the useful output of the exercise: the list of what any chosen stack must supply, or what we must audit if it does not.
-
-| Concern | Risk if hand-written | Standard involved |
-| --- | --- | --- |
-| Routing, request and response helpers | Low | - |
-| Cookie parsing and serialization | Medium | RFC 6265 |
-| Sessions and their storage | High | - |
-| CSRF protection | High | - |
-| HTML templating with context-aware escaping | High: every escaping mistake is a stored XSS | HTML |
-| Magic-link token issuance, confirmation POST and expiry | High | - |
-| Admin second factor (WebAuthn) | Very high: unrealistic to hand-write correctly | WebAuthn |
-| Security headers and CSP | Medium | CSP |
-| Form validation and error re-rendering | Medium | - |
-| Locale negotiation from `Accept-Language` | Low to medium | RFC 9110, RFC 4647 |
-| Message catalogs and translator workflow | Medium: no PO or XLIFF tooling | - |
-| Proof-of-work challenge (server and widget) | Medium | - |
-| Rate limiting | Low | - |
-| JSON Schema validation of exports | Medium | JSON Schema |
-| Moderation console, redaction, privacy-request handling | Medium, but large | - |
-| Migrations | Medium | - |
-
-Several rows implement standards. Using libraries for standardized formats and protocols is an established practice of this project, and this option contradicts it in those rows.
-
-### C.3 Gates (Addendum A)
-
-| Gate | Result |
-| --- | --- |
-| G1 Erasure | Pass, provided `secure_delete` is enabled, the database is vacuumed after deletions, and the backup lifecycle is respected. |
-| G2 Lossless export | Pass. |
-| G3 EU processing | Pass. |
-| G4 No-JS core | Pass. Server rendering is the natural mode. |
-| G5 Supported line | Conditional. Node LTS passes, but `node:sqlite` is still a release candidate, so its API may change before it becomes Stable. |
-
-### C.4 Scores
-
-Judgement, using the same scale as section 7:
-
-| # | Criterion | Weight | Bare Node | Reason |
-| --- | --- | --- | --- | --- |
-| 1 | Longevity | 11 | 4 | OpenJS Foundation runtime with a predictable LTS; no third-party code to be abandoned |
-| 2 | Upgrade burden | 9 | 4 | Core APIs are stable; one runtime major per year from Node 27; the release-candidate SQLite API may still move |
-| 3 | Admin | 8 | 1 | Everything is built by hand |
-| 4 | i18n | 8 | 3 | `Intl` is excellent for formatting and plurals; no catalogs, translator workflow or locale routing |
-| 5 | Magic link | 7 | 2 | Primitives exist; the security-critical flow is hand-written |
-| 6 | Forms and no-JS | 7 | 3 | Server-rendered by nature, but no auto-escaping templates (Go's `html/template` has them) |
-| 7 | Database | 6 | 2 | SQLite only, release candidate, FTS5 without French stemming; no PostgreSQL without a driver dependency |
-| 8 | Security | 9 | 2 | Node has a security process, but sessions, CSRF, escaping and auth are written by one person, with no external review |
-| 9 | Jobs | 5 | 3 | systemd timers running Node scripts, like the Django recommendation |
-| 10 | Operations | 6 | 5 | One process, one SQLite file, low memory |
-| 11 | Successor | 6 | 3 | JavaScript is ubiquitous and the code is small, but it is a bespoke framework |
-| 12 | Dependency footprint | 5 | 5 | Zero runtime dependencies |
-| 13 | Testing | 3 | 4 | `node:test` built in |
-| 14 | Archive-first fit | 10 | 5 | No ORM between the domain model and the export; the same code renders edition HTML; what runs is what is archived |
-| | Weighted total | 100 | **65.4** | |
-| 15 | Type expressiveness (Addendum B) | 8 | 4 | JSDoc checked by `tsc` gives most of TypeScript's power, more verbosely |
-| | With criterion 15 | 108 | **66.5** | |
-
-Updated order with criterion 15: Django 85.0, Symfony 77.4, ASP.NET Core 69.8, Go 69.1, **bare Node 66.5**, Laravel 63.5, SvelteKit 62.8, Rails 62.6, Phoenix 62.4, AdonisJS 58.9, WordPress 55.0, Next.js 53.3.
-
-Variants:
-
-- With native `.ts` type stripping instead of JSDoc, criterion 15 rises to 5: 68.0.
-- Allowing one audited dependency, a PostgreSQL driver, raises the database score to 4: 67.8 without criterion 15, 68.7 with it.
-
-### C.5 What it teaches
-
-1. **Fewer moving parts beat more features under these criteria.** With no framework at all, bare Node outranks every TypeScript framework evaluated, including SvelteKit. This supports Addendum B's intuition that a minimal TypeScript stack is the strongest TypeScript-family option.
-2. **Zero dependencies does not mean zero maintenance.** The dependency moves into the custodian's own code. The project becomes the sole maintainer of a small security-critical framework, with no external security process, no advisories and no other users finding its bugs. Section C.2 is that framework's backlog.
-3. **A framework's real value here is its security plumbing and its admin.** Sessions, CSRF, escaping, authentication and a moderation console are what would have to be rebuilt. Whatever is chosen should be judged mostly on how well it provides these.
-4. **Deletion is never immediate at the storage layer.** SQLite keeps deleted content in free pages unless `secure_delete` is on, and PostgreSQL keeps dead row versions until vacuum and in its write-ahead log. The deletion lifecycle (#16) must cover storage-level remnants, not just rows. This applies to every candidate.
-5. **No build step is an archival virtue.** The code that runs is the code that is read and preserved, and plain JavaScript will run on future engines without tooling. But types as comments depend on the checker's JSDoc dialect, which TypeScript 7 just tightened. The code ages well; its type annotations may need maintenance. Native type stripping makes types first-class syntax, at the price of tying execution to runtimes that strip them.
-6. **French search is a recurring gap.** Every SQLite-based option lacks French stemming. With fewer than a few thousand testimonies, prefix and accent-folded matching may be acceptable, but that is a product decision, not a technical accident.
-
-### C.6 Verdict
-
-Not recommended in its pure form. It is the most transparent option and the lightest to operate. It is also the one where a single person carries the whole security surface. Its most defensible form is "Node plus a short allow-list of small, audited libraries", covering at least sessions or cookies, templating with auto-escaping, WebAuthn for admin, and optionally a PostgreSQL driver. That is the minimal TypeScript candidate from Addendum B, which should be evaluated with sources if the owner wants a TypeScript-family stack.
-
-### C.7 Sources
-
-- [C1] https://nodejs.org/en/about/previous-releases - fetched 2026-11-15.
-- [C2] https://nodejs.org/api/sqlite.html - fetched 2026-11-15 (documentation for v26.13.1).
-- [C3] https://github.com/nodejs/node/issues/56951 and https://github.com/openclaw/openclaw/issues/20987 - search results only; reports of FTS5 missing in some builds.
-- [C4] https://nodejs.org/api/typescript.html - fetched 2026-11-15.
-- [C5] https://devblogs.microsoft.com/typescript/progress-on-typescript-7-december-2025/ - search result summary; JSDoc support rewritten, `@enum` and `@constructor` not recognized.
-- [C6] https://typescriptdocs.com/release-notes/TypeScript%207.0 - search result summary; release timeline and removed JSDoc behaviours.
-- Local test, 2026-11-15: Node v26.13.0, SQLite 3.54.0, FTS5 tokenizers, diacritics folding, absence of stemming, `secure_delete` default.

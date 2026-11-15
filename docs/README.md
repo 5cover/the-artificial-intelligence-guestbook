@@ -31,10 +31,12 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 - [0005. Track work publicly](decisions/0005-public-tracking.md)
 - [0006. The archive is the primary deliverable; the application is replaceable](decisions/0006-archive-first-replaceable-application.md)
 - [0007. Privacy review path for the MVP](decisions/0007-privacy-review-path.md)
+- [0008. Canonical domain: theaiguestbook.org, no defensive registrations](decisions/0008-canonical-domain.md)
+- [0009. Testimonies are licensed CC BY 4.0, separately from the project's own intellectual property](decisions/0009-testimony-licensing.md)
 
 ## Proposals
 
-- [Stack RFP](proposals/stack-rfp.md): comparison of application frameworks (#6, #7).
+- [Stack RFP](proposals/stack-rfp.md): comparison of application frameworks, with addenda on the worst possible stack (and the pass/fail gates it implies) and on data-model expressiveness (#6, #7).
 
 ## Research
 

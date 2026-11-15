@@ -42,8 +42,13 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 - [Legal landscape](research/legal-landscape.md): GDPR, LCEN, DSA and copyright as they apply to the Guestbook. Research, not legal advice.
 - [Domain and persistence](research/domain-and-persistence.md): domain choice, registrars, succession, persistent identifiers and edition packaging.
 
+## Specifications
+
+- [Identifiers and permanent URLs](specs/identifiers.md) (#15)
+- [Threat model](specs/threat-model.md) (#20)
+
 ## Planned
 
-- `specs/`: archive format (#13), data model (#14), identifiers (#15), deletion lifecycle (#16), threat model (#20).
+- `specs/`: archive format (#13), data model (#14), deletion lifecycle (#16), retention schedule (#18).
 - `legal/`: register, DPIA, privacy notice, mentions légales, publishing rules, consent texts (#19).
 - `operations/`: runbook, recurring duties, recovery, succession (#33).

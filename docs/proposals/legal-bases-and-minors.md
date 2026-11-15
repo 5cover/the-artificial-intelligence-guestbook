@@ -88,20 +88,24 @@ Recommended: risk reduction by design, so that a light verification is proportio
 3. **Restrictions on what an under-threshold testimony may publish:**
    - identity mode `anonymous` or `pseudonymous` only;
    - no `link`, `organization`, `region` or `display_name` that looks like a real name (a moderator check);
-   - age shown only as `under-18`.
+   - no age or age range shown at all, since an "under-18" label would itself mark a minor ([privacy research](../research/privacy-failures.md), R17.2).
 
    Even if the age declaration or the parental consent were false, the published testimony then carries little that could identify or endanger a child.
 4. **Moderation:** every under-threshold testimony is read with the third-party and self-identification rules applied strictly. The moderator can ask for changes rather than reject.
 5. **Contributors from the threshold up to 17:**
    - the normal flow applies;
-   - age is shown only as `under-18`;
+   - no age or age range is shown;
    - an additional warning appears about publishing their real name;
    - the accelerated erasure right (Loi I&L art. 51 II) is explained to them.
+6. **Neutral choice for every minor:** a self-declared minor's testimony stays unpublished until they make a separate, explicit choice to publish. Nothing is pre-selected and no screen nudges towards publication ([privacy research](../research/privacy-failures.md), R17.1 and R17.7, drawing on the DPC's TikTok decision).
+7. **The child's withdrawal prevails** over the parent's consent, without any adult's approval (R17.5).
 
 Alternatives:
 
+- Refuse contributors under the threshold. This is the simplest option, needs no verification at all, and is what the privacy research calls the least risky (question 2). It contradicts plan section 11, which asks that young people not be excluded merely because their participation creates work.
+- Accept self-declaration below the threshold, with the residual risk recorded in the DPIA. Cheaper, but CNIL Recommendation 7 excludes purely declarative systems for higher-risk processing.
 - Email confirmation only, without the publication restrictions. Cheaper, but weak under CNIL Recommendation 7, with no compensating safeguard.
-- Stronger verification, for example a signed form or an identity check. Disproportionate, excluding and itself a privacy risk.
+- Stronger verification, for example a signed form, an identity check or third-party age verification. Disproportionate and excluding. Services that store documents for age checks have been breached (privacy research, section 3, Discord and Tea), so this is itself a privacy risk.
 
 Recommendation: the design above, documented in the DPIA as the proportionality reasoning.
 
@@ -110,6 +114,16 @@ Recommendation: the design above, documented in the DPIA as the proportionality 
 Recommendation: one separate, mandatory statement for every submission, distinct from the publication consent and the licence. Draft wording, to be reviewed in both languages in #19:
 
 > I agree that my testimony, which may include information about my health, beliefs, sexuality, political opinions or other sensitive aspects of my life, is published and preserved in the archive. I can withdraw it at any time.
+
+The consent screen must also state the honest limits plainly, before submission. The [privacy research](../research/privacy-failures.md), section 5, gives suggested wording. In particular:
+
+- anonymity applies towards the public, not towards the operator;
+- writing style, described events and the people mentioned can identify an author, and machine-assisted stylometry is improving;
+- each optional detail makes identification easier;
+- withdrawal cannot reach copies others already hold;
+- backups keep withdrawn material for the published rotation window.
+
+Recommendation: show anonymous and pseudonymous contributors a short stylometry warning before they submit (privacy research, question 9).
 
 ## D7. DPIA
 

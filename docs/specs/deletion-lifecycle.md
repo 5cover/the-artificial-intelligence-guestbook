@@ -21,7 +21,11 @@ The goal is that deletion is a procedure, not an investigation (deletion philoso
 
 Verification: the request is confirmed through a magic link sent to the account email. Someone who has lost access to that address may prove control of the testimony in another proportionate way, for example by describing it and answering from a new address that the custodian then confirms. The custodian must not ask for identity documents unless no proportionate alternative exists (legal research, section 4, on CNIL Recommendation 7).
 
-Deadline: without undue delay and within one month of verification (GDPR art. 12(3), to be confirmed in the request procedure). Target for the automated steps of section 3: immediate.
+Deadline: without undue delay and within one month of receipt (GDPR art. 12(3), to be confirmed in the request procedure). Target for the automated steps of section 3: immediate.
+
+1. A request record is opened on receipt, with its deadline. The contributor receives a written answer within the deadline even when the deletion is automatic, and any extension is recorded with its reason. Automatic deletion does not replace the answer: the CNIL's 2026 sanction against Extia concerned late replies and undocumented retention ([privacy research](../research/privacy-failures.md), R16.1).
+2. A person who contributed as a minor can withdraw alone. Their withdrawal prevails over a parent's earlier consent, and no adult's approval is asked ([privacy research](../research/privacy-failures.md), R17.5).
+3. Identity documents are never requested by default. Any that arrive anyway, in the mailbox or elsewhere, are deleted under the same request record (R16.7).
 
 ## 2. Inventory of places
 
@@ -54,7 +58,7 @@ The deletion job runs these steps in order, in one transaction where the steps t
 3. Run `VACUUM` on the affected tables.
 4. Purge the reverse-proxy cache for the testimony URL in every locale, and for the listing and search pages.
 5. Regenerate the static renderings affected.
-6. Add the public ID to the withdrawal list, with the withdrawal date and the editions that contain it.
+6. Add the public ID to the withdrawal list, with the month of withdrawal and the editions that contain it.
 7. Schedule the privacy revision of every hosted edition containing the testimony (section 4).
 8. Add the internal ID to the erase-on-restore list (section 6).
 9. File removal requests with major search engines for the URL if it was indexed, and with the Internet Archive if it holds captures. These are manual steps for the custodian, listed in the job's output.
@@ -75,7 +79,7 @@ Account closure withdraws every testimony of the account, then deletes the accou
 
 ## 5. Withdrawal list and mirrors
 
-1. The project publishes a machine-readable withdrawal list at a permanent URL, with one entry per withdrawn testimony: `public_id`, `withdrawn_on`, and the edition IDs that contained it. It contains nothing else (data model, section 2.13).
+1. The project publishes a machine-readable withdrawal list at a permanent URL, with one entry per withdrawn testimony: `public_id`, `withdrawn_in` (year and month only), and the edition IDs that contained it. It contains nothing else (data model, section 2.13).
 2. The format is defined in the archive format (#13). It is also included in every edition, so that a mirror can apply it offline.
 3. Mirror operators may register a contact address with the project to be notified. The registry of mirrors is private operational data.
 4. The archive documentation and each edition's README ask mirror operators to apply the withdrawal list. The project does not claim it can enforce this (archival model, principle 9).

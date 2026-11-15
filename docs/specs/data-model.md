@@ -68,7 +68,7 @@ The primary object. One account may have several testimonies. Their public ident
 | `body` | public | The current public text (section 2.5) |
 | `received_at` | private | First submission. Decides the edition period (section 5). |
 | `published_on` | public | Date only, no time, to limit correlation with events (threat model, section 3.3) |
-| `withdrawn_on` | public, on the tombstone only | Date only |
+| `withdrawn_on` | private | The exact date stays private. The tombstone shows the month only (section 2.13). |
 | `edition_period` | public | The cutoff year of the period the testimony belongs to (section 5) |
 | `licence` | public | `CC-BY-4.0` (ADR 0009), stored per testimony so a future change does not rewrite history |
 | `attribution` | public | Derived from the public identity: display name, pseudonym, or "Anonymous" |
@@ -97,7 +97,7 @@ Every field is optional and published only if the contributor fills it in. Ident
 
 #### 2.4.1 Age ranges
 
-Public values: `under-18`, `18-24`, `25-34`, `35-44`, `45-54`, `55-64`, `65-74`, `75-plus`. A minor's age is never published more precisely than `under-18` (legal research, section 4). The declared age used for consent (section 2.8) is a separate, private field, and is never derived from or into the public value.
+Public values: `18-24`, `25-34`, `35-44`, `45-54`, `55-64`, `65-74`, `75-plus`. A minor's testimony shows no age and no age range at all. An "under-18" label would itself mark the contributor as a minor, which makes them a target ([privacy research](../research/privacy-failures.md), R17.2; legal research, section 4). A minor who wants to say they are young can say so in the text. The declared age used for consent (section 2.8) is a separate, private field, and is never derived from or into the public value.
 
 ### 2.5 Text versions (`private` history, one `public` current version)
 
@@ -217,7 +217,7 @@ What remains of a withdrawn or removed testimony.
 | --- | --- |
 | `public_id` | public |
 | `status` | public: always `withdrawn` |
-| `withdrawn_on` | public: date |
+| `withdrawn_in` | public: year and month only (`2027-06`), so that the withdrawal cannot be pinned to a day and correlated with events ([privacy research](../research/privacy-failures.md), R16.5) |
 
 Nothing else: no text, identity, language, country, edition labels or cause (legal research, section 10). Contributor withdrawal and moderation removal look the same publicly, so a tombstone never says "removed for illegal content". The cause stays in the operational records for as long as they are retained.
 
@@ -243,6 +243,8 @@ Both are project material: their licence is decided in #43, not by ADR 0009.
 ### 2.16 Operational records
 
 - **Rate-limit counters:** keyed by account or by a keyed hash of the IP address, with a salt rotated at least daily, so stored keys cannot be reversed into addresses. Retention is the counting window only, at most 24 hours.
+- **Derived identifiers:** any value derived from an email or IP address is a keyed HMAC, whose key is held outside the database, never a plain hash. An unkeyed hash of a small input space can be reversed ([privacy research](../research/privacy-failures.md), R14.3).
+- **No uploads:** the MVP accepts text only, so there are no images or documents whose metadata (EXIF, GPS, document properties) could identify the contributor. If uploads are ever added, that metadata must be stripped and files re-encoded at intake (R14.4).
 - **Admin audit log:** actor, action, object reference and time, append-only (threat model, section 3.2). Never contains testimony text or emails.
 - **Sessions:** framework-managed, server-side and revocable.
 
@@ -316,3 +318,5 @@ Full-text search uses PostgreSQL per-language configurations: `french` and `engl
 - The controlled vocabularies (`field`, `relationship_to_ai`, `attitude` and others) need wording and translation review, and filter thresholds (#27).
 - Whether contributors may edit their own pending submission after submitting, or only through "request changes".
 - The maximum text length (section 2.3) and the structured-field set (section 2.7) are proposals.
+- Whether a redacted testimony shows a visible "part of this text was redacted" note, on the site and in editions. The note serves transparency, but the Hurbain v. Belgium court found such notes can perpetuate stigma ([privacy research](../research/privacy-failures.md), R16.8, question 8).
+- Filter thresholds and the allowed filters belong to #27 (privacy research, R27.1 to R27.10). For example: no value shown below 10 matches, no age or sensitive-category filters, country-level geography only.

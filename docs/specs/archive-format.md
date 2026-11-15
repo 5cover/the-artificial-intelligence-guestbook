@@ -177,7 +177,7 @@ Labels in the plain-text and HTML renderings are in English, with the stable cod
   "format_version": 0,
   "generated_on": "2028-02-01",
   "withdrawals": [
-    { "public_id": "9xk3m2pa", "withdrawn_on": "2027-06-02", "editions": ["2026-rehearsal.1"] }
+    { "public_id": "9xk3m2pa", "withdrawn_in": "2027-06", "editions": ["2026-rehearsal.1"] }
   ]
 }
 ```

@@ -36,7 +36,7 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 
 ## Proposals
 
-- [Stack RFP](proposals/stack-rfp.md): pass/fail gates, then a weighted comparison of twelve candidates (frameworks, WordPress, Next.js, bare Node.js) against a reference anti-stack, with a sensitivity analysis on churn (#6, #7).
+- [Stack RFP](proposals/stack-rfp.md): pass/fail gates, then a weighted comparison of thirteen candidates (frameworks, WordPress, Next.js, bare Node.js, minimal TypeScript) against a reference anti-stack, with a sensitivity analysis on churn (#6, #7).
 
 ## Research
 

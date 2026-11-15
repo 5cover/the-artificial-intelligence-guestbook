@@ -12,9 +12,9 @@ Source tags such as [S12] refer to the numbered list in the Sources section. Any
 
 ## 1. Summary
 
-The owner asked for a comparison of application stacks, not a build. Thirteen options are scored on the same scale:
+The owner asked for a comparison of application stacks, not a build. Fourteen options are scored on the same scale:
 
-- eleven real candidates;
+- eleven real candidates, plus a minimal TypeScript assembly evaluated on the owner's request;
 - the bare-runtime extreme (Node.js with no framework);
 - a deliberately terrible reference stack that marks the floor of the scale.
 
@@ -23,10 +23,10 @@ The criteria were revised on 2026-11-15 after owner review (section 4.3): pass/f
 - **Gates come first** (section 4.1): erasure, lossless export, EU processing, a no-JavaScript core and a supported release line. Vercel fails the EU-processing gate, so Next.js is scored self-hosted only.
 - **Django** (Python, with PostgreSQL 18) leads with 86.4. Its strengths are a first-party admin, gettext-based i18n, PostgreSQL full-text search with French and English configurations, foundation governance and a verified security policy. Its gaps: no first-party magic-link flow, no production worker for its new Tasks framework, no first-party rate limiter, and the weakest static typing of the leading group.
 - **Symfony 7.4 LTS** (PHP) is second with 77.4. It has the longest verified LTS window, a first-party login-link feature, XLIFF and ICU translations and a database-backed job transport, but no first-party admin.
-- **ASP.NET Core** (70.0) and **Go** (69.0) follow closely.
-- **Bare Node.js** (65.6) is fifth. It is above every TypeScript framework, because it scores high on operations, dependencies and archive fit. But it would hand-write all its security plumbing, so it is not recommended in its pure form (section 6.12). Its realistic variant, "Node plus a short audited allow-list", is the strongest TypeScript-family direction and has not been evaluated with sources yet.
+- **ASP.NET Core** (70.0), **Go** (69.0) and **minimal TypeScript** (68.8) are in a near-tie for third place. Minimal TypeScript means Node.js with TypeScript source and maintained libraries for every security or standards concern (section 6.13). It is the best typed and the best archive fit, but hand-builds its admin and depends on several single-maintainer libraries.
+- **Bare Node.js** (65.6) is sixth, above every TypeScript framework. But it would hand-write all its security plumbing, so it is not recommended in its pure form (section 6.12). Minimal TypeScript is its practical form.
 - **SvelteKit** (62.4) is the strongest TypeScript framework. **WordPress** (54.8) and **Next.js self-hosted** (52.8) are at the bottom of the real candidates. Each excels at jobs this project does not have: content editing for WordPress, interactive client applications for Next.js.
-- **Churn does not decide the ranking.** Setting the cost-of-staying-supported weight to zero leaves the top four unchanged (section 7.2). Low scores for popular frameworks come from how little they provide first-party for a single custodian, not from their release cadence (section 7.3).
+- **Churn does not decide the ranking.** Setting the cost-of-staying-supported weight to zero leaves the top three unchanged (section 7.2). Low scores for popular frameworks come from how little they provide first-party for a single custodian, not from their release cadence (section 7.3).
 - **Architecture is largely independent of the winner.** ADR 0006 makes the archive format the primary artefact, so the framework choice is less consequential than usual. This document recommends writing the archive specification (issue #13) before the application scaffold.
 
 ## 2. Context and decided constraints
@@ -89,7 +89,8 @@ Results (judgement, not verified per candidate):
 - Next.js on Vercel fails G3 (section 6.11).
 - WordPress passes G1 to G3 with care: erasure must reach post revisions, metadata and plugin tables. It is conditional on G4, because contributors must use a custom no-JavaScript front-end form, never the block editor. It is also conditional on G5, because only the latest release is supported and plugins carry no support commitment.
 - Bare Node.js is conditional on G5, because `node:sqlite` is still a release candidate (section 6.12).
-- The reference anti-stack fails all five (section 6.13). It is scored only to mark the floor.
+- Minimal TypeScript is conditional on G5, because five of its key libraries publish no security policy (section 6.13).
+- The reference anti-stack fails all five (section 6.14). It is scored only to mark the floor.
 
 ### 4.2 Criteria and weights
 
@@ -353,7 +354,7 @@ Verified facts:
 - Form actions: they work without client-side JavaScript; use:enhance is a progressive enhancement that emulates the browser's native submission [S47]. This is the strongest verified fit for R14 among the TypeScript candidates.
 - Paraglide JS: MIT-licensed compile-time i18n, v2 core package; typed message functions; plurals through Intl.PluralRules; ICU through a plugin; built-in locale URL mapping such as /en/about and /de/ueber [S48].
 - Drizzle ORM: the latest stable tag on the releases page is 0.45.4 (8 October); 1.0.0-rc.5 is a pre-release (21 October) [S49]. A stable 1.0 has not shipped as of this check.
-- Astro (considered, see 6.14): i18n routing verified, no message catalogs or pluralization on the routing page [S46].
+- Astro (considered, see 6.15): i18n routing verified, no message catalogs or pluralization on the routing page [S46].
 - Not verified: magic-link libraries for SvelteKit, background job libraries for Node/PostgreSQL, the SvelteKit upgrade guide, and any admin framework.
 
 Strengths:
@@ -482,7 +483,7 @@ Weaknesses:
 - The largest dependency tree of the candidates (React, the framework, the bundler and the libraries above).
 - Its centre of gravity is interactive client-side applications, while this archive is mostly documents and forms. The server and client boundary of Server Components makes it harder to see what runs where, which matters for G4 and for keeping private data out of client payloads.
 
-Verdict: the lowest score among the real candidates. Next.js solves problems this project does not have (rich client interactivity, edge rendering at scale) and adds churn and security surface where the project is most sensitive. Vercel is excluded by G3. Among TypeScript options, SvelteKit, and better still the minimal TypeScript stack of section 6.12, are stronger.
+Verdict: the lowest score among the real candidates. Next.js solves problems this project does not have (rich client interactivity, edge rendering at scale) and adds churn and security surface where the project is most sensitive. Vercel is excluded by G3. Among TypeScript options, SvelteKit, and better still the minimal TypeScript stack of section 6.13, are stronger.
 
 ### 6.12 Bare Node.js (no framework, no build step)
 
@@ -555,9 +556,99 @@ What it teaches, for every candidate:
 - Deletion is never immediate at the storage layer. SQLite keeps deleted content in free pages unless `secure_delete` is on, and PostgreSQL keeps dead row versions until vacuum and in its write-ahead log. The deletion lifecycle (#16) must cover storage-level remnants, not just rows.
 - French search is a recurring gap for every SQLite-based option. With a few thousand testimonies, prefix and accent-folded matching may be acceptable, but that is a product decision.
 
-Verdict: not recommended in its pure form, because one person would carry the whole security surface. Its defensible form is "Node plus a short allow-list of small, audited libraries": sessions or cookies, templating with auto-escaping, WebAuthn for admin, and optionally a PostgreSQL driver. That minimal TypeScript stack keeps most of this option's strengths and removes its worst weaknesses. It has not been evaluated with sources, and should be before it is chosen.
+Verdict: not recommended in its pure form, because one person would carry the whole security surface. Its defensible form is "Node plus a short allow-list of small, audited libraries": sessions or cookies, templating with auto-escaping, WebAuthn for admin, and optionally a PostgreSQL driver. That minimal TypeScript stack keeps most of this option's strengths and removes its worst weaknesses. It is evaluated in section 6.13.
 
-### 6.13 Reference anti-stack (scale floor)
+### 6.13 Minimal TypeScript (Node.js, TypeScript and key libraries)
+
+Added 2026-11-15 at the owner's request. This is the practical form of section 6.12. The base is Node.js LTS, with source code in TypeScript run through Node's native type stripping (no build step) and checked by `tsc`. Security-sensitive and standards-defined concerns get a library. Everything else stays in the project's own code.
+
+Library set. Versions, licences and repository activity were read from the npm registry and GitHub on 2026-11-15 [S77].
+
+| Concern | Library | Version | Licence | Maintained by | Notes |
+| --- | --- | --- | --- | --- | --- |
+| HTTP server, routing, request validation by JSON Schema, test injection | `fastify` | 5.12.8 | MIT | Fastify organization, an OpenJS Foundation At-Large project [S78] | 15 direct dependencies. Security updates for a major continue six months after the next major ships [S78]. Its main branch already targets v6. |
+| Cookies | `@fastify/cookie` | 11.1.5 | MIT | Fastify organization | Covered by the organization-wide security policy |
+| Server-side sessions | `@fastify/session` | 11.1.6 | MIT | Fastify organization | Sessions stored in PostgreSQL through a small in-project store adapter, so they can be revoked |
+| CSRF protection | `@fastify/csrf-protection` | 8.0.2 | MIT | Fastify organization | |
+| Security headers and CSP | `@fastify/helmet` | 13.2.0 | MIT | Fastify organization | |
+| Rate limiting | `@fastify/rate-limit` | 11.2.2 | MIT | Fastify organization | |
+| Form parsing | `@fastify/formbody` | 9.0.2 | MIT | Fastify organization | |
+| HTML templates | `eta` | 4.6.0 | MIT | One maintainer | No dependencies. `autoEscape` defaults to true [S79]. |
+| Admin second factor (WebAuthn) | `@simplewebauthn/server` | 14.1.0 | MIT | One maintainer | 10 direct dependencies for ASN.1 and COSE parsing. Requires Node 22 or later. |
+| Typed SQL query builder and migrations | `kysely` | 0.29.9 | MIT | kysely-org | No dependencies; still 0.x |
+| PostgreSQL driver | `pg` | 8.23.1 | MIT | One long-standing maintainer | 6 direct dependencies; Kysely's built-in PostgreSQL dialect uses it |
+| Schemas producing both JSON Schema and static types | `typebox` | 1.4.7 | MIT | One maintainer | No dependencies. Its schemas are JSON Schema, the same artefact family as the archive specification. |
+| Message formatting (ICU plurals and select) | `intl-messageformat` | 12.1.5 | BSD-3-Clause | FormatJS organization | |
+| Locale negotiation (BCP 47 lookup) | `@formatjs/intl-localematcher` | 0.10.1 | MIT | FormatJS organization | |
+| Proof-of-work challenge, server side | `altcha-lib` | 2.8.0 | MIT | ALTCHA organization | No dependencies |
+| Type checking, development only | `typescript` | 7.0.2 | Apache-2.0 | Microsoft | |
+
+Not taken from npm:
+
+- The disposable-domain blocklist is vendored from the maintained, CC0-licensed GitHub list (ADR 0003, [S52]) and refreshed by a script. The `disposable-email-domains` npm package was last published in 2022.
+- Static files are served by the reverse proxy, which makes `@fastify/static` unnecessary.
+- From the runtime itself: `node:crypto` (random tokens, hashing, constant-time comparison), `fetch` (the email provider's HTTP API), and `node:test`, used with Fastify's request injection for testing.
+
+Measured footprint: a scratch install of the runtime libraries above, plus `@fastify/static` for an upper bound, resolved to 126 packages. Licences in the tree are MIT, ISC, BSD-3-Clause, Apache-2.0, 0BSD and BlueOak-1.0.0. By direct dependency, Fastify brings 45 packages, `@fastify/static` 25, `@simplewebauthn/server` 24, `pg` 14, and the others 0 to 4 each. Without `@fastify/static`, expect roughly 100. The install ran with lifecycle scripts disabled [S77].
+
+Security policies: Node.js, TypeScript, the Fastify organization (one policy covering all its repositories), Kysely and ALTCHA publish a `SECURITY.md`. node-postgres, SimpleWebAuthn, Eta, TypeBox and FormatJS do not publish one in their repositories [S77].
+
+Still hand-written, but on library primitives:
+
+- the magic-link flow: token issuance and expiry on `node:crypto`, a confirmation POST, and the session;
+- the session store adapter;
+- locale-prefixed routing;
+- the moderation console screens;
+- job scripts run by systemd timers;
+- the deletion procedures.
+
+None of these implements a standard or a cryptographic primitive itself.
+
+Gates: G1 to G4 pass, with the same storage-level deletion care as any PostgreSQL candidate. G5 is conditional: the runtime, compiler, framework, query builder and proof-of-work library publish security processes, but five key libraries do not.
+
+Scores (judgement):
+
+| # | Criterion | Score | Reason |
+| --- | --- | --- | --- |
+| 1 | Longevity and governance | 3 | Foundation-governed runtime and framework, but several essential libraries have one maintainer each. Each is small and replaceable. |
+| 2 | Cost of staying supported | 3 | Many independent release streams: a yearly Node major, Fastify majors with a six-month overlap and v6 near, Kysely still 0.x, and the TypeScript 7 transition. |
+| 3 | Admin | 2 | Sessions, forms, templates and validation exist, but the moderation console is built screen by screen. |
+| 4 | i18n | 3 | ICU message formatting and standards-based locale matching, but no catalog extraction or translator workflow, and hand-written locale routing |
+| 5 | Magic-link ecosystem | 3 | Thin in-project flow on audited primitives; library sessions, CSRF and rate limits; WebAuthn for admin |
+| 6 | Forms and no-JS | 4 | Server-rendered with auto-escaping templates, schema-validated form bodies with typed results |
+| 7 | Database and search | 4 | PostgreSQL with typed queries and migrations; full-text search in SQL with French and English configurations |
+| 8 | Security defaults and process | 3 | Every security concern has a maintained library, but composing them correctly is the project's job, and no framework-level secure defaults tie them together. Clears the optional security floor of section 7.3. |
+| 9 | Jobs | 3 | systemd timers running TypeScript scripts |
+| 10 | Operations | 4 | One light Node process plus PostgreSQL |
+| 11 | Successor-friendliness | 3 | TypeScript and Fastify are widely known, but the assembly is project-specific and must be documented |
+| 12 | Dependency footprint | 3 | About 100 packages, all permissively licensed: more than Django or Go, far fewer than the TypeScript frameworks |
+| 13 | Testing | 4 | `node:test` plus Fastify request injection |
+| 14 | Archive-first fit | 5 | One TypeBox schema can be the JSON Schema of the archive specification, the request validator and the TypeScript type. There is no ORM, and the exporter shares the domain types. |
+| 15 | Type system | 5 | TypeScript throughout, including typed SQL and typed schemas. Templates are the exception: Eta templates are strings and are not type-checked. |
+
+Weighted total: **68.8**, or 66.8 under the original criteria.
+
+Variants (judgement, not scored):
+
+- A compile step would allow TSX templates rendered on the server, typed by the compiler and escaped by default. That closes the template typing gap, at the cost of the no-build-step property.
+- Hono instead of Fastify: zero dependencies, with built-in cookie, CSRF and secure-header helpers, but no first-party session or rate-limit plugins, and no foundation governance.
+
+Strengths:
+
+- The best-typed option in the matrix, with the strongest archive fit: one schema can serve the archive specification, the validation and the types.
+- Every security-sensitive or standards-defined concern is handled by a maintained library. This removes the main objection to bare Node.js and follows the project's own practice of using libraries for standards.
+- Light to operate, transparent, and a moderate dependency tree with permissive licences.
+
+Weaknesses:
+
+- No admin. The moderation console, which is a daily tool, is hand-built.
+- Many independent maintainers and release streams. Five essential libraries publish no security policy, and several have one maintainer.
+- Security comes from composing libraries correctly, not from a framework's defaults. The threat model and tests must carry that.
+- A successor inherits a project-specific assembly rather than a framework with its own documentation.
+
+Verdict: the strongest TypeScript-family option, and in a near-tie with ASP.NET Core and Go for third place. It trades Django's first-party admin, i18n workflow and single governance for full TypeScript and the best archive fit. It is the credible alternative if TypeScript matters to the owner as much as the custodial evidence suggests it might (section 10).
+
+### 6.14 Reference anti-stack (scale floor)
 
 Added 2026-11-15 at the owner's request: the criteria applied in reverse, to design the worst possible stack. It is a deliberate composite of real categories, not a review of any particular product. It fails all five gates and is scored only to mark the floor of the scale (20).
 
@@ -602,13 +693,13 @@ What it teaches:
 
 These lessons are the origin of the gates in section 4.1.
 
-### 6.14 Astro (considered, not a primary candidate)
+### 6.15 Astro (considered, not a primary candidate)
 
 - Astro's current major is 7 (astro@7.4.12 on 13 November in the GitHub releases page) [S46].
 - Built-in i18n routing: locale folders, prefixDefaultLocale, fallback and domain mapping [S46]. No message catalogs or pluralization are covered on that page [S46].
 - Astro is an excellent static-HTML generator. It fits the "static HTML for published testimonies and editions" idea (ADR 0006) well, but a dynamic app (magic links, admin, moderation queue) is not its centre of gravity. It is noted as a possible companion for Context and editions, not as the application.
 
-### 6.15 CMS-on-framework options for Context pages (optional, not mandatory)
+### 6.16 CMS-on-framework options for Context pages (optional, not mandatory)
 
 - Wagtail (on Django): Wagtail 7.4 is LTS (released 4 May 2026) with security support until 2 November 2027; Wagtail 8.1 was released 2 November 2026 [S57]. A page-tree CMS would add an editor UI for Context pages. The cost is another dependency stream and another upgrade stream. Judgement: markdown files in the repository, rendered by the app, are simpler and more archive-friendly. Not required.
 - Filament (on Laravel): 5.11.3 active (13 November) [S23]. Relevant only if Laravel were chosen.
@@ -619,25 +710,25 @@ These lessons are the origin of the gates in section 4.1.
 
 Scores are 1 to 5 (5 best). They are judgements based on the verified facts in section 6, and on general experience where marked "not verified". Weighted total = sum of (score times weight) divided by 5, so the maximum is 100 and the floor, a score of 1 everywhere, is 20. Columns are ordered by weighted total. The last row keeps the totals of the first version (14 criteria, original weights; section 4.3) for comparison.
 
-| # | Criterion | Weight | Django | Symfony 7.4 | ASP.NET Core | Go | Bare Node.js | Laravel 13 | Rails 8.1 | Phoenix | SvelteKit | AdonisJS | WordPress | Next.js (self-hosted) | Anti-stack |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Longevity and governance | 10 | 5 | 4 | 4 | 4 | 4 | 3 | 3 | 3 | 3 | 2 | 3 | 3 | 1 |
-| 2 | Cost of staying supported | 7 | 4 | 4 | 3 | 5 | 4 | 3 | 2 | 3 | 2 | 3 | 4 | 1 | 1 |
-| 3 | Admin | 8 | 5 | 3 | 2 | 1 | 1 | 3 | 2 | 2 | 1 | 2 | 4 | 1 | 1 |
-| 4 | i18n | 8 | 5 | 5 | 4 | 3 | 3 | 3 | 3 | 4 | 4 | 4 | 3 | 3 | 1 |
-| 5 | Magic-link ecosystem | 6 | 3 | 4 | 2 | 2 | 2 | 3 | 3 | 4 | 2 | 2 | 2 | 3 | 1 |
-| 6 | Forms and no-JS | 6 | 5 | 4 | 4 | 4 | 3 | 4 | 4 | 3 | 5 | 3 | 3 | 3 | 1 |
-| 7 | Database and search | 6 | 5 | 3 | 4 | 3 | 2 | 3 | 4 | 4 | 3 | 3 | 1 | 3 | 1 |
-| 8 | Security defaults and process | 10 | 5 | 4 | 4 | 4 | 2 | 3 | 4 | 3 | 3 | 3 | 2 | 2 | 1 |
-| 9 | Jobs without extra infrastructure | 4 | 3 | 5 | 3 | 3 | 3 | 4 | 5 | 3 | 2 | 2 | 3 | 2 | 1 |
-| 10 | Operations on one VPS | 5 | 4 | 4 | 4 | 5 | 5 | 4 | 4 | 4 | 4 | 4 | 4 | 3 | 1 |
-| 11 | Successor-friendliness | 6 | 5 | 4 | 3 | 3 | 3 | 4 | 4 | 2 | 3 | 3 | 5 | 4 | 1 |
-| 12 | Dependency footprint | 5 | 4 | 3 | 3 | 5 | 5 | 3 | 3 | 4 | 2 | 2 | 2 | 1 | 1 |
-| 13 | Testing | 3 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 3 | 2 | 3 | 1 |
-| 14 | Archive-first fit | 10 | 4 | 4 | 4 | 4 | 5 | 3 | 3 | 3 | 4 | 3 | 2 | 3 | 1 |
-| 15 | Type system and data-model expressiveness | 6 | 2 | 3 | 4 | 2 | 4 | 2 | 1 | 2 | 5 | 5 | 1 | 5 | 1 |
-| | **Weighted total** | 100 | **86.4** | **77.4** | **70.0** | **69.0** | **65.6** | **63.6** | **63.4** | **62.6** | **62.4** | **58.4** | **54.8** | **52.8** | **20.0** |
-| | Total with the original 14 criteria and weights | | 88.6 | 78.8 | 69.0 | 71.4 | 65.4 | 65.4 | 66.0 | 64.2 | 59.8 | 55.6 | 57.8 | 49.6 | 20.0 |
+| # | Criterion | Weight | Django | Symfony 7.4 | ASP.NET Core | Go | Minimal TypeScript | Bare Node.js | Laravel 13 | Rails 8.1 | Phoenix | SvelteKit | AdonisJS | WordPress | Next.js (self-hosted) | Anti-stack |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Longevity and governance | 10 | 5 | 4 | 4 | 4 | 3 | 4 | 3 | 3 | 3 | 3 | 2 | 3 | 3 | 1 |
+| 2 | Cost of staying supported | 7 | 4 | 4 | 3 | 5 | 3 | 4 | 3 | 2 | 3 | 2 | 3 | 4 | 1 | 1 |
+| 3 | Admin | 8 | 5 | 3 | 2 | 1 | 2 | 1 | 3 | 2 | 2 | 1 | 2 | 4 | 1 | 1 |
+| 4 | i18n | 8 | 5 | 5 | 4 | 3 | 3 | 3 | 3 | 3 | 4 | 4 | 4 | 3 | 3 | 1 |
+| 5 | Magic-link ecosystem | 6 | 3 | 4 | 2 | 2 | 3 | 2 | 3 | 3 | 4 | 2 | 2 | 2 | 3 | 1 |
+| 6 | Forms and no-JS | 6 | 5 | 4 | 4 | 4 | 4 | 3 | 4 | 4 | 3 | 5 | 3 | 3 | 3 | 1 |
+| 7 | Database and search | 6 | 5 | 3 | 4 | 3 | 4 | 2 | 3 | 4 | 4 | 3 | 3 | 1 | 3 | 1 |
+| 8 | Security defaults and process | 10 | 5 | 4 | 4 | 4 | 3 | 2 | 3 | 4 | 3 | 3 | 3 | 2 | 2 | 1 |
+| 9 | Jobs without extra infrastructure | 4 | 3 | 5 | 3 | 3 | 3 | 3 | 4 | 5 | 3 | 2 | 2 | 3 | 2 | 1 |
+| 10 | Operations on one VPS | 5 | 4 | 4 | 4 | 5 | 4 | 5 | 4 | 4 | 4 | 4 | 4 | 4 | 3 | 1 |
+| 11 | Successor-friendliness | 6 | 5 | 4 | 3 | 3 | 3 | 3 | 4 | 4 | 2 | 3 | 3 | 5 | 4 | 1 |
+| 12 | Dependency footprint | 5 | 4 | 3 | 3 | 5 | 3 | 5 | 3 | 3 | 4 | 2 | 2 | 2 | 1 | 1 |
+| 13 | Testing | 3 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 3 | 2 | 3 | 1 |
+| 14 | Archive-first fit | 10 | 4 | 4 | 4 | 4 | 5 | 5 | 3 | 3 | 3 | 4 | 3 | 2 | 3 | 1 |
+| 15 | Type system and data-model expressiveness | 6 | 2 | 3 | 4 | 2 | 5 | 4 | 2 | 1 | 2 | 5 | 5 | 1 | 5 | 1 |
+| | **Weighted total** | 100 | **86.4** | **77.4** | **70.0** | **69.0** | **68.8** | **65.6** | **63.6** | **63.4** | **62.6** | **62.4** | **58.4** | **54.8** | **52.8** | **20.0** |
+| | Total with the original 14 criteria and weights | | 88.6 | 78.8 | 69.0 | 71.4 | 66.8 | 65.4 | 65.4 | 66.0 | 64.2 | 59.8 | 55.6 | 57.8 | 49.6 | 20.0 |
 
 Ranking:
 
@@ -645,21 +736,27 @@ Ranking:
 2. Symfony 77.4
 3. ASP.NET Core 70.0
 4. Go 69.0
-5. Bare Node.js 65.6
-6. Laravel 63.6
-7. Rails 63.4
-8. Phoenix 62.6
-9. SvelteKit 62.4
-10. AdonisJS 58.4
-11. WordPress 54.8
-12. Next.js self-hosted 52.8
+5. Minimal TypeScript 68.8
+6. Bare Node.js 65.6
+7. Laravel 63.6
+8. Rails 63.4
+9. Phoenix 62.6
+10. SvelteKit 62.4
+11. AdonisJS 58.4
+12. WordPress 54.8
+13. Next.js self-hosted 52.8
 
 Next.js on Vercel is excluded by G3. The anti-stack fails every gate and appears only as the floor.
 
 ### 7.1 Reading the matrix
 
 - Django's lead over Symfony comes mainly from admin (+2 points at weight 8), database and search, security process, longevity and successor-friendliness. Symfony leads on jobs, magic links and types.
+- Third to fifth place is a near-tie: ASP.NET Core 70.0, Go 69.0 and minimal TypeScript 68.8, within 1.2 points, which is less than the uncertainty of the judgements.
+  - ASP.NET Core is the most balanced.
+  - Go is the most frugal.
+  - Minimal TypeScript is the best typed and the best archive fit, and pays for it with a hand-built admin and many independent maintainers.
 - ASP.NET Core and Go swapped places compared with the first version. The type criterion favours ASP.NET Core, and the lower weight of criterion 2 costs Go some of its compatibility advantage. A reasonable owner who values minimal dependencies more than first-party features could still put Go higher.
+- Minimal TypeScript gains 3.2 points over bare Node.js. Through its libraries, admin, magic links, forms, security and types each go up one step, and database and search up two. The same libraries cost one step each on longevity, cost of staying supported and operations, and two on dependency footprint.
 - Bare Node.js scores 5 on operations, dependencies and archive fit, and 4 on longevity, cost of staying supported, testing and types. It scores 1 or 2 on admin, magic links, database and security. Section 7.3 explains why that profile does not collapse.
 - WordPress has the most uneven profile of the real candidates: 4 on admin and 5 on successor-friendliness, but 1 on database and 2 on security, archive fit and dependencies. Its strengths are in content editing, which the plan needs least.
 - Next.js loses on cost of staying supported (1), security history (2), first-party completeness (admin 1, jobs 2) and dependency footprint (1). Its benefits, interactive client rendering and edge delivery, are not requirements here.
@@ -675,6 +772,7 @@ Totals with criterion 2 (cost of staying supported) at weight 0, at the adopted 
 | Symfony 7.4 | 77.2 | 77.4 | 77.6 |
 | ASP.NET Core | 70.8 | 70.0 | 69.3 |
 | Go | 66.7 | 69.0 | 71.0 |
+| Minimal TypeScript | 69.5 | 68.8 | 68.2 |
 | Bare Node.js | 64.5 | 65.6 | 66.5 |
 | Laravel 13 | 63.9 | 63.6 | 63.4 |
 | Rails 8.1 | 65.2 | 63.4 | 61.9 |
@@ -685,7 +783,13 @@ Totals with criterion 2 (cost of staying supported) at weight 0, at the adopted 
 | Next.js (self-hosted) | 55.3 | 52.8 | 50.7 |
 | Anti-stack | 20.0 | 20.0 | 20.0 |
 
-Removing the criterion entirely leaves the top four unchanged. The largest movements are Go (down 2.3), and SvelteKit and Next.js (up 1.7 and 2.5). Even with churn ignored entirely, Next.js stays second to last and SvelteKit stays in the second half. Churn is not why these frameworks score low.
+Removing the criterion entirely leaves the top three unchanged. Minimal TypeScript moves ahead of Go for fourth place. Other movements:
+
+- Go: down 2.3.
+- SvelteKit: up 1.7.
+- Next.js: up 2.5.
+
+Even with churn ignored entirely, Next.js stays second to last and SvelteKit stays in the second half. Churn is not why these frameworks score low.
 
 ### 7.3 Why popular frameworks score low, and why bare Node.js does not collapse
 
@@ -693,7 +797,7 @@ Removing the criterion entirely leaves the top four unchanged. The largest movem
 - **About a third of the weight measures what the stack provides first-party for one person:** admin 8, i18n 8, magic links 6, database and search 6, jobs 4, which is 32 points. Next.js, SvelteKit and WordPress are popular for work where those pieces come from elsewhere: a team, hosted services or plugins. Here, every missing piece is assembled and maintained by one person.
 - **A 55 is not a failure.** On a 20 to 100 scale the midpoint is 60, so the popular frameworks sit around the middle: adequate with significant gaps for this use.
 - **Bare Node.js survives because the sum is compensatory.** Its fives on operations, dependencies and archive fit pay for its ones and twos on admin, magic links, database and security. The real cost of the second group is not linear. Hand-written sessions, CSRF protection, escaping and WebAuthn are a permanent security liability for one person, and a 2 out of 5 understates that. This is the limit of a weighted-sum method, and the reason for the gates.
-- **Option, not applied by default (question 13):** a non-compensatory floor of 3 on security. It would exclude bare Node.js in its pure form, WordPress and Next.js, and leave the other nine candidates. The minimal TypeScript variant of section 6.12 is designed to clear it.
+- **Option, not applied by default (question 13):** a non-compensatory floor of 3 on security. It would exclude bare Node.js in its pure form, WordPress and Next.js, and leave the other ten candidates. Minimal TypeScript (section 6.13) scores 3 and clears it.
 
 ## 8. Architecture sketch (applies to any winner)
 
@@ -784,7 +888,7 @@ Reasons not to pick it: no first-party admin, and the owner would be learning a 
 
 Close behind: ASP.NET Core (70.0) and Go (69.0). Go suits an owner who values minimal dependencies and a single binary more than first-party features, and accepts building the admin, magic-link flow and job runner. That is a larger one-person build than the verified facts for Django and Symfony suggest.
 
-If the owner decides that TypeScript should dominate, the strongest direction is not a TypeScript framework. It is the minimal TypeScript stack: Node LTS plus a short allow-list of audited libraries (section 6.12), which inherits bare Node.js's operations, dependency and archive-fit scores while removing its worst security weaknesses. It needs a sourced evaluation before it is chosen. Among frameworks, SvelteKit with Drizzle and Paraglide (62.4) is the strongest TypeScript option. Its admin, magic-link auth and background jobs are assembled from third-party packages.
+If the owner decides that TypeScript should dominate, the strongest direction is not a TypeScript framework. It is minimal TypeScript (section 6.13, 68.8): Node.js LTS with TypeScript source, Fastify and its first-party plugins for cookies, sessions, CSRF, headers and rate limits, Eta for auto-escaped templates, SimpleWebAuthn for admin, Kysely and pg for PostgreSQL, TypeBox for schemas, and FormatJS for messages. One TypeBox schema can serve as the archive JSON Schema, the request validator and the TypeScript type. That is the strongest archive fit in the matrix. Its costs are a hand-built moderation console, about 100 packages across many independent maintainers, and security that depends on composing those libraries correctly. Among frameworks, SvelteKit with Drizzle and Paraglide (62.4) is the strongest TypeScript option.
 
 ## 12. Risks
 
@@ -818,7 +922,7 @@ If the owner decides that TypeScript should dominate, the strongest direction is
 12. Is the Symfony login-link caveat acceptable if Symfony is chosen?
 13. Should security be a non-compensatory floor, so that a candidate scoring below 3 is excluded however well it does elsewhere (section 7.3)?
 14. Do you accept the revised criteria and weights of section 4.3?
-15. If TypeScript should dominate, should the minimal TypeScript stack of section 6.12 get a full sourced evaluation before the decision?
+15. If TypeScript should dominate, is minimal TypeScript (section 6.13) acceptable, given its hand-built admin and its reliance on several single-maintainer libraries without published security policies?
 
 ## 14. Sources
 
@@ -901,6 +1005,9 @@ Numbered sources. "Fetched" means the page was read in this pass through a fetch
 - [S75] <https://devblogs.microsoft.com/typescript/progress-on-typescript-7-december-2025/> - search result summary. JSDoc support rewritten; `@enum` and `@constructor` not recognized.
 - [S76] <https://typescriptdocs.com/release-notes/TypeScript%207.0> - search result summary. TypeScript 7 release timeline and removed JSDoc behaviours.
 - Local test, 2026-11-15: Node v26.13.0 with SQLite 3.54.0; FTS5 tokenizers, diacritics folding, absence of French stemming, `secure_delete` default.
+- [S77] npm registry (<https://registry.npmjs.org/>) and GitHub REST API, queried 2026-11-15: latest versions, licences, direct dependency counts, repository activity and the presence of `SECURITY.md` (including the Fastify organization's default community-health repository). A scratch install of the section 6.13 library set with pnpm 12.18.0, lifecycle scripts disabled, gave the package count and licence list.
+- [S78] <https://fastify.dev/docs/latest/Reference/LTS/> - fetched 2026-11-15. LTS policy and OpenJS Foundation At-Large status. <https://github.com/fastify/fastify> - search result: README notes that the main branch targets v6.
+- [S79] <https://eta.js.org/docs/4.x.x/api/configuration> - fetched 2026-11-15. `autoEscape` default true.
 - Repository documents: docs/plans/main.md; docs/decisions/0002-single-eu-vps.md; 0003-email-magic-link-auth.md; 0006-archive-first-replaceable-application.md; 0007-privacy-review-path.md; docs/research/domain-and-persistence.md; docs/constitution/archival-model.md; AGENTS.md.
 
 Not verified in this pass (listed so they are not mistaken for facts): Django deprecation policy and upgrade history; Django rate limiting; Django admin change-history storage; Python minimum for Django 6.x; Phoenix governance and security policy; Oban and Ecto full-text search; Laravel scheduler; Laravel and Rails i18n URL handling; ASP.NET localization and jobs; Go html/template, pgx and migration tools; AdonisJS Node requirement, Lucid, jobs and governance; SvelteKit magic-link and job libraries; Drizzle full-text search; Symfony full-text search; the licences of altcha-lib packages and the Sentinel server; Rails Foundation structure; Symfony governance today.

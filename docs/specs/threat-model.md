@@ -12,8 +12,8 @@ Stack-independent. Controls marked **(required)** are launch requirements; the r
 
 | Asset | Why it matters | Where it lives |
 | --- | --- | --- |
-| Unpublished entries | Potentially sensitive self-disclosure not yet consented to publication; may contain third-party data or secrets awaiting moderation | Database, backups |
-| Account emails | The only link between a person and their entries; enables withdrawal and could de-anonymize anonymous entries | Database, backups, email provider logs |
+| Unpublished testimonies | Potentially sensitive self-disclosure not yet consented to publication; may contain third-party data or secrets awaiting moderation | Database, backups |
+| Account emails | The only link between a person and their testimonies; enables withdrawal and could de-anonymize anonymous testimonies | Database, backups, email provider logs |
 | Moderation records, redacted originals | Contain exactly what was judged unfit to publish | Database, backups |
 | Privacy and withdrawal requests | Reveal who asked for what | Database, mailbox, backups |
 | Admin access | Full control over all of the above | App, VPS |
@@ -25,9 +25,9 @@ Stack-independent. Controls marked **(required)** are launch requirements; the r
 ## 2. Adversaries
 
 1. Spammers and SEO abusers: automated, high volume, low sophistication.
-2. Harassers and doxxers: use entries to target third parties, or try to unmask anonymous contributors.
+2. Harassers and doxxers: use testimonies to target third parties, or try to unmask anonymous contributors.
 3. Opportunistic attackers: credential stuffing, scanning for known vulnerabilities, compromised dependencies.
-4. Targeted attackers: someone seeking the identity behind a specific anonymous entry, or wanting to deface or delete the archive.
+4. Targeted attackers: someone seeking the identity behind a specific anonymous testimony, or wanting to deface or delete the archive.
 5. Ideological flooders: try to overwhelm moderation or skew the archive.
 6. Insider error: the custodian making a destructive mistake, or an export leaking private fields.
 7. Providers and legal process: hosting, email or backup providers, and legal requests for data.
@@ -50,10 +50,10 @@ Stack-independent. Controls marked **(required)** are launch requirements; the r
 
 ### 3.3 Content
 
-- **Stored XSS through entries.** Entries are stored and rendered as plain text, escaped on output. Only URLs are auto-linked. No user-supplied HTML or Markdown at MVP **(required)**. A strict Content-Security-Policy with no inline scripts **(required)**.
-- **Link abuse and SEO spam.** Outbound links carry `rel="ugc nofollow noopener"` **(required)**. A per-entry link count limit is enforced or flagged for moderation.
+- **Stored XSS through testimonies.** Testimonies are stored and rendered as plain text, escaped on output. Only URLs are auto-linked. No user-supplied HTML or Markdown at MVP **(required)**. A strict Content-Security-Policy with no inline scripts **(required)**.
+- **Link abuse and SEO spam.** Outbound links carry `rel="ugc nofollow noopener"` **(required)**. A per-testimony link count limit is enforced or flagged for moderation.
 - **Unicode abuse.** Text is normalized to NFC. Bidirectional override characters and excessive combining marks are flagged for moderation, not silently stripped, because legitimate right-to-left text must survive.
-- **Secrets and credentials in entries.** Submissions are scanned against known credential patterns before review, and hits are flagged to the moderator (plan section 25).
+- **Secrets and credentials in testimonies.** Submissions are scanned against known credential patterns before review, and hits are flagged to the moderator (plan section 25).
 - **Third-party personal data and doxxing.** Handled by moderation (constitution), helped by flags for emails, phone numbers and street addresses detected in text.
 - **Re-identification of anonymous contributors.** No public account linkage; filters suppressed below a population threshold; no exact timestamps finer than the date on public pages; no exact age for minors (legal research). Exports apply the same rules.
 
@@ -71,8 +71,8 @@ Stack-independent. Controls marked **(required)** are launch requirements; the r
 ### 3.6 Data leaving the system
 
 - **Export leakage of private fields.** Exports are built from an explicit allow-list of public fields. Every field in the data model is classified (public, private, operational), and a test fails if an unclassified field exists or a private field appears in an export **(required)**.
-- **Logs.** Application logs do not contain entry text, emails or full IP addresses. Reverse-proxy logs have short retention. Retention may be constrained by law (legal research, section 6); the final values go in the retention schedule (#18).
-- **Unpublished content sent to third parties.** Unpublished entries are never sent to external services, including machine translation or AI tools. Only published entries may be machine-translated, and only through an EU processor under a DPA or a self-hosted system **(required)**.
+- **Logs.** Application logs do not contain testimony text, emails or full IP addresses. Reverse-proxy logs have short retention. Retention may be constrained by law (legal research, section 6); the final values go in the retention schedule (#18).
+- **Unpublished content sent to third parties.** Unpublished testimonies are never sent to external services, including machine translation or AI tools. Only published testimonies may be machine-translated, and only through an EU processor under a DPA or a self-hosted system **(required)**.
 - **Provider access and legal requests.** EU-controlled processors with DPAs. A documented procedure for answering legal requests, including the right to challenge them and to inform the contributor where lawful.
 
 ### 3.7 Backups and editions

@@ -8,7 +8,7 @@ A person should be able to arrive at the site, understand why the project exists
 
 Other visitors should be able to browse and search these testimonies directly rather than through an algorithmic recommendation system, including by fields such as profession, location, language, relationship to AI, and other voluntarily supplied metadata.
 
-The project must preserve these voices over time, periodically package them into dated archival editions, and maintain enough contextual material that future readers can understand the world the contributors were describing.
+The project must preserve these testimonies over time, periodically package them into dated archival editions, and maintain enough contextual material that future readers can understand the world the contributors were describing.
 
 The project is not intended to become a comprehensive encyclopedia of artificial intelligence. Where other projects already preserve models, technical development, benchmarks, source code, incidents, or other specialized material well, The Artificial Intelligence Guestbook should identify and reference them rather than duplicating their work.
 
@@ -55,7 +55,7 @@ A testimony does not need to be insightful, representative, technically correct,
 
 The project consists conceptually of three layers.
 
-### 2.1 Voices
+### 2.1 Testimonies
 
 This is the primary layer.
 
@@ -65,7 +65,7 @@ The MVP must make creating, publishing, finding and preserving these contributio
 
 ### 2.2 Context
 
-Context explains the world in which those voices were produced.
+Context explains the world in which those testimonies were produced.
 
 It may cover subjects such as:
 
@@ -359,7 +359,7 @@ Every published testimony must have a stable identifier and a permanent deep lin
 Example conceptually:
 
 ```text
-/voices/VOICE-2027-000184
+/testimonies/7q4km2xd
 ```
 
 The exact URL convention is not prescribed.
@@ -870,7 +870,7 @@ Explains the idea clearly and offers immediate paths to:
 
 The testimony form and publication/consent flow.
 
-### Voices
+### Testimonies
 
 Browsable and searchable collection.
 
@@ -1251,4 +1251,4 @@ The name therefore acts as a useful product constraint as well as a public ident
 
 ## 39. The MVP in one sentence
 
-Build a multilingual, searchable, responsibly moderated public archive where anyone can leave a permanently addressable testimony about living through the AI era, with transparent authorship and optional identity, backed by enough context to make those voices understandable and by enough operational and archival infrastructure to ensure somebody can continue taking care of them.
+Build a multilingual, searchable, responsibly moderated public archive where anyone can leave a permanently addressable testimony about living through the AI era, with transparent authorship and optional identity, backed by enough context to make those testimonies understandable and by enough operational and archival infrastructure to ensure somebody can continue taking care of them.

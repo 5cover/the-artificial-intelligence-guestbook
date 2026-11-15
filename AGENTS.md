@@ -54,7 +54,11 @@ Directories that do not exist yet are created when their first document is writt
 
 ## Terminology
 
-Public interface: "entry", "sign the guestbook", "read the guestbook", "time capsule", "context", "reference shelf". Internal code and documentation may use "testimony", "contributor", "archival record", "edition" (plan section 38). Data model names should be consistent with [docs/specs/](docs/specs/) once it exists.
+The individual contribution is a **testimony** (plural "testimonies") in code, URLs, identifiers and documentation. The plan's earlier "voices" was a terminology mistake and must not reappear. Other terms: "contributor", "archival record", "edition" (public: "time capsule"), "context", "reference shelf".
+
+Public interface copy uses plain wording: "sign the guestbook", "read the guestbook", "time capsule". Whether visible interface text calls a single contribution "testimony" or "entry" (plan section 38) is an open owner question. Until it is settled, "entry" may appear only in interface copy, never in code, URLs or documentation.
+
+Dated research documents in `docs/research/` keep the wording of their date and are not rewritten for terminology. Data model names should be consistent with [docs/specs/](docs/specs/).
 
 ## Tracking
 

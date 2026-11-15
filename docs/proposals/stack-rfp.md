@@ -24,12 +24,12 @@ The owner asked for a comparison of application stacks, not a build. The short v
 These are owner decisions already recorded in the repository or stated for this RFP. They are not reopened here.
 
 - The archive is the primary deliverable. The web application is replaceable. The canonical archive format (structured records, plain text, manifests, checksums, schema documentation) is specified independently of the app. The app database is an operational store that exports to that format ([ADR 0006](../decisions/0006-archive-first-replaceable-application.md), [plan section 23](../plans/main.md)).
-- Lessons from a "static public site plus small API" design may be borrowed (for example cacheable, pre-rendered HTML for published entries and static HTML in editions) without adopting that architecture ([ADR 0006](../decisions/0006-archive-first-replaceable-application.md)).
+- Lessons from a "static public site plus small API" design may be borrowed (for example cacheable, pre-rendered HTML for published testimonies and static HTML in editions) without adopting that architecture ([ADR 0006](../decisions/0006-archive-first-replaceable-application.md)).
 - Hosting: one self-managed EU VPS (Hetzner, OVHcloud, Scaleway class). The stack must run comfortably on a small VPS with modest memory ([ADR 0002](../decisions/0002-single-eu-vps.md)).
 - Authentication: email magic links only, no passwords and no OAuth for now. Defences in layers: disposable-email blocklist, MX check, per-account pending caps, global intake throttling, a self-hosted proof-of-work challenge, rate limits, and rel="ugc nofollow" on outbound links ([ADR 0003](../decisions/0003-email-magic-link-auth.md)).
 - Database: PostgreSQL is the presumptive choice for full-text search in French and English. A challenge to it is required (section 6).
 - One operator, for decades. Successor-friendliness, low dependency churn and low supply-chain surface matter ([plan section 28 and 29](../plans/main.md)).
-- Server-rendered, accessible HTML that works without JavaScript is preferred. French and English are first-class interface languages, and entries may be in any language ([plan sections 8 and 27](../plans/main.md)).
+- Server-rendered, accessible HTML that works without JavaScript is preferred. French and English are first-class interface languages, and testimonies may be in any language ([plan sections 8 and 27](../plans/main.md)).
 - The operator's machine is Windows 11 with Node 26, pnpm and Python 3.12. Docker is not installed and PHP is not installed. The owner is comfortable with TypeScript. This is noted in section 10 and deliberately kept out of the scoring matrix.
 - Git: this document is not committed. The owner asked for no commit in this pass.
 
@@ -38,10 +38,10 @@ These are owner decisions already recorded in the repository or stated for this 
 Each requirement is a condition the stack must satisfy or make practical. "Must" items are used for the scoring; the list is not exhaustive.
 
 - R1. Canonical archive export that is lossless and independent of the app, including a round-trip validation test ([ADR 0006](../decisions/0006-archive-first-replaceable-application.md); plan sections 19, 23; [archival model](../constitution/archival-model.md)).
-- R2. Stable entry identifiers independent of state, URL and database keys; identifiers never reused (plan sections 12, 33; [domain research](../research/domain-and-persistence.md)).
-- R3. Entry states draft, submitted, under_review, published, rejected, withdrawn, with a content-free tombstone after withdrawal (plan sections 22, 33).
+- R2. Stable testimony identifiers independent of state, URL and database keys; identifiers never reused (plan sections 12, 33; [domain research](../research/domain-and-persistence.md)).
+- R3. Testimony states draft, submitted, under_review, published, rejected, withdrawn, with a content-free tombstone after withdrawal (plan sections 22, 33).
 - R4. Pre-publication moderation queue; nothing auto-publishes; original submission kept separately from any moderated public representation (plan section 9; ADR 0003 point 2).
-- R5. Authorship disclosure fields stored and shown with the entry (plan section 7).
+- R5. Authorship disclosure fields stored and shown with the testimony (plan section 7).
 - R6. Optional public identity separated from the private account; no automatic publication of account data (plan sections 4, 5).
 - R7. Magic-link sign-in with single-use, short-lived tokens; sessions; CSRF protection; rate limiting (plan section 25; ADR 0003).
 - R8. Disposable-domain blocklist, MX validation, per-account pending caps, global throttling and bulk rejection in the admin (ADR 0003).
@@ -49,7 +49,7 @@ Each requirement is a condition the stack must satisfy or make practical. "Must"
 - R10. One-person admin: queue, moderation notes, redaction, privacy requests, translations, context pages, account suspension, export, operational health (plan section 24).
 - R11. Deletion propagates to database, search index, caches, generated translations, generated files, and downloadable releases under project control; backups follow a defined expiry (plan sections 21, 22).
 - R12. Chronological browsing, basic full-text search in French and English, filters by language, country, profession, relationship to AI and similar fields (plan section 13).
-- R13. Full UI in French and English, including emails and consent text; entries in any language with the original canonical; machine translations labelled (plan sections 8, 10).
+- R13. Full UI in French and English, including emails and consent text; testimonies in any language with the original canonical; machine translations labelled (plan sections 8, 10).
 - R14. Server-rendered pages that work without JavaScript; semantic HTML, lang attributes, accessible forms and validation (plan section 27).
 - R15. Permanent, short, opaque testimony URLs; published pages renderable as static HTML for cache and editions (plan section 12; ADR 0006).
 - R16. Separate guardian-consent flow for minors (plan section 11).
@@ -69,7 +69,7 @@ Weights sum to 100. They reflect the plan and the ADRs. Each criterion is scored
 | 1 | Longevity: governance, release cadence, support windows | 11 | The plan is for decades and a successor must inherit the stack ([plan 28, 29](../plans/main.md)). |
 | 2 | Upgrade burden over 10+ years | 9 | Every forced major or minor upgrade is recurring custodial work ([plan 28](../plans/main.md)). |
 | 3 | Built-in or first-party admin for one-person moderation | 8 | Moderation, redaction, privacy requests and translations are routine duties ([plan 24](../plans/main.md)). |
-| 4 | i18n and l10n maturity | 8 | FR and EN are first-class and entries may be in any language ([plan 8](../plans/main.md)). |
+| 4 | i18n and l10n maturity | 8 | FR and EN are first-class and testimonies may be in any language ([plan 8](../plans/main.md)). |
 | 5 | Magic-link auth ecosystem (library maintenance, sessions, CSRF, rate limits) | 7 | Owner decision ([ADR 0003](../decisions/0003-email-magic-link-auth.md)), but libraries can be swapped. |
 | 6 | Forms, server-side validation, accessible no-JS rendering | 7 | Accessibility and no-JS are explicit ([plan 27](../plans/main.md)). Important, but most stacks can do it. |
 | 7 | PostgreSQL integration (ORM, migrations, full-text search) | 6 | PostgreSQL is presumptive; search quality matters ([plan 13](../plans/main.md)). |
@@ -89,7 +89,7 @@ PostgreSQL is presumed. The challenge was asked for, so the tradeoff is stated h
 
 - The case for SQLite: one file, no database server, simple backup with its online backup mechanism, no extra service to patch, and enough capacity for a small archive. Its operational simplicity is real and would suit a successor.
 - The case against SQLite for this project is specific. SQLite's FTS5 ships the unicode61 tokenizer (the default), an ascii tokenizer, a porter tokenizer and a trigram tokenizer. The porter stemmer is documented as designed for English only, and the document does not describe a French stemmer [S43]. French search would therefore be accent-folded and unstemmed, which is a real loss for a bilingual archive.
-- The case for PostgreSQL: Snowball stemmers are documented for many languages [S42]; Django's own documentation uses config="french" in its search examples [S7], so PostgreSQL search configurations per entry language are a practical option. PostgreSQL also gives row-level concurrency, LISTEN/NOTIFY and SKIP LOCKED for a job table. Rails' Solid Queue uses PostgreSQL's SKIP LOCKED [S13], and River runs on PostgreSQL [S40].
+- The case for PostgreSQL: Snowball stemmers are documented for many languages [S42]; Django's own documentation uses config="french" in its search examples [S7], so PostgreSQL search configurations per testimony language are a practical option. PostgreSQL also gives row-level concurrency, LISTEN/NOTIFY and SKIP LOCKED for a job table. Rails' Solid Queue uses PostgreSQL's SKIP LOCKED [S13], and River runs on PostgreSQL [S40].
 - Costs of PostgreSQL: one more service to install, patch and back up on the VPS; on the owner's Windows machine without Docker, a native PostgreSQL install (or WSL) is needed for local development. This is a real cost and is recorded as a risk.
 - Version: PostgreSQL 18 is the current major (18.7 on the versioning page). PostgreSQL 14's final release is 12 November 2026, three days before this document's date, so a new deployment should not start on 14 [S41]. PostgreSQL 19 is at release-candidate stage and is not supported yet [S41].
 
@@ -339,7 +339,7 @@ Verdict: AdonisJS is a credible TypeScript option, but the verified gaps are on 
 
 - Astro's current major is 7 (astro@7.4.12 on 13 November in the GitHub releases page) [S46].
 - Built-in i18n routing: locale folders, prefixDefaultLocale, fallback and domain mapping [S46]. No message catalogs or pluralization are covered on that page [S46].
-- Astro is an excellent static-HTML generator. It fits the "static HTML for published entries and editions" idea (ADR 0006) well, but a dynamic app (magic links, admin, moderation queue) is not its centre of gravity. It is noted as a possible companion for Context and editions, not as the application.
+- Astro is an excellent static-HTML generator. It fits the "static HTML for published testimonies and editions" idea (ADR 0006) well, but a dynamic app (magic links, admin, moderation queue) is not its centre of gravity. It is noted as a possible companion for Context and editions, not as the application.
 
 ### 6.11 CMS-on-framework options for Context pages (optional, not mandatory)
 
@@ -386,15 +386,15 @@ The architecture is the same whichever framework wins. Only the application cont
 Components:
 
 - Application process: the web application (Django with Gunicorn, or the equivalent for the chosen stack). Serves public pages, the contribution flow, the magic-link flow and the admin under a separate path. Admin access restricted at the proxy (IP allow-list or VPN) and protected by a second factor where the framework permits (not verified for each candidate).
-- Reverse proxy: TLS termination, static files, caching for published entry pages and edition HTML, and coarse rate limits. Caddy or nginx; choice not evaluated here.
+- Reverse proxy: TLS termination, static files, caching for published testimony pages and edition HTML, and coarse rate limits. Caddy or nginx; choice not evaluated here.
 - PostgreSQL 18: operational store for drafts, moderation, accounts (minimal), privacy requests, translations, context pages and search columns. Separate database user per role.
 - Job runner: systemd timers calling idempotent management or CLI commands for email sending, token and rate-limit expiry, export builds and backups. Where a queue is needed for email, a Postgres-backed table with SKIP LOCKED (or the framework's database queue) is sufficient on one VPS. This keeps the infrastructure to the VPS plus Postgres.
 - Mail: transactional provider with DNS authentication (SPF, DKIM, DMARC), per ADR 0003 and issue #10.
 - Backups: PostgreSQL logical dumps in custom format plus optional continuous WAL archiving, encrypted, copied to storage operated by a different provider (ADR 0002). Restore drills run on a schedule and are documented in docs/operations/.
 - Archive exporter: a separate command that reads the database through the same domain layer as the app, and writes an edition package. It is part of the core and runs continuously in tests (ADR 0006). Round-trip test: export, validate against the schema, re-import into a scratch database, compare identifiers and checksums.
 - Archive format: specified in docs/specs/archive-format.md (issue #13), independent of the application. The research note (domain-and-persistence) proposes BagIt (RFC 8493) per edition for transfer and OCFL 1.1 objects for successive editions, with an explicit purge procedure for privacy revisions. These are proposals, not decisions; the specification decides.
-- Entry identifiers: opaque, assigned at publication, never reused, no year and no sequence in the public form; internal keys are separate (domain research, section 3.8).
-- Deletion propagation: database rows with cascading foreign keys; search columns derived in the database (generated or trigger-maintained) so they go with the row; cache keys per entry; generated translations and static renderings removed by a defined procedure; backup expiry on a documented schedule (retention to be set with legal review).
+- Testimony identifiers: opaque, assigned at publication, never reused, no year and no sequence in the public form; internal keys are separate (domain research, section 3.8).
+- Deletion propagation: database rows with cascading foreign keys; search columns derived in the database (generated or trigger-maintained) so they go with the row; cache keys per testimony; generated translations and static renderings removed by a defined procedure; backup expiry on a documented schedule (retention to be set with legal review).
 - Logs and analytics: minimal application logs with short retention; hashed IP for rate limits with short retention (ADR 0003); no third-party analytics.
 - Secrets: environment files outside the repository, never in exports; .env stays ignored (AGENTS.md).
 - Monitoring: a health endpoint, a daily check of backlog, failed mail sends, failed exports, and backup age. Notifications to the operator only (plan section 31).
@@ -422,10 +422,10 @@ PostgreSQL 18               job runner (systemd timers -> management commands)
 ## 9. Operational and privacy notes that apply to all candidates
 
 - Deletion must reach admin history, sessions, logs and backups. Django's admin keeps an object history view [S6]; the other candidates have comparable admin or audit logs (not verified per framework). The design must decide what they store and for how long (R11).
-- Backups: a deleted entry remains in backups until they expire. The plan requires a deletion lifecycle for backups (plan section 21, 30). The retention figure is a legal and operational decision, not a stack decision.
+- Backups: a deleted testimony remains in backups until they expire. The plan requires a deletion lifecycle for backups (plan section 21, 30). The retention figure is a legal and operational decision, not a stack decision.
 - The archive format must not depend on the application's serialization. Framework-native serialization (pickle, PHP serialize, Marshal) must never be used for exports.
 - Outbound links are rel="ugc nofollow" by policy (ADR 0003). This is trivial in any stack.
-- The admin must not expose the export of unpublished submissions. Export builds read published entries only.
+- The admin must not expose the export of unpublished submissions. Export builds read published testimonies only.
 
 ## 10. Owner context (noted, not scored)
 
@@ -492,7 +492,7 @@ If the owner decides that TypeScript familiarity should dominate: SvelteKit with
 7. Context pages: markdown in the repository rendered by the app, or a CMS such as Wagtail? The default here is the former.
 8. Which reverse proxy do you want (Caddy or nginx)? Not evaluated here.
 9. ALTCHA: self-host the Sentinel component, or a custom verifier? Which licence is acceptable if Sentinel's licence is not MIT?
-10. Entries in any language: is it acceptable that languages without a PostgreSQL search configuration use the "simple" configuration (no stemming)?
+10. Testimonies in any language: is it acceptable that languages without a PostgreSQL search configuration use the "simple" configuration (no stemming)?
 11. Do you want the archive specification (issue #13) to be written before the framework is scaffolded? This document recommends yes.
 12. Is the Symfony login-link caveat acceptable if Symfony is chosen?
 

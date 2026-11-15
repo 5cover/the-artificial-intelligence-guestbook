@@ -8,14 +8,14 @@ Basis: plan sections 12, 14, 19, 22 and 33; [Archival model](../constitution/arc
 
 Identifiers belong to the archive, not to the application. They must survive redesigns, re-implementations and changes of custodian. The domain is written `<domain>` below until #8 is decided.
 
-## 1. Entry identifiers
+## 1. Testimony identifiers
 
 Every testimony has two identifiers.
 
 | Identifier | Assigned | Visibility | Purpose |
 | --- | --- | --- | --- |
 | Internal ID | When the draft is created | Private. Never in URLs, pages or exports. | Joins and references inside the operational store, independent of state (plan section 33). |
-| Public ID | When the entry is first published | Public, permanent. | Permanent link, citation, archival records, tombstones. |
+| Public ID | When the testimony is first published | Public, permanent. | Permanent link, citation, archival records, tombstones. |
 
 ### 1.1 Public ID syntax
 
@@ -29,8 +29,8 @@ Rationale:
 
 - Assigning at publication means rejected or never-published submissions have no public ID. Nothing about moderation outcomes or submission volume can be inferred from IDs (research section 3.8).
 - Dates live in metadata. A year in the ID would be ambiguous between submission, publication and edition years, because late submissions join later editions (plan section 19).
-- 40 bits is short enough to cite in print and large enough that random guessing is pointless at any plausible archive size. Guessing only ever finds published entries, which are public anyway.
-- This replaces the plan's illustrative `VOICE-2027-000184`, which the plan does not prescribe (section 12). "Voice" also conflicts with the public term "entry" (plan section 38).
+- 40 bits is short enough to cite in print and large enough that random guessing is pointless at any plausible archive size. Guessing only ever finds published testimonies, which are public anyway.
+- This replaces the plan's original illustrative `VOICE-2027-000184`, which the plan did not prescribe (section 12). "Voice" was a terminology mistake; the object is a testimony.
 
 ### 1.2 Input tolerance
 
@@ -40,29 +40,29 @@ Readers copy IDs by hand. Lookups normalize input before matching: case-insensit
 
 | Resource | Permanent URL | Notes |
 | --- | --- | --- |
-| Entry | `https://<domain>/entries/<public-id>` | Language-neutral. This is the form used in citations and archives. |
-| Entry, localized interface | `https://<domain>/<locale>/entries/<public-id>` | `<locale>` is `en` or `fr`, later more. Linked with `hreflang`. The neutral URL redirects (302, `Vary: Accept-Language`) to the visitor's preferred interface locale. |
+| Testimony | `https://<domain>/testimonies/<public-id>` | Language-neutral. This is the form used in citations and archives. |
+| Testimony, localized interface | `https://<domain>/<locale>/testimonies/<public-id>` | `<locale>` is `en` or `fr`, later more. Linked with `hreflang`. The neutral URL redirects (302, `Vary: Accept-Language`) to the visitor's preferred interface locale. |
 | Edition | `https://<domain>/time-capsules/<edition-id>` | See section 4. |
 | Context document | `https://<domain>/context/<slug>` | See section 5. |
 | Reference record | `https://<domain>/references/<slug>` | See section 5. |
 
 Rules:
 
-1. No slug, title or language of the entry text appears in the canonical entry path, because those can change.
-2. URLs are never removed. Moved resources redirect permanently. Withdrawn entries become tombstones (section 3).
+1. No slug, title or language of the testimony text appears in the canonical testimony path, because those can change.
+2. URLs are never removed. Moved resources redirect permanently. Withdrawn testimonies become tombstones (section 3).
 3. No technology-specific path elements (`.php`, `/app/`, `/api/v1/` for human pages) appear in permanent URLs.
 4. The URL scheme is part of the archive specification. A re-implementation of the site must serve the same permanent URLs.
 
-## 3. HTTP semantics by entry state
+## 3. HTTP semantics by testimony state
 
-| State | Response at the entry URL |
+| State | Response at the testimony URL |
 | --- | --- |
 | Never existed, draft, submitted, under review, rejected | `404 Not Found`, identical in every case, so that state cannot be probed |
 | Published | `200 OK` |
-| Published with moderation redaction | `200 OK`, with a visible note that part of the entry was redacted, without revealing what |
+| Published with moderation redaction | `200 OK`, with a visible note that part of the testimony was redacted, without revealing what |
 | Withdrawn | `410 Gone`, with a content-free tombstone page: the ID, the fact of withdrawal, and nothing that identifies the contributor or the content |
 
-Private views of a contributor's own unpublished entries are reachable only when authenticated, at URLs that use neither the internal ID nor a public ID.
+Private views of a contributor's own unpublished testimonies are reachable only when authenticated, at URLs that use neither the internal ID nor a public ID.
 
 ## 4. Edition identifiers
 
@@ -78,16 +78,16 @@ Private views of a contributor's own unpublished entries are reachable only when
 
 ## 6. Citation
 
-Each entry page offers a copyable citation that respects the contributor's chosen public identity:
+Each testimony page offers a copyable citation that respects the contributor's chosen public identity:
 
 ```text
-<Display name | "Anonymous">, entry <public-id>, The Artificial Intelligence Guestbook, <publication date, ISO 8601>. https://<domain>/entries/<public-id>
+<Display name | "Anonymous">, testimony <public-id>, The Artificial Intelligence Guestbook, <publication date, ISO 8601>. https://<domain>/testimonies/<public-id>
 ```
 
-A pseudonym is cited as given. An anonymous entry is cited as "Anonymous" and never with any other identifying metadata. When an edition is cited, ` Time capsule <edition-id>.` is appended.
+A pseudonym is cited as given. An anonymous testimony is cited as "Anonymous" and never with any other identifying metadata. When an edition is cited, ` Time capsule <edition-id>.` is appended.
 
 ## Open questions
 
 - The exact domain (#8).
 - How translations are addressed: one per language, or several per language (human and machine) with their own identifiers. To be settled in the data model (#14).
-- Whether entry fragments get stable anchors for quoting (plan section 14 says optional).
+- Whether testimony fragments get stable anchors for quoting (plan section 14 says optional).

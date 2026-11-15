@@ -2,11 +2,11 @@
 
 Status: Draft, awaiting owner ratification
 
-The project is interested in how people communicate during the AI era, including their use of AI to communicate about AI. Entries do not have to be written without AI. Fully AI-generated entries are permitted when their provenance is disclosed.
+The project is interested in how people communicate during the AI era, including their use of AI to communicate about AI. Testimonies do not have to be written without AI. Fully AI-generated testimonies are permitted when their provenance is disclosed.
 
 ## Declaration
 
-Every entry carries an authorship declaration chosen by the contributor. The categories are at minimum:
+Every testimony carries an authorship declaration chosen by the contributor. The categories are at minimum:
 
 | Code | Meaning |
 | --- | --- |
@@ -23,8 +23,8 @@ When AI was involved, the contributor may optionally add: the model or product, 
 
 ## Rules
 
-1. The declaration is shown with the published entry, on its permanent page and in every export.
-2. The declaration is the contributor's statement. The project does not verify, override or guess it, and does not run AI-detection tools on entries.
+1. The declaration is shown with the published testimony, on its permanent page and in every export.
+2. The declaration is the contributor's statement. The project does not verify, override or guess it, and does not run AI-detection tools on testimonies.
 3. `undisclosed` is a legitimate choice and is presented neutrally.
-4. Moderators do not reject an entry because they suspect its declaration is inaccurate. They may act on it only if the inaccuracy is itself part of a publishing-rule violation, such as automated flooding.
-5. Translations carry their own provenance (see [Multilingual principles](multilingual-principles.md)). They do not change the entry's authorship declaration.
+4. Moderators do not reject a testimony because they suspect its declaration is inaccurate. They may act on it only if the inaccuracy is itself part of a publishing-rule violation, such as automated flooding.
+5. Translations carry their own provenance (see [Multilingual principles](multilingual-principles.md)). They do not change the testimony's authorship declaration.

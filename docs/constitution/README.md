@@ -12,7 +12,7 @@ These short documents define what The Artificial Intelligence Guestbook is and h
 | [Editorial principles](editorial-principles.md) | What belongs in the archive and how it is presented |
 | [Moderation principles](moderation-principles.md) | What moderation may and may not do |
 | [Privacy assumptions](privacy-assumptions.md) | How personal data is treated by default |
-| [Authorship disclosure](authorship-disclosure.md) | How AI involvement in entries is declared |
+| [Authorship disclosure](authorship-disclosure.md) | How AI involvement in testimonies is declared |
 | [Archival model](archival-model.md) | The living guestbook and its annual time capsules |
 | [Deletion philosophy](deletion-philosophy.md) | How withdrawal and deletion relate to preservation |
 | [Multilingual principles](multilingual-principles.md) | Languages, originals and translations |

@@ -17,10 +17,10 @@ The owner raised the risk of spam via temporary email addresses and asked whethe
 Contributors sign in with single-use, short-lived email magic links. No passwords, no OAuth for now. Defences, in layers:
 
 1. Reject sign-up from domains on a maintained disposable-email blocklist, and reject domains without valid MX records.
-2. Nothing auto-publishes (plan section 9). Spam can only cost moderator attention, so protect that attention: cap pending entries per account, throttle global intake, and give the moderator bulk rejection and account suspension.
+2. Nothing auto-publishes (plan section 9). Spam can only cost moderator attention, so protect that attention: cap pending testimonies per account, throttle global intake, and give the moderator bulk rejection and account suspension.
 3. A self-hosted, privacy-friendly proof-of-work challenge on sign-up and submission. No third-party tracking captcha.
 4. Per-account and per-hashed-IP rate limits with short retention.
-5. Outbound links in entries are marked `rel="ugc nofollow"`, removing the SEO incentive (plan section 25).
+5. Outbound links in testimonies are marked `rel="ugc nofollow"`, removing the SEO incentive (plan section 25).
 
 The account email is private, never published and never exported to archives.
 

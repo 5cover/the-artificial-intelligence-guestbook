@@ -11,8 +11,8 @@ The plan requires that the archive can survive the application and that a future
 ## Decision
 
 1. The canonical archive format is specified first and independently of any application ([#13](https://github.com/5cover/the-artificial-intelligence-guestbook/issues/13), `docs/specs/archive-format.md`). It uses simple, documented formats: structured records, plain text, manifests, checksums and schema documentation.
-2. The application database is an operational store. Its job is to collect, moderate and serve entries, and to export them losslessly to the canonical format.
-3. Public pages for published entries are designed to be cacheable and reproducible as static HTML, so that editions can ship a static rendering and the live site can be rebuilt by another implementation.
+2. The application database is an operational store. Its job is to collect, moderate and serve testimonies, and to export them losslessly to the canonical format.
+3. Public pages for published testimonies are designed to be cacheable and reproducible as static HTML, so that editions can ship a static rendering and the live site can be rebuilt by another implementation.
 4. Stable identifiers and URLs belong to the archive, not to the application's routing or database keys.
 
 ## Consequences

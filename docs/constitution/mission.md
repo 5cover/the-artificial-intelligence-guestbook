@@ -19,7 +19,7 @@ Its subject is people, not technology. Enthusiasm, hostility, indifference, unce
 
 ## Who may contribute
 
-Anybody. Not only experts, users, particular professions, countries or political positions. "I barely use AI and don't care very much" is as legitimate an entry as an expert's long analysis. Requirements arising from law, abuse prevention, security or parental consent are operational constraints, not exceptions to this principle.
+Anybody. Not only experts, users, particular professions, countries or political positions. "I barely use AI and don't care very much" is as legitimate a testimony as an expert's long analysis. Requirements arising from law, abuse prevention, security or parental consent are operational constraints, not exceptions to this principle.
 
 ## What it is not
 
@@ -27,7 +27,7 @@ Not a social network, an encyclopedia of AI, a technology news site, a model dat
 
 ## The obligation it creates
 
-Accepting entries means accepting custody of them: moderating, honouring privacy rights, preserving data, producing editions and keeping the archive intelligible. See [Continuity](continuity.md).
+Accepting testimonies means accepting custody of them: moderating, honouring privacy rights, preserving data, producing editions and keeping the archive intelligible. See [Continuity](continuity.md).
 
 ## The test for new features
 

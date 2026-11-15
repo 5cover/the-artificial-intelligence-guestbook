@@ -18,6 +18,7 @@ The owner asked for a comparison of application stacks, not a build. The short v
 - Symfony 7.4 LTS (PHP) is the runner-up. It has the longest verified LTS window of the candidates, a first-party login-link (magic link) feature, strong XLIFF and ICU translation support and a Doctrine-backed job transport. It has no first-party admin and it is a PHP stack the owner does not currently use.
 - The strongest TypeScript option is SvelteKit with Drizzle and Paraglide. It is the best fit for no-JavaScript forms and for localized URLs, but it leaves admin, magic-link auth and background jobs to the operator. AdonisJS was evaluated but its first-party docs did not show magic-link auth and several details could not be verified.
 - WordPress (added 2026-11-15) scores 57.8, between SvelteKit and AdonisJS. It has an excellent editor, native "pending review" moderation, core privacy-request tools and the largest successor pool. Against that: no PostgreSQL or real full-text search, every other requirement delivered by plugins (where 91 to 97% of ecosystem vulnerabilities are), no LTS, governance under antitrust litigation, and a post-centred data model that fights the archive-first principle.
+- Next.js self-hosted (added 2026-11-15) scores 49.6, the lowest: the highest upgrade churn, a CVSS 10.0 exploited remote-code-execution bug in its Server Components protocol (December 2025), and nothing first-party beyond rendering. Vercel, its natural host, fails the EU-processing gate (G3): its DPA places primary processing in the US.
 - Architecture is largely independent of the winner. ADR 0006 makes the archive format the primary artefact, so the framework choice is less consequential than usual. This document recommends the archive specification (issue #13) be written before the application scaffold.
 - Addendum A applies the criteria in reverse to design the worst possible stack, and derives five pass/fail gates from it. Addendum B tests the owner's point that TypeScript expresses complex data models better than Python. Addendum C evaluates having no framework at all (bare Node.js, JSDoc types, no build step). It scores 65.4 (66.5 with the type criterion), above every TypeScript framework, and lists the security plumbing it would have to hand-write.
 
@@ -299,7 +300,7 @@ Verified facts:
 - Form actions: they work without client-side JavaScript; use:enhance is a progressive enhancement that emulates the browser's native submission [S47]. This is the strongest verified fit for R14 among the TypeScript candidates.
 - Paraglide JS: MIT-licensed compile-time i18n, v2 core package; typed message functions; plurals through Intl.PluralRules; ICU through a plugin; built-in locale URL mapping such as /en/about and /de/ueber [S48].
 - Drizzle ORM: the latest stable tag on the releases page is 0.45.4 (8 October); 1.0.0-rc.5 is a pre-release (21 October) [S49]. A stable 1.0 has not shipped as of this check.
-- Astro (considered, see 6.11): i18n routing verified, no message catalogs or pluralization on the routing page [S46].
+- Astro (considered, see 6.12): i18n routing verified, no message catalogs or pluralization on the routing page [S46].
 - Not verified: magic-link libraries for SvelteKit, background job libraries for Node/PostgreSQL, the SvelteKit upgrade guide, and any admin framework.
 
 Strengths:
@@ -388,13 +389,55 @@ Weaknesses:
 
 Verdict: WordPress is strongest where the plan asks least (editing context pages, finding a successor) and weakest where the plan asks most: the privacy-separated data model, the archive export, multilingual testimonies, passwordless authentication and a small attack surface. Not recommended as the application. Using it only for Context pages would add a second system holding an admin login and personal data, contrary to [privacy assumption](../constitution/privacy-assumptions.md) 10.
 
-### 6.11 Astro (considered, not a primary candidate)
+### 6.11 Next.js (TypeScript, React), and Vercel as a host
+
+Added 2026-11-15 at the owner's request. Next.js, the framework, is scored self-hosted on the VPS like every other candidate. Vercel, the hosting platform it is designed around, is tested separately against the gates (Addendum A) and ADR 0002.
+
+Verified facts (search summaries; the official support-policy page is cited by those summaries):
+
+- Support policy: each major is in Active LTS until the next major ships, then in Maintenance LTS until two years after its initial release, receiving only critical and security fixes. 16.x was released on 21 October 2025 and is the only supported line since 15.x ended on 21 October 2026. 14.x and older get no patches. Next.js 17 had not shipped as of the sources found [S66].
+- Releases: 16.2 (March 2026) made the Deployment Adapter API stable. 16.3 shipped in August 2026. 16.4.1, an out-of-band fix for two critical remote-code-execution vulnerabilities, followed in October 2026 [S66, S68].
+- Requirements: Node.js 20.9 or later and TypeScript 5.1 or later [S68].
+- Security history [S67]:
+  - CVE-2025-29927 (March 2025, CVSS 9.1): middleware authorization bypass through a spoofable internal header, affecting self-hosted versions 11.1.4 to 15.2.2.
+  - CVE-2025-55182, "React2Shell" (December 2025, CVSS 10.0): unauthenticated remote code execution through insecure deserialization in the React Server Components protocol, affecting Next.js 15 and 16 with the App Router. It was exploited within hours, added to CISA's Known Exploited Vulnerabilities catalog on 5 December 2025, and used in ransomware campaigns. Denial-of-service and source-exposure follow-ups came after it.
+  - Another React Server Components remote-code-execution flaw was fixed on 14 October 2026.
+- Self-hosting: supported as a Node server, in containers or as a static export. The Adapter API is meant to give other hosts parity with Vercel. Sources from spring 2026 say full parity is not there yet, and that some caching defaults behaved as intended only on Vercel [S68].
+- Authentication: Auth.js (NextAuth) moved to the Better Auth team in September 2025 and receives security fixes only. Its v5 was still beta in September 2026. Better Auth has a magic-link plugin. One secondary source reports that Vercel acquired Better Auth on 7 July 2026 [S69, secondary].
+- Not built in (general knowledge, not verified in this pass): admin, database access and migrations, background jobs, and i18n routing in the App Router. Each needs a separate library, for example next-intl, Drizzle or Prisma, and a job runner.
+
+Vercel as a host [S70]:
+
+- Vercel Inc. is a US company, certified under the EU-US Data Privacy Framework.
+- Its DPA states that primary processing facilities are in the United States and that customer data may be processed wherever Vercel or its sub-processors operate. Its security FAQ says no data is stored permanently inside EU regions; EU regions such as `fra1` only cache responses ephemerally.
+- The control plane, account data and support are in the US (secondary).
+- Result: **fails gate G3** (EU-controlled processing) and contradicts ADR 0002. Vercel is excluded before scoring, whatever its convenience. The legal research (section 9) also recommends EU-controlled processors because of the CLOUD Act.
+
+Strengths:
+
+- TypeScript end to end, with the type-system advantage of Addendum B (criterion 15: 5).
+- The largest React talent pool. Popular enough that it will not disappear.
+- Server Components and Server Actions can render HTML on the server and accept form posts without client JavaScript when written carefully.
+- A stable Adapter API and documented self-hosting.
+
+Weaknesses:
+
+- The highest upgrade churn of any candidate (judgement): a new routing model (Pages Router to App Router), caching semantics changed between majors, and yearly majors with two-year support windows. For a decades-long custodian this is a recurring rewrite tax.
+- Its security surface is novel and complex. The React Server Components protocol produced a CVSS 10.0 remote-code-execution bug exploited in the wild, followed by more of the same class within a year. A middleware bypass hit self-hosters specifically.
+- Governance and business model belong to a hosting company whose product is the platform the framework is optimized for. The authentication library most Next.js apps use reportedly now belongs to the same company.
+- Nothing the plan needs beyond rendering is first-party: admin, database, jobs, i18n routing, rate limiting and magic links. Each is a separate dependency with its own churn.
+- The largest dependency tree of the candidates (React, the framework, the bundler and the libraries above).
+- Its centre of gravity is interactive client-side applications, while this archive is mostly documents and forms. The server and client boundary of Server Components makes it harder to see what runs where, which matters for G4 and for keeping private data out of client payloads.
+
+Verdict: the lowest score in the matrix. Next.js solves problems this project does not have (rich client interactivity, edge rendering at scale) and adds churn and security surface where the project is most sensitive. Vercel is excluded by G3. Among TypeScript options, SvelteKit, and better still the minimal TypeScript stack of Addenda B and C, are stronger.
+
+### 6.12 Astro (considered, not a primary candidate)
 
 - Astro's current major is 7 (astro@7.4.12 on 13 November in the GitHub releases page) [S46].
 - Built-in i18n routing: locale folders, prefixDefaultLocale, fallback and domain mapping [S46]. No message catalogs or pluralization are covered on that page [S46].
 - Astro is an excellent static-HTML generator. It fits the "static HTML for published testimonies and editions" idea (ADR 0006) well, but a dynamic app (magic links, admin, moderation queue) is not its centre of gravity. It is noted as a possible companion for Context and editions, not as the application.
 
-### 6.12 CMS-on-framework options for Context pages (optional, not mandatory)
+### 6.13 CMS-on-framework options for Context pages (optional, not mandatory)
 
 - Wagtail (on Django): Wagtail 7.4 is LTS (released 4 May 2026) with security support until 2 November 2027; Wagtail 8.1 was released 2 November 2026 [S57]. A page-tree CMS would add an editor UI for Context pages. The cost is another dependency stream and another upgrade stream. Judgement: markdown files in the repository, rendered by the app, are simpler and more archive-friendly. Not required.
 - Filament (on Laravel): 5.11.3 active (13 November) [S23]. Relevant only if Laravel were chosen.
@@ -405,31 +448,32 @@ Verdict: WordPress is strongest where the plan asks least (editing context pages
 
 Scores are 1 to 5 (5 best). They are judgements based on the verified facts above and on general experience where marked "not verified". Weighted total = sum of (score times weight) divided by 5, so the maximum is 100.
 
-| # | Criterion | Weight | Django | Symfony 7.4 | Go | ASP.NET Core | Rails 8.1 | Laravel 13 | Phoenix | SvelteKit | AdonisJS | WordPress |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Longevity | 11 | 5 | 4 | 4 | 4 | 3 | 3 | 3 | 3 | 2 | 3 |
-| 2 | Upgrade burden | 9 | 4 | 4 | 5 | 3 | 2 | 3 | 3 | 2 | 3 | 4 |
-| 3 | Admin | 8 | 5 | 3 | 1 | 2 | 2 | 3 | 2 | 1 | 2 | 4 |
-| 4 | i18n | 8 | 5 | 5 | 3 | 4 | 3 | 3 | 4 | 4 | 4 | 3 |
-| 5 | Magic-link ecosystem | 7 | 3 | 4 | 2 | 2 | 3 | 3 | 4 | 2 | 2 | 2 |
-| 6 | Forms and no-JS | 7 | 5 | 4 | 4 | 4 | 4 | 4 | 3 | 5 | 3 | 3 |
-| 7 | PostgreSQL integration | 6 | 5 | 3 | 3 | 4 | 4 | 3 | 4 | 3 | 3 | 1 |
-| 8 | Security defaults and process | 9 | 5 | 4 | 4 | 4 | 4 | 3 | 3 | 3 | 3 | 2 |
-| 9 | Jobs without extra infra | 5 | 3 | 5 | 3 | 3 | 5 | 4 | 3 | 2 | 2 | 3 |
-| 10 | Operations on one VPS | 6 | 4 | 4 | 5 | 4 | 4 | 4 | 4 | 4 | 4 | 4 |
-| 11 | Successor-friendliness | 6 | 5 | 4 | 3 | 3 | 4 | 4 | 2 | 3 | 3 | 5 |
-| 12 | Dependency footprint | 5 | 4 | 3 | 5 | 3 | 3 | 3 | 4 | 2 | 2 | 2 |
-| 13 | Testing | 3 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 3 | 2 |
-| 14 | Archive-first fit | 10 | 4 | 4 | 4 | 4 | 3 | 3 | 3 | 4 | 3 | 2 |
-| | Weighted total (out of 100) | 100 | 88.6 | 78.8 | 71.4 | 69.0 | 66.0 | 65.4 | 64.2 | 59.8 | 55.6 | 57.8 |
+| # | Criterion | Weight | Django | Symfony 7.4 | Go | ASP.NET Core | Rails 8.1 | Laravel 13 | Phoenix | SvelteKit | AdonisJS | WordPress | Next.js |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Longevity | 11 | 5 | 4 | 4 | 4 | 3 | 3 | 3 | 3 | 2 | 3 | 3 |
+| 2 | Upgrade burden | 9 | 4 | 4 | 5 | 3 | 2 | 3 | 3 | 2 | 3 | 4 | 1 |
+| 3 | Admin | 8 | 5 | 3 | 1 | 2 | 2 | 3 | 2 | 1 | 2 | 4 | 1 |
+| 4 | i18n | 8 | 5 | 5 | 3 | 4 | 3 | 3 | 4 | 4 | 4 | 3 | 3 |
+| 5 | Magic-link ecosystem | 7 | 3 | 4 | 2 | 2 | 3 | 3 | 4 | 2 | 2 | 2 | 3 |
+| 6 | Forms and no-JS | 7 | 5 | 4 | 4 | 4 | 4 | 4 | 3 | 5 | 3 | 3 | 3 |
+| 7 | PostgreSQL integration | 6 | 5 | 3 | 3 | 4 | 4 | 3 | 4 | 3 | 3 | 1 | 3 |
+| 8 | Security defaults and process | 9 | 5 | 4 | 4 | 4 | 4 | 3 | 3 | 3 | 3 | 2 | 2 |
+| 9 | Jobs without extra infra | 5 | 3 | 5 | 3 | 3 | 5 | 4 | 3 | 2 | 2 | 3 | 2 |
+| 10 | Operations on one VPS | 6 | 4 | 4 | 5 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 3 |
+| 11 | Successor-friendliness | 6 | 5 | 4 | 3 | 3 | 4 | 4 | 2 | 3 | 3 | 5 | 4 |
+| 12 | Dependency footprint | 5 | 4 | 3 | 5 | 3 | 3 | 3 | 4 | 2 | 2 | 2 | 1 |
+| 13 | Testing | 3 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 3 | 2 | 3 |
+| 14 | Archive-first fit | 10 | 4 | 4 | 4 | 4 | 3 | 3 | 3 | 4 | 3 | 2 | 3 |
+| | Weighted total (out of 100) | 100 | 88.6 | 78.8 | 71.4 | 69.0 | 66.0 | 65.4 | 64.2 | 59.8 | 55.6 | 57.8 | 49.6 |
 
-Ranking: Django (88.6), Symfony (78.8), Go (71.4), ASP.NET Core (69.0), Rails (66.0), Laravel (65.4), Phoenix (64.2), SvelteKit (59.8), WordPress (57.8), AdonisJS (55.6).
+Ranking: Django (88.6), Symfony (78.8), Go (71.4), ASP.NET Core (69.0), Rails (66.0), Laravel (65.4), Phoenix (64.2), SvelteKit (59.8), WordPress (57.8), AdonisJS (55.6), Next.js self-hosted (49.6). Next.js on Vercel is excluded by gate G3.
 
 Reading the matrix:
 
 - Django's lead over Symfony comes mainly from admin (+3 points times weight 8), search and PostgreSQL integration, security process, longevity and successor-friendliness. Symfony leads on jobs and magic-link ecosystem, which are real but smaller in weight.
 - Go ranks third mostly because of upgrade burden, dependency footprint and operations. It scores 1 on admin and 2 on magic links, which the one-person constraint makes expensive. A reasonable owner who values minimal dependencies more than first-party features could reasonably put Go higher.
 - WordPress has the most uneven profile in the matrix. It scores 4 on admin and 5 on successor-friendliness, among the best of all candidates, but 1 on database, 2 on security, 2 on archive fit and 2 on dependency footprint. Its strengths are in content editing, which the plan needs least; its weaknesses are in the privacy-separated data model and the export, which the plan needs most.
+- Next.js scores lowest because its costs fall on the heaviest criteria: upgrade churn (1, weight 9), security history (2, weight 9) and missing first-party pieces (admin 1, jobs 2). Its benefits, interactive client rendering and edge delivery, are not requirements here. Popularity shows up only in successor-friendliness (4).
 - The scores are judgements. A score of 3 means "adequate with known gaps", not "average". The matrix does not weigh the owner's TypeScript familiarity, the local tooling on Windows, or personal taste; those are discussed in section 10.
 - No formal sensitivity analysis was run. Django leads Symfony by 9.8 points, and the lead depends mostly on the admin, PostgreSQL and security weights. Treat the order from third place down as unstable; it is within the range that different judgements could move.
 
@@ -618,6 +662,11 @@ Numbered sources. "Fetched" means the page was read in this pass through a fetch
 - [S63] https://patchstack.com/whitepaper/state-of-wordpress-security-in-2024/ and https://patchstack.com/whitepaper/state-of-wordpress-security-in-2025/ - search result summaries. Plugin, theme and core vulnerability shares.
 - [S64] https://wp-content.co/patchstack-wordpress-security-report-2026-vulnerabilities-rises-hosting-defenses-struggles/ - secondary coverage of Patchstack's 2026 report.
 - [S65] https://techcrunch.com/2026/02/12/automattic-planned-to-target-10-competitors-with-royalty-fees-wp-engine-claims-in-new-filing/ and https://www.therepository.email/wp-engines-antitrust-claims-against-automattic-are-back-on-after-judge-reverses-earlier-dismissal - secondary. WP Engine v. Automattic status and the September 2026 ruling.
+- [S66] https://nextjs.org/support-policy - cited through search result summaries, 2026-11-15; release and end-of-support dates from third-party summaries (endoflife.ai, digitalapplied.com, creuto.com).
+- [S67] https://github.com/vercel/next.js/security/advisories/GHSA-9qr9-h5gf-34mp ; https://projectdiscovery.io/blog/nextjs-middleware-authorization-bypass ; https://threatdefence.com/article/react-server-components-rce-ghsa-xqc2-xf4c-x3h3-patching-hunting - search result summaries. CVE-2025-29927, CVE-2025-55182 and the October 2026 Server Components fix.
+- [S68] https://www.reactsquad.io/blog/nextjs-16-2-adapter-api ; https://github.com/vercel/next.js/discussions/77740 - search result summaries. Adapter API, self-hosting parity, Node and TypeScript requirements.
+- [S69] https://www.better-auth.com/blog/authjs-joins-better-auth ; https://startwithidentity.com/vendors/open-source/authjs/ - search result summaries. Auth.js maintenance status; the Vercel acquisition of Better Auth is from secondary sources only.
+- [S70] https://vercel.com/security ; https://vercel.com/legal/dpa ; https://www.dataprivacyframework.gov/participant/6847 - search result summaries. DPF certification, DPA processing locations, EU regions caching only.
 - Repository documents: docs/plans/main.md; docs/decisions/0002-single-eu-vps.md; 0003-email-magic-link-auth.md; 0006-archive-first-replaceable-application.md; 0007-privacy-review-path.md; docs/research/domain-and-persistence.md; docs/constitution/archival-model.md; AGENTS.md.
 
 Not verified in this pass (listed so they are not mistaken for facts): Django deprecation policy and upgrade history; Django rate limiting; Django admin change-history storage; Python minimum for Django 6.x; Phoenix governance and security policy; Oban and Ecto full-text search; Laravel scheduler; Laravel and Rails i18n URL handling; ASP.NET localization and jobs; Go html/template, pgx and migration tools; AdonisJS Node requirement, Lucid, jobs and governance; SvelteKit magic-link and job libraries; Drizzle full-text search; Symfony full-text search; the licences of altcha-lib packages and the Sentinel server; Rails Foundation structure; Symfony governance today.
@@ -673,7 +722,7 @@ Lesson 8 means some criteria should be gates rather than weights. A candidate, a
 | G4 No-JS core | Reading testimonies and contributing work without client-side JavaScript. | Plan section 27; editorial principles |
 | G5 Supported line | A released, supported version line with a published security process and a known end-of-support date. | Plan sections 26, 28 |
 
-Judgement, not verified per candidate: the nine framework candidates in section 6 are self-hostable and can pass G1 to G5. WordPress passes G1 to G3 with care: erasure must reach post revisions, metadata and plugin tables. It is conditional on G4, because contributors must use a custom no-JavaScript front-end form, never the block editor. It is also conditional on G5, because only the latest release is supported and plugins have no support commitment at all. The gates therefore do not change the ranking. Their value is in protecting future decisions about services added around the application.
+Judgement, not verified per candidate: the framework candidates in section 6, including Next.js when self-hosted, can pass G1 to G5. Next.js on Vercel fails G3 (section 6.11). WordPress passes G1 to G3 with care: erasure must reach post revisions, metadata and plugin tables. It is conditional on G4, because contributors must use a custom no-JavaScript front-end form, never the block editor. It is also conditional on G5, because only the latest release is supported and plugins have no support commitment at all. The gates therefore do not change the ranking. Their value is in protecting future decisions about services added around the application.
 
 ## Addendum B: data-model expressiveness and the TypeScript question
 
@@ -690,7 +739,7 @@ Judgement, from general knowledge of the languages rather than sourced in this p
 
 ### B.2 Sensitivity: adding the criterion
 
-Criterion 15, "type system and data-model expressiveness", scored 1 to 5 (judgement): SvelteKit 5, AdonisJS 5, ASP.NET Core 4, Symfony 3, Django 2, Go 2, Laravel 2, Phoenix 2, Rails 1, WordPress 1 (PHP plus array-shaped hooks and key-value post metadata). Totals are recomputed out of 100 with the original 14 weights unchanged.
+Criterion 15, "type system and data-model expressiveness", scored 1 to 5 (judgement): SvelteKit 5, AdonisJS 5, Next.js 5, ASP.NET Core 4, Symfony 3, Django 2, Go 2, Laravel 2, Phoenix 2, Rails 1, WordPress 1 (PHP plus array-shaped hooks and key-value post metadata). Totals are recomputed out of 100 with the original 14 weights unchanged.
 
 | Candidate | Original | With criterion 15 at weight 8 |
 | --- | --- | --- |
@@ -704,6 +753,7 @@ Criterion 15, "type system and data-model expressiveness", scored 1 to 5 (judgem
 | Phoenix | 64.2 | 62.4 |
 | AdonisJS | 55.6 | 58.9 |
 | WordPress | 57.8 | 55.0 |
+| Next.js (self-hosted) | 49.6 | 53.3 |
 
 For SvelteKit to tie Django on this criterion alone, it would need a weight of 48 against the other criteria's 100, almost half of the whole decision. Even rescoring SvelteKit's admin from 1 to 3, on the grounds that the moderation console is only a few screens, leaves it at about 66 against 85.
 
@@ -791,7 +841,7 @@ Judgement, using the same scale as section 7:
 | 15 | Type expressiveness (Addendum B) | 8 | 4 | JSDoc checked by `tsc` gives most of TypeScript's power, more verbosely |
 | | With criterion 15 | 108 | **66.5** | |
 
-Updated order with criterion 15: Django 85.0, Symfony 77.4, ASP.NET Core 69.8, Go 69.1, **bare Node 66.5**, Laravel 63.5, SvelteKit 62.8, Rails 62.6, Phoenix 62.4, AdonisJS 58.9, WordPress 55.0.
+Updated order with criterion 15: Django 85.0, Symfony 77.4, ASP.NET Core 69.8, Go 69.1, **bare Node 66.5**, Laravel 63.5, SvelteKit 62.8, Rails 62.6, Phoenix 62.4, AdonisJS 58.9, WordPress 55.0, Next.js 53.3.
 
 Variants:
 

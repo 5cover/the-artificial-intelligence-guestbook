@@ -49,6 +49,12 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 - [Identifiers and permanent URLs](specs/identifiers.md) (#15)
 - [Threat model](specs/threat-model.md) (#20)
 
+## Procedures
+
+Step-by-step guides. See [procedures/README.md](procedures/README.md).
+
+- [Register and configure the domain](procedures/register-and-configure-domain.md) (#8)
+
 ## Planned
 
 - `specs/`: archive format (#13), data model (#14), deletion lifecycle (#16), retention schedule (#18).

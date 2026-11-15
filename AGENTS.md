@@ -38,7 +38,8 @@ The agent working on the project is the primary custodian of the organization of
 | `docs/research/` | Findings with sources. Dated. | Informative only. |
 | `docs/specs/` | Specifications: archive format, data model, lifecycle, threat model. | Binding for implementation. |
 | `docs/legal/` | Drafts of privacy notice, register, DPIA, mentions légales, consent texts. | Binding once published. |
-| `docs/operations/` | Runbooks, recurring duties, recovery, succession. | Binding for the custodian. |
+| `docs/operations/` | What exists and when it must be done: inventory of services, recurring duties calendar, incident runbooks, recovery, succession. | Binding for the custodian. |
+| `docs/procedures/` | Repeatable step-by-step guides: how to do one-time setups that may need redoing and occasional tasks. Each states when its external facts were last checked. | Binding when run. |
 
 Precedence when documents conflict: constitution, then accepted ADRs, then specs, then code. A conflict is resolved by amending the lower document or, with owner approval, the higher one. Never resolve it silently in code.
 

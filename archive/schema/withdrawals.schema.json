@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://theaiguestbook.org/schema/0/withdrawals.schema.json",
+  "title": "Withdrawal list",
+  "description": "Testimonies withdrawn from any edition (docs/specs/archive-format.md section 5). Content-free by design. Format version 0 (unstable).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format_version", "generated_on", "withdrawals"],
+  "properties": {
+    "format_version": { "const": 0 },
+    "generated_on": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "withdrawals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["public_id", "withdrawn_on", "editions"],
+        "properties": {
+          "public_id": { "type": "string", "pattern": "^[0-9a-hjkmnp-tv-z]{8}$" },
+          "withdrawn_on": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+          "editions": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string", "pattern": "^[0-9]{4}(\\.[0-9]+|-rehearsal\\.[0-9]+)$" }
+          }
+        }
+      }
+    }
+  }
+}

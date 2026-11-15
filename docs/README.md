@@ -39,6 +39,8 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 ## Proposals
 
 - [Stack RFP](proposals/stack-rfp.md), concluded by ADR 0010: pass/fail gates, then a weighted comparison of thirteen candidates (frameworks, WordPress, Next.js, bare Node.js, minimal TypeScript) against a reference anti-stack, with a sensitivity analysis on churn (#6, #7).
+- [Legal bases, retention duty and minors](proposals/legal-bases-and-minors.md): seven owner decisions on GDPR bases, decree 2021-1362, the DSA, age thresholds, parental consent, explicit consent and the DPIA (#12, #17, #18).
+- [Licences for the project's own material and for editions](proposals/project-licensing.md) (#43).
 
 ## Research
 
@@ -50,6 +52,9 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 
 - [Identifiers and permanent URLs](specs/identifiers.md) (#15)
 - [Threat model](specs/threat-model.md) (#20)
+- [Data model and testimony lifecycle](specs/data-model.md) (#14)
+- [Withdrawal and deletion lifecycle](specs/deletion-lifecycle.md) (#16)
+- [Archive format and edition packaging](specs/archive-format.md) (#13), with its JSON Schemas in [archive/schema/](../archive/schema/)
 
 ## Operations
 
@@ -63,6 +68,6 @@ Step-by-step guides. See [procedures/README.md](procedures/README.md).
 
 ## Planned
 
-- `specs/`: archive format (#13), data model (#14), deletion lifecycle (#16), retention schedule (#18).
+- `specs/`: retention schedule (#18).
 - `legal/`: register, DPIA, privacy notice, mentions légales, publishing rules, consent texts (#19).
 - `operations/`: runbook, recurring duties, recovery, succession (#33).

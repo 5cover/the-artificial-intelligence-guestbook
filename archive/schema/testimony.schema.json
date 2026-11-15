@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://theaiguestbook.org/schema/0/testimony.schema.json",
+  "title": "Testimony record",
+  "description": "One published testimony in an edition of The Artificial Intelligence Guestbook. Normative definition of docs/specs/archive-format.md section 3. Format version 0 (unstable).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format_version", "public_id", "url", "language", "published_on", "edition_period", "licence", "attribution", "citation", "redacted", "body", "identity", "authorship"],
+  "properties": {
+    "format_version": { "const": 0 },
+    "public_id": { "$ref": "#/$defs/public_id" },
+    "url": { "type": "string", "pattern": "^https://theaiguestbook\\.org/testimonies/[0-9a-hjkmnp-tv-z]{8}$" },
+    "language": { "$ref": "#/$defs/language" },
+    "published_on": { "$ref": "#/$defs/date" },
+    "edition_period": { "type": "integer", "minimum": 2026 },
+    "licence": { "const": "CC-BY-4.0" },
+    "attribution": { "type": "string", "minLength": 1 },
+    "citation": { "type": "string", "minLength": 1 },
+    "redacted": { "type": "boolean" },
+    "body": { "type": "string", "minLength": 1, "maxLength": 50000 },
+    "identity": { "$ref": "#/$defs/identity" },
+    "authorship": { "$ref": "#/$defs/authorship" },
+    "structured": { "$ref": "#/$defs/structured" },
+    "translations": { "type": "array", "items": { "$ref": "#/$defs/translation" } }
+  },
+  "$defs": {
+    "public_id": {
+      "description": "8 lowercase Crockford base32 symbols (docs/specs/identifiers.md section 1.1).",
+      "type": "string",
+      "pattern": "^[0-9a-hjkmnp-tv-z]{8}$"
+    },
+    "language": {
+      "description": "BCP 47 language tag.",
+      "type": "string",
+      "pattern": "^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$"
+    },
+    "date": {
+      "description": "ISO 8601 calendar date, no time of day.",
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode"],
+      "properties": {
+        "mode": { "enum": ["named", "pseudonymous", "anonymous"] },
+        "display_name": { "type": "string", "minLength": 1 },
+        "age_range": { "enum": ["under-18", "18-24", "25-34", "35-44", "45-54", "55-64", "65-74", "75-plus"] },
+        "country": { "type": "string", "pattern": "^[A-Z]{2}$" },
+        "region": { "type": "string", "minLength": 1 },
+        "languages": { "type": "array", "items": { "$ref": "#/$defs/language" }, "uniqueItems": true },
+        "profession": { "type": "string", "minLength": 1 },
+        "field": { "type": "string", "minLength": 1 },
+        "organization": { "type": "string", "minLength": 1 },
+        "organization_type": { "enum": ["none", "self-employed", "company", "public-sector", "education", "non-profit", "other"] },
+        "relationship_to_ai": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["user", "non-user", "refuser", "builder", "researcher", "affected-by", "unsure"] }
+        },
+        "link": { "type": "string", "pattern": "^https?://" }
+      },
+      "if": { "properties": { "mode": { "const": "anonymous" } } },
+      "then": { "not": { "required": ["display_name"] } }
+    },
+    "authorship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category"],
+      "properties": {
+        "category": { "enum": ["none", "assisted-language", "assisted-structure", "substantially-generated", "fully-generated", "undisclosed"] },
+        "model_or_product": { "type": "string", "minLength": 1 },
+        "model_version": { "type": "string", "minLength": 1 },
+        "mode_or_setting": { "type": "string", "minLength": 1 },
+        "workflow": { "type": "string", "minLength": 1 },
+        "changes_after": { "type": "string", "minLength": 1 },
+        "comment": { "type": "string", "minLength": 1 }
+      }
+    },
+    "structured": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ai_use_frequency": { "enum": ["never", "rarely", "monthly", "weekly", "daily", "constantly", "unsure"] },
+        "tools_used": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "attitude": { "enum": ["enthusiastic", "positive", "mixed", "indifferent", "negative", "hostile", "unsure"] },
+        "prediction": { "type": "string", "minLength": 1 },
+        "prediction_horizon": { "type": "integer", "minimum": 2026 }
+      }
+    },
+    "translation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["translation_id", "language", "body", "source_version", "producer_kind", "producer_name", "created_on", "reviewed"],
+      "properties": {
+        "translation_id": { "type": "string", "pattern": "^[a-z0-9]{1,16}$" },
+        "language": { "$ref": "#/$defs/language" },
+        "body": { "type": "string", "minLength": 1 },
+        "source_version": { "type": "integer", "minimum": 1 },
+        "producer_kind": { "enum": ["contributor", "project-human", "machine"] },
+        "producer_name": { "type": "string", "minLength": 1 },
+        "created_on": { "$ref": "#/$defs/date" },
+        "reviewed": { "type": "boolean" },
+        "reviewed_on": { "$ref": "#/$defs/date" }
+      },
+      "if": { "properties": { "reviewed": { "const": true } } },
+      "then": { "required": ["reviewed_on"] }
+    }
+  }
+}

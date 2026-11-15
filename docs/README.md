@@ -38,6 +38,8 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 
 ## Proposals
 
+Open decisions are gathered in the [decision queue](proposals/README.md).
+
 - [Stack RFP](proposals/stack-rfp.md), concluded by ADR 0010: pass/fail gates, then a weighted comparison of thirteen candidates (frameworks, WordPress, Next.js, bare Node.js, minimal TypeScript) against a reference anti-stack, with a sensitivity analysis on churn (#6, #7).
 - [Legal bases, retention duty and minors](proposals/legal-bases-and-minors.md): seven owner decisions on GDPR bases, decree 2021-1362, the DSA, age thresholds, parental consent, explicit consent and the DPIA (#12, #17, #18).
 - [Licences for the project's own material and for editions](proposals/project-licensing.md) (#43).

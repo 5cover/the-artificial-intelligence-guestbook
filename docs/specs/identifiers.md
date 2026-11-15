@@ -84,7 +84,7 @@ Each testimony page offers a copyable citation that respects the contributor's c
 <Display name | "Anonymous">, testimony <public-id>, The Artificial Intelligence Guestbook, <publication date, ISO 8601>. https://theaiguestbook.org/testimonies/<public-id>
 ```
 
-A pseudonym is cited as given. An anonymous testimony is cited as "Anonymous" and never with any other identifying metadata. When an edition is cited, ` Time capsule <edition-id>.` is appended.
+A pseudonym is cited as given. An anonymous testimony is cited as "Anonymous" and never with any other identifying metadata. When an edition is cited, the citation ends with `Time capsule <edition-id>.` after a space.
 
 ## Open questions
 

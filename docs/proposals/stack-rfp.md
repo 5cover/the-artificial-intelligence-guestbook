@@ -432,7 +432,7 @@ Weaknesses:
   - search with French support;
   - a no-JavaScript front-end contribution form, since contributors must not land in the JavaScript block editor;
   - rate limiting and proof-of-work.
-  
+
   That is where 91 to 97% of ecosystem vulnerabilities are.
 - No PostgreSQL, and no real full-text search in core.
 - The most attacked web software. Its default login and XML-RPC endpoints draw constant automated scanning (judgement).
@@ -821,7 +821,7 @@ Components:
 
 Sketch:
 
-```
+```text
 visitors
    |
 reverse proxy (TLS, static files, page cache, coarse rate limits)

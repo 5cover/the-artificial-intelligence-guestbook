@@ -15,6 +15,6 @@ The visible interface also says "testimony", and "témoignage" in French. The ow
 ## Consequences
 
 - One term across interface, code, URLs and documentation removes the translation layer between the public object and the archival record.
-- Plan section 38, the [editorial principles](../constitution/editorial-principles.md) (principle 13) and [AGENTS.md](../../AGENTS.md) are updated accordingly.
+- Plan section 38, the [editorial principles](../constitution/editorial-principles.md) ("Public language") and [AGENTS.md](../../AGENTS.md) are updated accordingly.
 - "Témoignage" can sound formal or solemn to some visitors. The plain surrounding copy and the guestbook framing must carry the "anybody can contribute" message (plan section 3), and copy reviews should check for that.
 - Methodology terms such as "corpus", "archival record" or "Zeitzeugnis" stay out of the main interface.

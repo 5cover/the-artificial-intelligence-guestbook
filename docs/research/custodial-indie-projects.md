@@ -44,7 +44,7 @@ What failed. No announcement was found that sebsauvage.net closed services becau
 
 Lesson for the Guestbook. Documenting how legal removals work, and how copies are handled, is cheap and was done here. Plan a successor fork path for the code (plan section 29).
 
-Sources: sebsauvage wiki (https://sebsauvage.net/wiki/doku.php?id=php%3Azerobin), GitHub README (https://github.com/sebsauvage/ZeroBin), PrivateBin project (https://github.com/PrivateBin/PrivateBin).
+Sources: sebsauvage wiki (<https://sebsauvage.net/wiki/doku.php?id=php%3Azerobin>), GitHub README (<https://github.com/sebsauvage/ZeroBin>), PrivateBin project (<https://github.com/PrivateBin/PrivateBin>).
 
 ### 3.2 Framasoft (Déframasoftisons Internet)
 
@@ -60,7 +60,7 @@ What failed or remains unclear. Closures of Framasite and Framaslides in 2021 an
 
 Lesson for the Guestbook. Give a published capacity argument early. Keep a list of what the project can actually run; the plan's MVP exclusions (section 34, and "no comments, no messaging" in section 28) already follow this logic. Give long notice in the published closure policy.
 
-Sources: Next.ink article (https://next.ink/6608/108225-deframatisons-internet-framasoft-fermera-progressivement-30-services/), Framablog 2019 post (https://framablog.org/2019/09/24/deframasoftisons-internet/, not opened because fetches timed out), Framablog 2025 numbers (https://framablog.org/2025/12/23/framasoft-in-numbers-2025-edition/, search only).
+Sources: Next.ink article (<https://next.ink/6608/108225-deframatisons-internet-framasoft-fermera-progressivement-30-services/>), Framablog 2019 post (<https://framablog.org/2019/09/24/deframasoftisons-internet/>, not opened because fetches timed out), Framablog 2025 numbers (<https://framablog.org/2025/12/23/framasoft-in-numbers-2025-edition/>, search only).
 
 ### 3.3 Mastodon and fediverse closures
 
@@ -76,7 +76,7 @@ What failed. Abrupt closures prevent followers from being redirected [fetched vi
 
 Lesson for the Guestbook. Adopt a written closure rule with a minimum notice period. Treat "no notice" as a failure mode. The French article's claim that the DSA may apply to small non-commercial hosts is unresolved and should go to the legal review (section 4).
 
-Sources: Mastodon Covenant (https://joinmastodon.org/covenant), Mozilla notice (https://wedistribute.org/2024/09/mozilla-social-shutting-down/ and https://techcrunch.com/2024/09/17/mozilla-exits-the-fediverse-and-will-shutter-its-mastodon-server-in-december, search only), mastodon.au (https://news.ycombinator.com/item?id=34817612, search only), French lawyer article (https://kohenavocats.com/mastodon-france-instance-moderation-compte-suspendu-serveur-ferme-donnees-obligations-administrateurs-2026/, fetched via www).
+Sources: Mastodon Covenant (<https://joinmastodon.org/covenant>), Mozilla notice (<https://wedistribute.org/2024/09/mozilla-social-shutting-down/> and <https://techcrunch.com/2024/09/17/mozilla-exits-the-fediverse-and-will-shutter-its-mastodon-server-in-december>, search only), mastodon.au (<https://news.ycombinator.com/item?id=34817612>, search only), French lawyer article (<https://kohenavocats.com/mastodon-france-instance-moderation-compte-suspendu-serveur-ferme-donnees-obligations-administrateurs-2026/>, fetched via www).
 
 ### 3.4 Pinboard
 
@@ -92,7 +92,7 @@ What failed or is unclear. No formal succession plan or export-on-death arrangem
 
 Lesson for the Guestbook. A joke about the bus is not a succession plan. The plan's section 29 requirement that important knowledge not exist solely in the founder's memory is the right control.
 
-Sources: Hacker News thread quoting the post (https://news.ycombinator.com/item?id=20397745, search only), Michael Tsai on Pinboard (https://mjtsai.com/blog/2024/09/20/the-end-of-pinboard/, search only), Pinboard blog (https://blog.pinboard.in/, not opened).
+Sources: Hacker News thread quoting the post (<https://news.ycombinator.com/item?id=20397745>, search only), Michael Tsai on Pinboard (<https://mjtsai.com/blog/2024/09/20/the-end-of-pinboard/>, search only), Pinboard blog (<https://blog.pinboard.in/>, not opened).
 
 ### 3.5 Mataroa
 
@@ -108,7 +108,7 @@ What failed. Spam forced the closure of a public sign-up path. The export tool n
 
 Lesson for the Guestbook. Export tooling is a precondition for opening or reopening a public submission path; the plan's section 20 export must exist before public launch. State the bus-factor risk on the public site, as Mataroa does.
 
-Sources: https://mataroa.blog/ (fetched), https://hey.mataroa.blog/p/closing-registrations/ (fetched).
+Sources: <https://mataroa.blog/> (fetched), <https://hey.mataroa.blog/p/closing-registrations/> (fetched).
 
 ### 3.6 Bear Blog
 
@@ -124,7 +124,7 @@ What failed or is unknown. The sources are 2022 to 2024; current figures are not
 
 Lesson for the Guestbook. The default-hidden model of Bear is the same principle as the plan's pre-publication queue (section 9). The review workload scales with signups, which is why the plan's magic-link login, which limits automated signup, matters. Watch the queue backlog metric (section 31).
 
-Sources: https://herman.bearblog.dev/the-frustration-loop/ (search), https://docs.bearblog.dev/code-of-conduct/ (search).
+Sources: <https://herman.bearblog.dev/the-frustration-loop/> (search), <https://docs.bearblog.dev/code-of-conduct/> (search).
 
 ### 3.7 Neocities
 
@@ -140,7 +140,7 @@ What failed or is unknown. No recent controversy was found [search].
 
 Lesson for the Guestbook. Publish the removal standard in plain terms. The plan's "narrow publishing rules" (section 9) should be written in the same form.
 
-Sources: https://neocities.org/legal (search), https://neocities.org/terms (search).
+Sources: <https://neocities.org/legal> (search), <https://neocities.org/terms> (search).
 
 ### 3.8 Refern and the IndieWeb site-deaths list
 
@@ -156,7 +156,7 @@ What failed. Refern's closure deleted content without a recorded export [fetched
 
 Lesson for the Guestbook. Illegal-content reporting is a real operating cost for a small public site, and it can be the reason a site closes. The plan's section 9 lists "illegal material" but does not yet say how reports are handled, or where mandatory reports go. This needs a written protocol and a legal check (section 4).
 
-Sources: https://indieweb.org/site_deaths (fetched).
+Sources: <https://indieweb.org/site_deaths> (fetched).
 
 ### 3.9 Cohost
 
@@ -172,7 +172,7 @@ What failed. Funding and burnout forced the closure, and the source code was con
 
 Lesson for the Guestbook. Plan the closure for funding and burnout, not only for abuse. The sequence announcement, read-only, export, archiving partner, shutdown is a template. Decide in advance who would hold the code and the data if the founder cannot continue.
 
-Sources: https://mjtsai.com/blog/2024/09/23/cohost-to-shut-down (fetched), https://indieweb.org/site_deaths (fetched), Yahoo Finance report (https://finance.yahoo.com/news/cohost-x-rival-founded-anti-200951160.html, search only).
+Sources: <https://mjtsai.com/blog/2024/09/23/cohost-to-shut-down> (fetched), <https://indieweb.org/site_deaths> (fetched), Yahoo Finance report (<https://finance.yahoo.com/news/cohost-x-rival-founded-anti-200951160.html>, search only).
 
 ### 3.10 Mozilla.social and Mozilla Solo
 
@@ -186,7 +186,7 @@ What failed. The export left users to rebuild the parts it omitted, which is the
 
 Lesson for the Guestbook. An export of "HTML plus separate media" is not a complete archive. The plan's section 20 and 23 export should carry testimony IDs, metadata, withdrawal tombstones, and media in one package, and a stranger should be able to restore it from the documentation.
 
-Sources: https://www.theregister.com/software/2026/11/13/mozilla-leaves-solo-website-owners-to-go-it-alone-as-hosting-shuts-down/5309632 (fetched), https://wedistribute.org/2024/09/mozilla-social-shutting-down/ (search).
+Sources: <https://www.theregister.com/software/2026/11/13/mozilla-leaves-solo-website-owners-to-go-it-alone-as-hosting-shuts-down/5309632> (fetched), <https://wedistribute.org/2024/09/mozilla-social-shutting-down/> (search).
 
 ### 3.11 GeoCities and Archive Team
 
@@ -202,7 +202,7 @@ What failed. The rescue happened after the operator had decided, and it was part
 
 Lesson for the Guestbook. A closure rescue is possible but depends on volunteers, so the Guestbook should not rely on it. The annual editions with a prearranged custodian (case 3.16) are the better plan. The restricted-download flag shows the privacy question has to be decided separately.
 
-Sources: https://wiki.archiveteam.org/index.php/GeoCities (fetched), https://www.computerworld.com/article/1333713/yahoo-geocities-closes-on-oct-26.html (search).
+Sources: <https://wiki.archiveteam.org/index.php/GeoCities> (fetched), <https://www.computerworld.com/article/1333713/yahoo-geocities-closes-on-oct-26.html> (search).
 
 ### 3.12 Internet Archive: Hachette litigation, 2024 breach, removal requests
 
@@ -218,7 +218,7 @@ What failed. A large user database was exposed and disclosure was slow [search].
 
 Lesson for the Guestbook. A breach of account data is the most likely high-impact personal-data incident for a login-based site. Keep the stored personal data minimal, prepare a 72-hour notification path (Art. 33, [fetched]), and do not promise removal from third-party archives (section 20 of the plan already says this).
 
-Sources: Infodocket on the Second Circuit ruling (https://www.infodocket.com/2024/09/04/appellate-court-affirms-district-court-ruling-in-hachette-v-internet-archive/, search), BleepingComputer on the breach (https://www.bleepingcomputer.com/news/security/internet-archive-hacked-data-breach-impacts-31-million-users/, search), Internet Archive blog (https://blog.archive.org/2026/04/23/gone-but-not-forgotten-recovering-the-dead-web/, fetched).
+Sources: Infodocket on the Second Circuit ruling (<https://www.infodocket.com/2024/09/04/appellate-court-affirms-district-court-ruling-in-hachette-v-internet-archive/>, search), BleepingComputer on the breach (<https://www.bleepingcomputer.com/news/security/internet-archive-hacked-data-breach-impacts-31-million-users/>, search), Internet Archive blog (<https://blog.archive.org/2026/04/23/gone-but-not-forgotten-recovering-the-dead-web/>, fetched).
 
 ### 3.13 Link rot evidence
 
@@ -234,7 +234,7 @@ What failed. Most links are not archived at the time of use [fetched in Pew cont
 
 Lesson for the Guestbook. For the reference shelf and contextual material (plan sections 16 and 18), store a copy at publication, with a record of the snapshot and date. The review in plan section 28 should check these.
 
-Sources: https://www.pewresearch.org/data-labs/2024/05/17/when-online-content-disappears/ (fetched), https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0115253 (search), https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0167475 (search), https://blog.archive.org/2026/04/23/gone-but-not-forgotten-recovering-the-dead-web/ (fetched).
+Sources: <https://www.pewresearch.org/data-labs/2024/05/17/when-online-content-disappears/> (fetched), <https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0115253> (search), <https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0167475> (search), <https://blog.archive.org/2026/04/23/gone-but-not-forgotten-recovering-the-dead-web/> (fetched).
 
 ### 3.14 UK Oral History Society guidance on GDPR
 
@@ -250,7 +250,7 @@ What failed or is unclear. The guidance is UK-specific and dated. I did not find
 
 Lesson for the Guestbook. Choose the legal basis per data category, and write the withdrawal promise to match. If consent is the basis for a testimony, withdrawal must work; if public-interest archiving is the basis, the controller must qualify under French law, which is the central open question (section 4). The GDPR text supports special-category processing for data "manifestly made public by the data subject" (Art. 9(2)(e), [fetched]) and for archiving in the public interest (Art. 9(2)(j), [fetched]). Art. 89 requires safeguards such as data minimisation and allows Union or Member State law to derogate from certain rights where the purposes would be impossible or seriously harder to achieve [fetched, paraphrased]. Art. 17(3)(d) exempts archiving from erasure only within that same test [fetched in part; the full "render impossible" condition was not fetched].
 
-Sources: https://ohs.org.uk/gdpr-2/ (fetched), https://gdpr-info.eu/art-9-gdpr/ (fetched), https://gdpr-info.eu/art-89-gdpr/ (fetched), https://gdpr-info.eu/art-17-gdpr/ (fetched).
+Sources: <https://ohs.org.uk/gdpr-2/> (fetched), <https://gdpr-info.eu/art-9-gdpr/> (fetched), <https://gdpr-info.eu/art-89-gdpr/> (fetched), <https://gdpr-info.eu/art-17-gdpr/> (fetched).
 
 ### 3.15 Archivio Diaristico Nazionale (Pieve Santo Stefano, Italy)
 
@@ -266,7 +266,7 @@ What failed or is strained. Space and physical custody, and slow public works [f
 
 Lesson for the Guestbook. A long-lived testimony archive needs a place and a custodian beyond the founder. Permission for each excerpt is the copyright lesson for the plan's section 14 (quoting and sharing). Text-only testimonies are small, but media will not be.
 
-Sources: https://www.ilpost.it/2023/12/27/archivio-diari-pieve-santo-stefano/ (fetched), https://www.atlasobscura.com/articles/italy-tuscany-city-diaries-memories-history (search).
+Sources: <https://www.ilpost.it/2023/12/27/archivio-diari-pieve-santo-stefano/> (fetched), <https://www.atlasobscura.com/articles/italy-tuscany-city-diaries-memories-history> (search).
 
 ### 3.16 French COVID-19 testimony collection and the BnF web deposit
 
@@ -282,7 +282,7 @@ What failed or is unclear. Some calls gathered little material [search]. I did n
 
 Lesson for the Guestbook. In France, a public archive is a realistic custodian for the annual editions and may already run a call. The plan's section 29 should list the departmental archives and the BnF as candidates, with a written deposit agreement that settles withdrawal rules before anything is deposited.
 
-Sources: https://labo.societenumerique.gouv.fr/fr/articles/comment-les-mus%C3%A9es-services-des-archives-et-la-bnf-archivent-et-documentent-la-crise-sanitaire/ (fetched), https://www.bnf.fr/en/help-center/web-legal-deposit-instructions (search), https://www.archimag.com/archives-patrimoine/2020/03/23/memoires-confinement-projets-archivent-quotidien-coronavirus-covid-19 (search).
+Sources: <https://labo.societenumerique.gouv.fr/fr/articles/comment-les-mus%C3%A9es-services-des-archives-et-la-bnf-archivent-et-documentent-la-crise-sanitaire/> (fetched), <https://www.bnf.fr/en/help-center/web-legal-deposit-instructions> (search), <https://www.archimag.com/archives-patrimoine/2020/03/23/memoires-confinement-projets-archivent-quotidien-coronavirus-covid-19> (search).
 
 ### 3.17 Mass Observation Archive (COVID-19 collection)
 
@@ -298,7 +298,7 @@ What failed or is unknown. The end date of the contribution window is reported d
 
 Lesson for the Guestbook. A standing annual call (the plan's annual editions) can build a longitudinal series, and an institutional host is what keeps the custody going. The plan's 12 May style one-day call is also a method to consider.
 
-Sources: https://massobs.org.uk/research/covid19/ (search), https://journals.sagepub.com/doi/10.1177/09526951231152139 (search).
+Sources: <https://massobs.org.uk/research/covid19/> (search), <https://journals.sagepub.com/doi/10.1177/09526951231152139> (search).
 
 ### 3.18 A Journal of the Plague Year (Arizona State University)
 
@@ -314,7 +314,7 @@ What is unknown. Its consent and removal policy, which is the item most relevant
 
 Lesson for the Guestbook. A closely comparable project, and a useful comparison for the consent wording. The terms page should be read before the plan's consent language (section 10) is finalised.
 
-Sources: https://covid-19archive.org/ (fetched).
+Sources: <https://covid-19archive.org/> (fetched).
 
 ### 3.19 Zenodo takedown procedure
 
@@ -328,7 +328,7 @@ What worked. A clear order of steps: restrict, verify, inform, decide, and keep 
 
 Lesson for the Guestbook. Copy this order for withdrawal and removal requests (plan section 22), and record each step in the internal moderation log.
 
-Sources: https://support.zenodo.org/help/en-gb/13-policies/140-what-is-your-take-down-procedure (fetched), https://about.zenodo.org/privacy-policy/ (search).
+Sources: <https://support.zenodo.org/help/en-gb/13-policies/140-what-is-your-take-down-procedure> (fetched), <https://about.zenodo.org/privacy-policy/> (search).
 
 ### 3.20 Right to Be (formerly Hollaback!)
 
@@ -344,7 +344,7 @@ What is unknown. Whether older Hollaback-era stories and the map are still onlin
 
 Lesson for the Guestbook. A rename or rebrand can break the stable URLs that the plan requires (section 12). Decide the naming and redirect policy before launch, and avoid any product name that might later change.
 
-Sources: https://righttobe.org/ (fetched), https://en.wikipedia.org/wiki/Right_to_Be (search).
+Sources: <https://righttobe.org/> (fetched), <https://en.wikipedia.org/wiki/Right_to_Be> (search).
 
 ### 3.21 Everyday Sexism Project (unresolved lead)
 
@@ -356,7 +356,7 @@ What happened. Search summaries report tens of thousands of entries, including a
 
 Lesson for the Guestbook. This is a close analogue for a testimony collection, but its custodial history is not documented in what I found. Treat it as an open question, not a case study.
 
-Sources: https://www.theglobeandmail.com/life/the-hot-button/20000-submissions-have-you-heard-of-the-everyday-sexism-project/article8483409/ (search), https://time.com/2882850/everyday-sexism/ (search).
+Sources: <https://www.theglobeandmail.com/life/the-hot-button/20000-submissions-have-you-heard-of-the-everyday-sexism-project/article8483409/> (search), <https://time.com/2882850/everyday-sexism/> (search).
 
 ### 3.22 September 11 Digital Archive
 
@@ -370,7 +370,7 @@ What worked. Direct collection and deliberate outreach to underrepresented group
 
 Lesson for the Guestbook. Representation is a custodial concern as well as an editorial one. The plan's section 8 (languages) and the outreach element of the MVP should plan for this from the start.
 
-Sources: https://www.historians.org/perspectives-article/digital-archive-collects-and-preserves-memories-of-9-11-april-2002/ (search), https://en.wikipedia.org/wiki/September_11_Digital_Archive (search).
+Sources: <https://www.historians.org/perspectives-article/digital-archive-collects-and-preserves-memories-of-9-11-april-2002/> (search), <https://en.wikipedia.org/wiki/September_11_Digital_Archive> (search).
 
 ### 3.23 French regulatory references used in this report
 
@@ -382,14 +382,14 @@ Enforcement: a 2025 search summary says the CNIL received 6,167 breach notificat
 
 Lesson for the Guestbook. Age handling (plan section 11) can be specified at 15 for France as a starting point, with a legal check on scope. Security failures, not content, are where small operators are most often sanctioned, which supports the plan's security section.
 
-Sources: https://www.cnil.fr/fr/recommandation-4-rechercher-le-consentement-dun-parent-pour-les-mineurs-de-moins-de-15-ans (fetched), https://www.weka.fr/actualite/administration/article/face-a-un-nombre-record-de-violations-de-donnees-en-2025-la-cnil-va-renforcer-ses-controles-214486/ (search), https://own2pwn.fr/articles/appsec/fuite-de-donnees (search).
+Sources: <https://www.cnil.fr/fr/recommandation-4-rechercher-le-consentement-dun-parent-pour-les-mineurs-de-moins-de-15-ans> (fetched), <https://www.weka.fr/actualite/administration/article/face-a-un-nombre-record-de-violations-de-donnees-en-2025-la-cnil-va-renforcer-ses-controles-214486/> (search), <https://own2pwn.fr/articles/appsec/fuite-de-donnees> (search).
 
 ## 4. Open questions and leads not pursued
 
 1. CNIL guidance on definitive archiving (guide_durees_de_conservation.pdf) could not be read; the tool returned a binary PDF. A search summary says private organisations should agree arrangements for definitive archiving with the competent departmental archives service [search]. If true, this is a plan-changing point for sections 20 and 21, because it could give the archive a legal anchor. Priority: read the CNIL PDF or its HTML equivalent.
 2. Which French legal basis applies to a private operator archiving testimony in the public interest under Art. 9(2)(j) and Art. 89, and whether a deposit agreement with a public archive would qualify. Not verified.
 3. Whether a testimony archive falls within the French under-15 consent rule (Art. 45 of the French data-protection act, cited by secondary sources [search]).
-4. Whether the DSA and the French LCEN hosting rules apply to a small non-commercial operator. The French lawyer article (https://kohenavocats.com/mastodon-france-instance-moderation-compte-suspendu-serveur-ferme-donnees-obligations-administrateurs-2026/) says it is unsettled and recommends treating it as if it applies; it also states reporting duties for certain offences. Not verified against Legifrance.
+4. Whether the DSA and the French LCEN hosting rules apply to a small non-commercial operator. The French lawyer article (<https://kohenavocats.com/mastodon-france-instance-moderation-compte-suspendu-serveur-ferme-donnees-obligations-administrateurs-2026/>) says it is unsettled and recommends treating it as if it applies; it also states reporting duties for certain offences. Not verified against Legifrance.
 5. Mandatory reporting of illegal content, including child sexual abuse material, and the French reporting channel. Refern's case (case 3.8) makes this concrete. Not researched further.
 6. The Everyday Sexism Project's current status and moderation practice (case 3.21).
 7. The terms page of A Journal of the Plague Year (case 3.18).
@@ -408,65 +408,65 @@ Sources: https://www.cnil.fr/fr/recommandation-4-rechercher-le-consentement-dun-
 
 Primary or fetched sources (opened and read):
 
-- https://next.ink/6608/108225-deframatisons-internet-framasoft-fermera-progressivement-30-services/ (Framasoft plan, 2019)
-- https://sebsauvage.net/wiki/doku.php?id=php%3Azerobin (ZeroBin wiki)
-- https://github.com/sebsauvage/ZeroBin (ZeroBin README)
-- https://joinmastodon.org/covenant (Mastodon Covenant)
-- https://kohenavocats.com/mastodon-france-instance-moderation-compte-suspendu-serveur-ferme-donnees-obligations-administrateurs-2026/ (French lawyer article, 25 October 2026; secondary, unverified)
-- https://mataroa.blog/ (Mataroa homepage)
-- https://hey.mataroa.blog/p/closing-registrations/ (Mataroa, 30 September 2022)
-- https://indieweb.org/site_deaths (IndieWeb site-deaths list; secondary compilation)
-- https://mjtsai.com/blog/2024/09/23/cohost-to-shut-down (Cohost, quoting the staff post)
-- https://www.theregister.com/software/2026/11/13/mozilla-leaves-solo-website-owners-to-go-it-alone-as-hosting-shuts-down/5309632 (Mozilla Solo)
-- https://wiki.archiveteam.org/index.php/GeoCities (Archive Team GeoCities page)
-- https://www.pewresearch.org/data-labs/2024/05/17/when-online-content-disappears/ (Pew, 17 May 2024)
-- https://blog.archive.org/2026/04/23/gone-but-not-forgotten-recovering-the-dead-web/ (Internet Archive, 23 April 2026; self-reported analysis)
-- https://ohs.org.uk/gdpr-2/ (Oral History Society GDPR guidance, version 5.0 August 2019)
-- https://gdpr-info.eu/art-9-gdpr/ (GDPR Art. 9)
-- https://gdpr-info.eu/art-17-gdpr/ (GDPR Art. 17, partly read)
-- https://gdpr-info.eu/art-33-gdpr/ (GDPR Art. 33, partly read)
-- https://gdpr-info.eu/art-89-gdpr/ (GDPR Art. 89, paraphrased)
-- https://www.cnil.fr/fr/recommandation-4-rechercher-le-consentement-dun-parent-pour-les-mineurs-de-moins-de-15-ans (CNIL Recommendation 4)
-- https://www.ilpost.it/2023/12/27/archivio-diari-pieve-santo-stefano/ (Il Post on the Archivio Diaristico Nazionale)
-- https://labo.societenumerique.gouv.fr/fr/articles/comment-les-mus%C3%A9es-services-des-archives-et-la-bnf-archivent-et-documentent-la-crise-sanitaire/ (French state digital lab article on COVID archiving)
-- https://covid-19archive.org/ (A Journal of the Plague Year)
-- https://support.zenodo.org/help/en-gb/13-policies/140-what-is-your-take-down-procedure (Zenodo take-down procedure)
-- https://righttobe.org/ (Right To Be)
+- <https://next.ink/6608/108225-deframatisons-internet-framasoft-fermera-progressivement-30-services/> (Framasoft plan, 2019)
+- <https://sebsauvage.net/wiki/doku.php?id=php%3Azerobin> (ZeroBin wiki)
+- <https://github.com/sebsauvage/ZeroBin> (ZeroBin README)
+- <https://joinmastodon.org/covenant> (Mastodon Covenant)
+- <https://kohenavocats.com/mastodon-france-instance-moderation-compte-suspendu-serveur-ferme-donnees-obligations-administrateurs-2026/> (French lawyer article, 25 October 2026; secondary, unverified)
+- <https://mataroa.blog/> (Mataroa homepage)
+- <https://hey.mataroa.blog/p/closing-registrations/> (Mataroa, 30 September 2022)
+- <https://indieweb.org/site_deaths> (IndieWeb site-deaths list; secondary compilation)
+- <https://mjtsai.com/blog/2024/09/23/cohost-to-shut-down> (Cohost, quoting the staff post)
+- <https://www.theregister.com/software/2026/11/13/mozilla-leaves-solo-website-owners-to-go-it-alone-as-hosting-shuts-down/5309632> (Mozilla Solo)
+- <https://wiki.archiveteam.org/index.php/GeoCities> (Archive Team GeoCities page)
+- <https://www.pewresearch.org/data-labs/2024/05/17/when-online-content-disappears/> (Pew, 17 May 2024)
+- <https://blog.archive.org/2026/04/23/gone-but-not-forgotten-recovering-the-dead-web/> (Internet Archive, 23 April 2026; self-reported analysis)
+- <https://ohs.org.uk/gdpr-2/> (Oral History Society GDPR guidance, version 5.0 August 2019)
+- <https://gdpr-info.eu/art-9-gdpr/> (GDPR Art. 9)
+- <https://gdpr-info.eu/art-17-gdpr/> (GDPR Art. 17, partly read)
+- <https://gdpr-info.eu/art-33-gdpr/> (GDPR Art. 33, partly read)
+- <https://gdpr-info.eu/art-89-gdpr/> (GDPR Art. 89, paraphrased)
+- <https://www.cnil.fr/fr/recommandation-4-rechercher-le-consentement-dun-parent-pour-les-mineurs-de-moins-de-15-ans> (CNIL Recommendation 4)
+- <https://www.ilpost.it/2023/12/27/archivio-diari-pieve-santo-stefano/> (Il Post on the Archivio Diaristico Nazionale)
+- <https://labo.societenumerique.gouv.fr/fr/articles/comment-les-mus%C3%A9es-services-des-archives-et-la-bnf-archivent-et-documentent-la-crise-sanitaire/> (French state digital lab article on COVID archiving)
+- <https://covid-19archive.org/> (A Journal of the Plague Year)
+- <https://support.zenodo.org/help/en-gb/13-policies/140-what-is-your-take-down-procedure> (Zenodo take-down procedure)
+- <https://righttobe.org/> (Right To Be)
 
 Search-result sources (not opened; lower confidence):
 
-- https://framablog.org/2019/09/24/deframasoftisons-internet/ (Framablog 2019; fetch timed out)
-- https://framablog.org/2025/12/23/framasoft-in-numbers-2025-edition/
-- https://news.ycombinator.com/item?id=34817612 (mastodon.au)
-- https://wedistribute.org/2024/09/mozilla-social-shutting-down/
-- https://techcrunch.com/2024/09/17/mozilla-exits-the-fediverse-and-will-shutter-its-mastodon-server-in-december
-- https://news.ycombinator.com/item?id=20397745 (Pinboard quote)
-- https://mjtsai.com/blog/2024/09/20/the-end-of-pinboard/
-- https://finance.yahoo.com/news/cohost-x-rival-founded-anti-200951160.html
-- https://www.computerworld.com/article/1333713/yahoo-geocities-closes-on-oct-26.html
-- https://www.infodocket.com/2024/09/04/appellate-court-affirms-district-court-ruling-in-hachette-v-internet-archive/
-- https://www.bleepingcomputer.com/news/security/internet-archive-hacked-data-breach-impacts-31-million-users/
-- https://news.ycombinator.com/item?id=16965575 (2018 comment on Wayback removal)
-- https://neocities.org/legal
-- https://neocities.org/terms
-- https://herman.bearblog.dev/the-frustration-loop/
-- https://docs.bearblog.dev/code-of-conduct/
-- https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0115253 (Klein et al. 2014)
-- https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0167475 (Klein et al. 2016)
-- https://www.bnf.fr/en/help-center/web-legal-deposit-instructions
-- https://www.archimag.com/archives-patrimoine/2020/03/23/memoires-confinement-projets-archivent-quotidien-coronavirus-covid-19
-- https://massobs.org.uk/research/covid19/
-- https://journals.sagepub.com/doi/10.1177/09526951231152139 (Mass Observation COVID article)
-- https://www.atlasobscura.com/articles/italy-tuscany-city-diaries-memories-history
-- https://www.historians.org/perspectives-article/digital-archive-collects-and-preserves-memories-of-9-11-april-2002/
-- https://en.wikipedia.org/wiki/September_11_Digital_Archive
-- https://en.wikipedia.org/wiki/Right_to_Be
-- https://www.theglobeandmail.com/life/the-hot-button/20000-submissions-have-you-heard-of-the-everyday-sexism-project/article8483409/
-- https://time.com/2882850/everyday-sexism/
-- https://about.zenodo.org/privacy-policy/
-- https://www.weka.fr/actualite/administration/article/face-a-un-nombre-record-de-violations-de-donnees-en-2025-la-cnil-va-renforcer-ses-controles-214486/
-- https://own2pwn.fr/articles/appsec/fuite-de-donnees
-- https://www.i6doc.com/fr/publisher/?publisher_id=413 (AFAS)
+- <https://framablog.org/2019/09/24/deframasoftisons-internet/> (Framablog 2019; fetch timed out)
+- <https://framablog.org/2025/12/23/framasoft-in-numbers-2025-edition/>
+- <https://news.ycombinator.com/item?id=34817612> (mastodon.au)
+- <https://wedistribute.org/2024/09/mozilla-social-shutting-down/>
+- <https://techcrunch.com/2024/09/17/mozilla-exits-the-fediverse-and-will-shutter-its-mastodon-server-in-december>
+- <https://news.ycombinator.com/item?id=20397745> (Pinboard quote)
+- <https://mjtsai.com/blog/2024/09/20/the-end-of-pinboard/>
+- <https://finance.yahoo.com/news/cohost-x-rival-founded-anti-200951160.html>
+- <https://www.computerworld.com/article/1333713/yahoo-geocities-closes-on-oct-26.html>
+- <https://www.infodocket.com/2024/09/04/appellate-court-affirms-district-court-ruling-in-hachette-v-internet-archive/>
+- <https://www.bleepingcomputer.com/news/security/internet-archive-hacked-data-breach-impacts-31-million-users/>
+- <https://news.ycombinator.com/item?id=16965575> (2018 comment on Wayback removal)
+- <https://neocities.org/legal>
+- <https://neocities.org/terms>
+- <https://herman.bearblog.dev/the-frustration-loop/>
+- <https://docs.bearblog.dev/code-of-conduct/>
+- <https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0115253> (Klein et al. 2014)
+- <https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0167475> (Klein et al. 2016)
+- <https://www.bnf.fr/en/help-center/web-legal-deposit-instructions>
+- <https://www.archimag.com/archives-patrimoine/2020/03/23/memoires-confinement-projets-archivent-quotidien-coronavirus-covid-19>
+- <https://massobs.org.uk/research/covid19/>
+- <https://journals.sagepub.com/doi/10.1177/09526951231152139> (Mass Observation COVID article)
+- <https://www.atlasobscura.com/articles/italy-tuscany-city-diaries-memories-history>
+- <https://www.historians.org/perspectives-article/digital-archive-collects-and-preserves-memories-of-9-11-april-2002/>
+- <https://en.wikipedia.org/wiki/September_11_Digital_Archive>
+- <https://en.wikipedia.org/wiki/Right_to_Be>
+- <https://www.theglobeandmail.com/life/the-hot-button/20000-submissions-have-you-heard-of-the-everyday-sexism-project/article8483409/>
+- <https://time.com/2882850/everyday-sexism/>
+- <https://about.zenodo.org/privacy-policy/>
+- <https://www.weka.fr/actualite/administration/article/face-a-un-nombre-record-de-violations-de-donnees-en-2025-la-cnil-va-renforcer-ses-controles-214486/>
+- <https://own2pwn.fr/articles/appsec/fuite-de-donnees>
+- <https://www.i6doc.com/fr/publisher/?publisher_id=413> (AFAS)
 
 Local files:
 

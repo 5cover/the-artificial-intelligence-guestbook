@@ -10,7 +10,7 @@ The repository is public. The owner first intended a private Kanban board, then 
 
 ## Decision
 
-Work is tracked in public: issues in this repository, milestones per plan phase (A to G), and a public GitHub Project at https://github.com/users/5cover/projects/23 with the status workflow described in [AGENTS.md](../../AGENTS.md).
+Work is tracked in public: issues in this repository, milestones per plan phase (A to G), and a public GitHub Project at <https://github.com/users/5cover/projects/23> with the status workflow described in [AGENTS.md](../../AGENTS.md).
 
 ## Consequences
 

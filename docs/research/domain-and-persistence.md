@@ -18,7 +18,7 @@ Method: RDAP lookups were run with curl on 2026-11-15 (times in UTC around 17:30
 8. Identifiers: use `/entries/<ID>` (not `/voices/`, which conflicts with the public terminology in plan section 38) with an opaque, non-sequential ID, assigned at publication, never reused, with no year and no sequence number exposed. Details in section 3.8.
 9. Zenodo can mint DOIs for editions, but a Zenodo removal keeps the DOI, the metadata and a tombstone page [verified against Zenodo policy]. Use Zenodo only for material that will never contain personal data, or wait for legal review before depositing any edition that contains testimony.
 10. ARK identifiers: arks.org states that NAANs are for "stable memory organizations" and does not address individuals [verified]. Do not claim ARK identifiers unless an institutional partner assigns a NAAN later. Use your own domain as the persistence layer.
-11. Preservation: request BnF collection by writing to depot.legal.web@bnf.fr or using the BnF form once the site is live; .fr sites and sites whose authors are domiciled in France are in scope [verified on bnf.fr]. Archive each code release with Software Heritage and cite its SWHID.
+11. Preservation: request BnF collection by writing to <depot.legal.web@bnf.fr> or using the BnF form once the site is live; .fr sites and sites whose authors are domiciled in France are in scope [verified on bnf.fr]. Archive each code release with Software Heritage and cite its SWHID.
 12. Edition packaging: use one BagIt bag (RFC 8493) per annual edition for transfer, and an OCFL (1.1) object for the successive editions 2027.0, 2027.1 and so on. OCFL version directories are immutable by specification, so the withdrawal mechanism of plan section 20 needs an explicit purge procedure; that design is an open question below.
 
 ## 1. Domain names for permanence
@@ -195,7 +195,7 @@ Recommendations:
 
 ### 3.5 Software Heritage
 
-- SWHID format: swh:1:<type>:<40 hex digits>, for example swh:1:cnt:94a9ed024d3859793618152ea559a168bbcbb5e2 for the GPL-3 text, the example given in Software Heritage's FAQ [verified, softwareheritage.org FAQ as quoted in search].
+- SWHID format: `swh:1:<type>:<40 hex digits>`, for example `swh:1:cnt:94a9ed024d3859793618152ea559a168bbcbb5e2` for the GPL-3 text, the example given in Software Heritage's FAQ [verified, softwareheritage.org FAQ as quoted in search].
 - The identifier is computed from content, so anyone can verify it locally with swh-identify [secondary].
 - Standardisation: one source says the specification is ISO/IEC 18670 and gives April 2025 as the date; the sources differ slightly [secondary].
 - Recommendation: archive the repository and each release with Software Heritage, and cite the release SWHID in the methodology and in the edition documentation. Software Heritage's save-request procedure was not verified here.
@@ -209,7 +209,7 @@ Recommendations:
 ### 3.7 BnF dépôt légal du web
 
 - The BnF collects French websites under legal deposit. Eligible sites include .fr domains and other French extensions, and sites whose authors are domiciled in France or whose content is produced or hosted in France [verified, bnf.fr "Signaler un site web" page].
-- To suggest a site: use the BnF form (up to five URLs; the email address is required) or write to depot.legal.web@bnf.fr [verified]. The BnF does not issue a receipt for a suggestion, and sites are not individually listed in the general catalogue [secondary, BnF help summarized in search].
+- To suggest a site: use the BnF form (up to five URLs; the email address is required) or write to <depot.legal.web@bnf.fr> [verified]. The BnF does not issue a receipt for a suggestion, and sites are not individually listed in the general catalogue [secondary, BnF help summarized in search].
 - Timing: a requested site is collected within a maximum of three months [secondary]; the bnf.fr page itself gives no timeline [verified].
 - Do not block the BnF crawler in robots.txt [secondary].
 - Open question for legal review: how the BnF treats erasure requests for collected personal data, and how that interacts with plan section 21. The archive should expect that the BnF copy may not follow the same deletion lifecycle as the live site.
@@ -269,73 +269,73 @@ Suggested edition layout (illustrative, to be refined):
 
 Domains and registries
 
-- ICANN, Expired registration and renewal FAQs for registrants: https://www.icann.org/resources/pages/domain-name-renewal-expiration-faqs-2018-12-07-en
-- ICANN, Emergency Back-End Registry Operator: https://www.icann.org/en/contracted-parties/registry-operators/resources/emergency-back-end-registry-operator
-- ICANN, .nowruz EBERO announcement (March 2024): https://www.icann.org/en/announcements/details/icann-to-place-nowruz-into-emergency-back-end-registry-operator-program-03-07-2024-en
-- ICANN, .org registry agreement listing: https://www.icann.org/en/registry-agreements/details/org
-- Domain Name Wire, .org sale terminated: https://domainnamewire.com/2020/05/12/org-registry-sale-officially-terminated/
-- Clarivate, ICANN board rejects sale of .org PIR: https://clarivate.com/intellectual-property/blog/icann-board-rejects-sale-of-orgs-public-interest-registry/
-- Technical.ly, PIR will no longer be acquired (Reston, Virginia): https://technical.ly/startups/reston-org-manager-public-interest-registry-will-no-longer-be-acquired-ethos-capital/
-- NTIA, Amendment 35 to the Cooperative Agreement with Verisign: https://www.ntia.gov/press-release/2018/ntia-statement-amendment-35-cooperative-agreement-verisign
-- Verisign 10-K (FY2024 summary via search): https://www.sec.gov/Archives/edgar/data/1014473/000101447325000006/vrsn-20241231.htm
-- NTIA blog on .com cooperative agreement (2024): https://www.ntia.gov/blog/2024/com-cooperative-agreement-ensuring-internet-stability-and-security
-- Wikipedia, .io: https://en.wikipedia.org/wiki/.io
-- Domain Incite, .io safe for now as Trump puts Chagos deal on ice: https://domainincite.com/31642-io-safe-for-now-as-trump-puts-chagos-deal-on-ice
-- EuroDNS, The End of the .IO Domain? (2026 update): https://www.eurodns.com/blog/end-of-io-domain
-- AFNIC, Charte de nommage (2025 version, via search results): https://www.afnic.fr/wp-media/uploads/2025/04/afnic-charte-de-nommage-2025-05-05.pdf
-- AFNIC, Guide pratique du titulaire 2024 (via search results): https://www.afnic.fr/wp-media/uploads/2024/07/Afnic-Guide-pratique-du-Titulaire.pdf
-- AFNIC, Guide des procedures (via search results): https://www.afnic.fr/wp-media/uploads/2022/10/Guide-des-procedures-Afnic-VF.pdf
-- AFNIC, Guide pratique a l'attention de l'ayant droit 2024 (title only): https://www.afnic.fr/wp-media/uploads/2021/01/GuidePratique_Ayant-Droit_VF_.pdf
-- AFNIC, Signature du .fr et .re: https://www.afnic.fr/fr/l-afnic-en-bref/actualites/actualites-operationnelles/3774/showOperational/signature-du-fr-et-re.html
-- AFNIC, Brexit and .fr domain names: https://www.afnic.fr/en/observatory-and-resources/expert-papers/brexit-and-fr-domain-names/
-- EURid, Timeline: https://eurid.eu/en/about-eurid/timeline/
-- Wiggin LLP, EEA citizens can register .eu (2020): https://wiggin.co.uk/insight/eurid-confirms-that-all-eea-citizens-can-register-eu-domain-names-from-2-september-2020/
-- Gandi, Wikipedia article: https://en.wikipedia.org/wiki/Gandi
-- Gandi, domain page excerpt: https://www.gandi.net/en/domain
-- Gandi, changing the owner of a domain: https://docs.gandi.net/en/domain_names/change_owner/standard_process.html
-- OVHcloud, domain page (English): https://www.ovhcloud.com/en/domains/
-- OVHcloud, domain page (French): https://www.ovhcloud.com/fr/domains/
-- Infomaniak, domains page: https://www.infomaniak.com/en/domains
-- Infomaniak, .org prices page (excerpt quoted in search results): https://www.infomaniak.com/en/domains/prices/org
+- ICANN, Expired registration and renewal FAQs for registrants: <https://www.icann.org/resources/pages/domain-name-renewal-expiration-faqs-2018-12-07-en>
+- ICANN, Emergency Back-End Registry Operator: <https://www.icann.org/en/contracted-parties/registry-operators/resources/emergency-back-end-registry-operator>
+- ICANN, .nowruz EBERO announcement (March 2024): <https://www.icann.org/en/announcements/details/icann-to-place-nowruz-into-emergency-back-end-registry-operator-program-03-07-2024-en>
+- ICANN, .org registry agreement listing: <https://www.icann.org/en/registry-agreements/details/org>
+- Domain Name Wire, .org sale terminated: <https://domainnamewire.com/2020/05/12/org-registry-sale-officially-terminated/>
+- Clarivate, ICANN board rejects sale of .org PIR: <https://clarivate.com/intellectual-property/blog/icann-board-rejects-sale-of-orgs-public-interest-registry/>
+- Technical.ly, PIR will no longer be acquired (Reston, Virginia): <https://technical.ly/startups/reston-org-manager-public-interest-registry-will-no-longer-be-acquired-ethos-capital/>
+- NTIA, Amendment 35 to the Cooperative Agreement with Verisign: <https://www.ntia.gov/press-release/2018/ntia-statement-amendment-35-cooperative-agreement-verisign>
+- Verisign 10-K (FY2024 summary via search): <https://www.sec.gov/Archives/edgar/data/1014473/000101447325000006/vrsn-20241231.htm>
+- NTIA blog on .com cooperative agreement (2024): <https://www.ntia.gov/blog/2024/com-cooperative-agreement-ensuring-internet-stability-and-security>
+- Wikipedia, .io: <https://en.wikipedia.org/wiki/.io>
+- Domain Incite, .io safe for now as Trump puts Chagos deal on ice: <https://domainincite.com/31642-io-safe-for-now-as-trump-puts-chagos-deal-on-ice>
+- EuroDNS, The End of the .IO Domain? (2026 update): <https://www.eurodns.com/blog/end-of-io-domain>
+- AFNIC, Charte de nommage (2025 version, via search results): <https://www.afnic.fr/wp-media/uploads/2025/04/afnic-charte-de-nommage-2025-05-05.pdf>
+- AFNIC, Guide pratique du titulaire 2024 (via search results): <https://www.afnic.fr/wp-media/uploads/2024/07/Afnic-Guide-pratique-du-Titulaire.pdf>
+- AFNIC, Guide des procedures (via search results): <https://www.afnic.fr/wp-media/uploads/2022/10/Guide-des-procedures-Afnic-VF.pdf>
+- AFNIC, Guide pratique a l'attention de l'ayant droit 2024 (title only): <https://www.afnic.fr/wp-media/uploads/2021/01/GuidePratique_Ayant-Droit_VF_.pdf>
+- AFNIC, Signature du .fr et .re: <https://www.afnic.fr/fr/l-afnic-en-bref/actualites/actualites-operationnelles/3774/showOperational/signature-du-fr-et-re.html>
+- AFNIC, Brexit and .fr domain names: <https://www.afnic.fr/en/observatory-and-resources/expert-papers/brexit-and-fr-domain-names/>
+- EURid, Timeline: <https://eurid.eu/en/about-eurid/timeline/>
+- Wiggin LLP, EEA citizens can register .eu (2020): <https://wiggin.co.uk/insight/eurid-confirms-that-all-eea-citizens-can-register-eu-domain-names-from-2-september-2020/>
+- Gandi, Wikipedia article: <https://en.wikipedia.org/wiki/Gandi>
+- Gandi, domain page excerpt: <https://www.gandi.net/en/domain>
+- Gandi, changing the owner of a domain: <https://docs.gandi.net/en/domain_names/change_owner/standard_process.html>
+- OVHcloud, domain page (English): <https://www.ovhcloud.com/en/domains/>
+- OVHcloud, domain page (French): <https://www.ovhcloud.com/fr/domains/>
+- Infomaniak, domains page: <https://www.infomaniak.com/en/domains>
+- Infomaniak, .org prices page (excerpt quoted in search results): <https://www.infomaniak.com/en/domains/prices/org>
 
 Email
 
-- RFC 7208, SPF: https://www.rfc-editor.org/rfc/rfc7208
-- RFC 6376, DKIM: https://www.rfc-editor.org/rfc/rfc6376
-- RFC 9989, DMARC (obsoletes RFC 7489): https://www.rfc-editor.org/rfc/rfc9989
-- RFC 7489, DMARC (historic): https://www.rfc-editor.org/rfc/rfc7489
-- Google Workspace Admin Help, email sender guidelines: https://support.google.com/a/answer/81126
+- RFC 7208, SPF: <https://www.rfc-editor.org/rfc/rfc7208>
+- RFC 6376, DKIM: <https://www.rfc-editor.org/rfc/rfc6376>
+- RFC 9989, DMARC (obsoletes RFC 7489): <https://www.rfc-editor.org/rfc/rfc9989>
+- RFC 7489, DMARC (historic): <https://www.rfc-editor.org/rfc/rfc7489>
+- Google Workspace Admin Help, email sender guidelines: <https://support.google.com/a/answer/81126>
 
 SEO
 
-- Google Search Central, managing multi-regional and multilingual sites: https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites
-- Search Engine Journal on ccTLD geotargeting (secondary): https://www.searchenginejournal.com/google-uses-cctlds-search-console-settings-geotarget-search-results/205486/
-- Search results on AI guestbook products: https://myguestbook.ai/ ; https://robocfo.ai/ai-guestbook ; https://hosette.net/projects/guestbook/ ; https://pm.redawning.com/ai-guestbook
+- Google Search Central, managing multi-regional and multilingual sites: <https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites>
+- Search Engine Journal on ccTLD geotargeting (secondary): <https://www.searchenginejournal.com/google-uses-cctlds-search-console-settings-geotarget-search-results/205486/>
+- Search results on AI guestbook products: <https://myguestbook.ai/> ; <https://robocfo.ai/ai-guestbook> ; <https://hosette.net/projects/guestbook/> ; <https://pm.redawning.com/ai-guestbook>
 
 Persistent identifiers and archives
 
-- W3C, Cool URIs don't change (Berners-Lee): https://www.w3.org/Provider/Style/URI
-- ARK, NAANs and systems: https://arks.org/about/ark-naans-and-systems/
-- N2T, ARK identifiers: https://n2t.net/e/ark_ids.html
-- Zenodo, General policies: https://about.zenodo.org/policies
-- Zenodo help, DOI versioning: https://zenodo.org/help/versioning
-- Zenodo help, manage records (via search results): https://help.zenodo.org/docs/deposit/manage-records
-- w3id.org: https://w3id.org/
-- purl.org: https://purl.org/
-- Software Heritage FAQ: https://www.softwareheritage.org/software-heritage-faq/
-- Software Heritage, SWHID seminar post (2025): https://www.softwareheritage.org/2025/11/20/swhid-seminar-post/
-- Internet Archive developer documentation, items: https://archive.org/developers/items.html
-- Internet Archive, Wayback Machine: https://web.archive.org/
-- BnF, Signaler un site web a la BnF: https://www.bnf.fr/en/submitting-website-bnf
-- BnF, Dépôt légal: https://www.bnf.fr/fr/centre-d-aide/depot-legal
-- arXiv, identifier help: https://info.arxiv.org/help/arxiv_identifier.html
-- Wikipedia, Help:Permanent link: https://en.wikipedia.org/wiki/Help:Permanent_link
-- Mass Observation Archive, referencing and publishing: https://massobs.org.uk/research/referencing-and-publishing/
-- RFC 8493, BagIt: https://www.rfc-editor.org/rfc/rfc8493
-- OCFL 1.1 specification: https://ocfl.io/1.1/spec/
+- W3C, Cool URIs don't change (Berners-Lee): <https://www.w3.org/Provider/Style/URI>
+- ARK, NAANs and systems: <https://arks.org/about/ark-naans-and-systems/>
+- N2T, ARK identifiers: <https://n2t.net/e/ark_ids.html>
+- Zenodo, General policies: <https://about.zenodo.org/policies>
+- Zenodo help, DOI versioning: <https://zenodo.org/help/versioning>
+- Zenodo help, manage records (via search results): <https://help.zenodo.org/docs/deposit/manage-records>
+- w3id.org: <https://w3id.org/>
+- purl.org: <https://purl.org/>
+- Software Heritage FAQ: <https://www.softwareheritage.org/software-heritage-faq/>
+- Software Heritage, SWHID seminar post (2025): <https://www.softwareheritage.org/2025/11/20/swhid-seminar-post/>
+- Internet Archive developer documentation, items: <https://archive.org/developers/items.html>
+- Internet Archive, Wayback Machine: <https://web.archive.org/>
+- BnF, Signaler un site web a la BnF: <https://www.bnf.fr/en/submitting-website-bnf>
+- BnF, Dépôt légal: <https://www.bnf.fr/fr/centre-d-aide/depot-legal>
+- arXiv, identifier help: <https://info.arxiv.org/help/arxiv_identifier.html>
+- Wikipedia, Help:Permanent link: <https://en.wikipedia.org/wiki/Help:Permanent_link>
+- Mass Observation Archive, referencing and publishing: <https://massobs.org.uk/research/referencing-and-publishing/>
+- RFC 8493, BagIt: <https://www.rfc-editor.org/rfc/rfc8493>
+- OCFL 1.1 specification: <https://ocfl.io/1.1/spec/>
 
 Law
 
-- Legifrance, loi n 78-17 (article 85), to be checked directly: https://www.legifrance.gouv.fr/
-- CNIL, digital legacy and post-mortem directives (search results, to be checked): https://www.cnil.fr/
-- Donnees personnelles, deceased persons' data (secondary): https://www.donneespersonnelles.fr/donnees-personnes-decedees
+- Legifrance, loi n 78-17 (article 85), to be checked directly: <https://www.legifrance.gouv.fr/>
+- CNIL, digital legacy and post-mortem directives (search results, to be checked): <https://www.cnil.fr/>
+- Donnees personnelles, deceased persons' data (secondary): <https://www.donneespersonnelles.fr/donnees-personnes-decedees>

@@ -12,17 +12,17 @@ Status: Draft, awaiting owner ratification
 
 ## Presentation
 
-6. There is no recommendation algorithm, personalized feed, engagement ranking or "people like you also liked". Visitors choose what to look for: chronological browsing, search and filters.
-7. Filters must not combine into granular slices that make anonymous contributors identifiable. A filter appears only when it is populated enough to be useful and safe.
-8. Each published testimony has a permanent address and a citation that respects the contributor's chosen public identity.
-9. No comments, replies, likes, followers, messaging, reputation or public argument threads. A testimony may respond to another intellectually; the platform does not build a conversation graph around it.
+1. There is no recommendation algorithm, personalized feed, engagement ranking or "people like you also liked". Visitors choose what to look for: chronological browsing, search and filters.
+2. Filters must not combine into granular slices that make anonymous contributors identifiable. A filter appears only when it is populated enough to be useful and safe.
+3. Each published testimony has a permanent address and a citation that respects the contributor's chosen public identity.
+4. No comments, replies, likes, followers, messaging, reputation or public argument threads. A testimony may respond to another intellectually; the platform does not build a conversation graph around it.
 
 ## Context
 
-10. Contextual material exists to help a future reader understand the testimonies and their world. Its test: does a future reader need this to understand what the contributors were describing?
-11. Context is selective, not encyclopedic. It may cover social dimensions that other archives cover poorly, such as labour, education, culture, companionship, hype, backlash and ordinary uses.
-12. Context pages are dated and revised openly. They describe the period; they do not argue with the testimonies.
+1. Contextual material exists to help a future reader understand the testimonies and their world. Its test: does a future reader need this to understand what the contributors were describing?
+2. Context is selective, not encyclopedic. It may cover social dimensions that other archives cover poorly, such as labour, education, culture, companionship, hype, backlash and ordinary uses.
+3. Context pages are dated and revised openly. They describe the period; they do not argue with the testimonies.
 
 ## Public language
 
-13. The interface speaks plainly: "sign the guestbook", "leave a testimony", "read the guestbook", "time capsule". The object itself is a "testimony" ("témoignage" in French) everywhere, in the interface as in code and documentation. Academic terms such as "corpus", "archival record" or "Zeitzeugnis" belong in methodology pages and internal documentation.
+1. The interface speaks plainly: "sign the guestbook", "leave a testimony", "read the guestbook", "time capsule". The object itself is a "testimony" ("témoignage" in French) everywhere, in the interface as in code and documentation. Academic terms such as "corpus", "archival record" or "Zeitzeugnis" belong in methodology pages and internal documentation.

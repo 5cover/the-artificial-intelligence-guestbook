@@ -16,13 +16,13 @@ Published testimonies, their public metadata and authorship declarations, transl
 
 ## Properties
 
-4. **The archive is the primary deliverable.** The application is a replaceable front end ([ADR 0006](../decisions/0006-archive-first-replaceable-application.md)).
-5. **Independently intelligible.** An edition can be understood without the live website, the production stack or the founder. Formats are simple, open and documented.
-6. **Stable identity.** Every testimony has a permanent identifier independent of its state, URL or the application's database. Identifiers are never reused.
-7. **Revisable for privacy.** An edition is versioned (for example `2027.0`, `2027.1`). A privacy revision may remove withdrawn material and replace it with a content-free tombstone. The fact that a revision happened, and why in general terms, is recorded.
-8. **Verifiable.** Editions ship with checksums, and the project publishes what each edition contains so that copies can be checked.
-9. **Mirrors are welcome, with honesty about limits.** People and institutions may download and keep copies. The project publishes a machine-readable list of withdrawn identifiers so mirror operators can update their copies. The project does not claim it can remotely delete independent copies.
-10. **Private data is excluded by construction.** Exports never contain account data, moderation notes, privacy requests, logs or secrets.
+1. **The archive is the primary deliverable.** The application is a replaceable front end ([ADR 0006](../decisions/0006-archive-first-replaceable-application.md)).
+2. **Independently intelligible.** An edition can be understood without the live website, the production stack or the founder. Formats are simple, open and documented.
+3. **Stable identity.** Every testimony has a permanent identifier independent of its state, URL or the application's database. Identifiers are never reused.
+4. **Revisable for privacy.** An edition is versioned (for example `2027.0`, `2027.1`). A privacy revision may remove withdrawn material and replace it with a content-free tombstone. The fact that a revision happened, and why in general terms, is recorded.
+5. **Verifiable.** Editions ship with checksums, and the project publishes what each edition contains so that copies can be checked.
+6. **Mirrors are welcome, with honesty about limits.** People and institutions may download and keep copies. The project publishes a machine-readable list of withdrawn identifiers so mirror operators can update their copies. The project does not claim it can remotely delete independent copies.
+7. **Private data is excluded by construction.** Exports never contain account data, moderation notes, privacy requests, logs or secrets.
 
 ## Not yet decided
 

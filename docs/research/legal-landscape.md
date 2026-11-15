@@ -109,7 +109,7 @@ Remaining uncertainty [inference]: no source discusses a non-professional publis
 Recommended mapping (for the self-review; each row to be confirmed by the DPIA):
 
 | Data | Recommended basis | Notes |
-|---|---|---|
+| --- | --- | --- |
 | Account and email (login by magic link) | Art. 6(1)(b) for the account the user asks for, or art. 6(1)(f) for account security | Email is needed to authenticate and to process withdrawal. Art. 6(1)(b) is arguable only if the account is objectively necessary to provide the requested service [N for EDPB 2/2019 reasoning]. Consent is not appropriate for a login the user cannot avoid. |
 | Testimony text (publication) | Art. 6(1)(a) consent plus art. 9(2)(a) explicit consent where special categories are present | Consent is the only basis that fits withdrawal. Legitimate interest for publication is weak once the text is archived and mirrored. |
 | Optional public metadata (name, age range, country, region, language, profession, organisation, relationship to AI, link) | Art. 6(1)(a) consent | Each field optional. Withdraw one field without withdrawing the whole entry where practicable. |
@@ -167,7 +167,7 @@ Consent must satisfy art. 7 and be freely given, specific, informed and unambigu
 Member state thresholds (secondary; verify each against national law before use):
 
 | Age | Member states (per a secondary comparison) |
-|---|---|
+| --- | --- |
 | 13 | Belgium, Estonia, Finland, Latvia, Malta, Portugal, Sweden |
 | 14 | Austria, Bulgaria, Cyprus, Italy, Lithuania, Spain |
 | 15 | Czechia, France, Greece, Slovenia; Denmark listed as 15 in one source (from 2024) and 13 in older sources (conflict) |
@@ -406,7 +406,7 @@ Member state thresholds (secondary; verify each against national law before use)
 These are recommendations, not legal minima, unless marked. Where a legal minimum exists it is quoted from section 6.
 
 | Data category | Recommended retention | Legal anchor |
-|---|---|---|
+| --- | --- | --- |
 | Unfinished drafts never submitted | Delete after a fixed inactivity period (for example 30 to 90 days) | Art. 5(1)(e) [F]; period is a recommendation |
 | Account email and login data | While the account is active; if decree 2021-1362 applies, one year after account closure (art. 3) | Decree art. 3 [F] (applicability uncertain) |
 | Civil identity data, if ever collected | Five years after contract end if decree applies (art. 2) | Decree art. 2 [F]; avoid collecting if not needed |
@@ -466,36 +466,36 @@ Self-review checks:
 
 Primary, fetched in this session [F]:
 
-- GDPR, Regulation (EU) 2016/679, EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679 (arts. 5(1)(e), 6(1)(e) and (f), 6(3), 7(3), 8(1), 9(2)(a), 9(2)(e), 17(1), 17(2), 17(3)(a) and (d), 28(3), 30(5), 33(1), 35(3)(b), 37(1)(c), 85(1)-(2), 89(1); recitals 38, 65, 69)
-- DSA, Regulation (EU) 2022/2065, EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2065 (arts. 3(i), 6(1), 14(1), 15(2), 16(1), 17(1), 19(1), 28(1); recitals 7, 13, 22, 29, 49, 50, 57)
-- Directive (EU) 2015/1535, art. 1(1)(b), EUR-Lex: https://eur-lex.europa.eu/legal-content/FR/TXT/HTML/?uri=CELEX:32015L1535
-- Directive 2000/31/EC (e-commerce), recital 18, EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031
-- CJEU C-184/20, OT v Vyriausioji tarnybines etikos komisija, judgment of 1 August 2022, EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62020CJ0184 (paras 23, 44, 108-128 read in part)
-- Commission Implementing Decision (EU) 2023/1795 (EU-US Data Privacy Framework), EUR-Lex: https://eur-lex.europa.eu/eli/dec_impl/2023/1795/oj/eng (art. 1 partially read)
-- LCEN, loi no. 2004-575 (consolidated, version as read in session, en vigueur au 15 novembre 2026), Legifrance: https://www.legifrance.gouv.fr/loda/id/JORFTEXT000000801164 (arts. 1-1, 1-2, 6 I 2, 6 I 3, 6 II, 6 IV A-B, 6 V A-B)
-- Loi no. 78-17 (Loi Informatique et Libertes, consolidated), Legifrance: https://www.legifrance.gouv.fr/loda/id/JORFTEXT000000886460 (arts. 4 point 5, 6, 51 I-II, 80, 88 - art. 88 concerns the directive 2016/680 regime and does not apply here)
-- Decree no. 2021-1362 of 20 October 2021, Legifrance: https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000044228912 (arts. 1 to 13, summarised)
-- Deliberation no. 2018-327 of 11 October 2018 (CNIL list of processing requiring a DPIA), Legifrance JO: https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000037559521 (annex)
-- CNIL, Recommendation 4 (parental consent for minors under 15): https://www.cnil.fr/fr/recommandation-4-rechercher-le-consentement-dun-parent-pour-les-mineurs-de-moins-de-15-ans
-- CNIL, Recommendation 7 (verifying age and parental consent): https://www.cnil.fr/fr/recommandation-7-verifier-lage-de-lenfant-et-laccord-des-parents-dans-le-respect-de-sa-vie-privee
-- CNIL, cookies and trackers, "Que dit la loi": https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies/que-dit-la-loi
-- CNIL, DPIA page (AIPD): https://www.cnil.fr/fr/RGPD-analyse-impact-protection-des-donnees-aipd (fetch partial)
-- Creative Commons Attribution 4.0 legal code: https://creativecommons.org/licenses/by/4.0/legalcode.en
-- 18 U.S.C. 2713, Cornell LII: https://www.law.cornell.edu/uscode/text/18/2713
-- Code de la propriete intellectuelle, Legifrance (table of contents only was read): https://www.legifrance.gouv.fr/codes/id/LEGITEXT000006069414/
-- WP248 rev.01 (EDPB/Article 29 DPIA guidelines), not readable in session: https://ec.europa.eu/newsroom/just/document.cfm?doc_id=47711 [N]
+- GDPR, Regulation (EU) 2016/679, EUR-Lex: <https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679> (arts. 5(1)(e), 6(1)(e) and (f), 6(3), 7(3), 8(1), 9(2)(a), 9(2)(e), 17(1), 17(2), 17(3)(a) and (d), 28(3), 30(5), 33(1), 35(3)(b), 37(1)(c), 85(1)-(2), 89(1); recitals 38, 65, 69)
+- DSA, Regulation (EU) 2022/2065, EUR-Lex: <https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2065> (arts. 3(i), 6(1), 14(1), 15(2), 16(1), 17(1), 19(1), 28(1); recitals 7, 13, 22, 29, 49, 50, 57)
+- Directive (EU) 2015/1535, art. 1(1)(b), EUR-Lex: <https://eur-lex.europa.eu/legal-content/FR/TXT/HTML/?uri=CELEX:32015L1535>
+- Directive 2000/31/EC (e-commerce), recital 18, EUR-Lex: <https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031>
+- CJEU C-184/20, OT v Vyriausioji tarnybines etikos komisija, judgment of 1 August 2022, EUR-Lex: <https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62020CJ0184> (paras 23, 44, 108-128 read in part)
+- Commission Implementing Decision (EU) 2023/1795 (EU-US Data Privacy Framework), EUR-Lex: <https://eur-lex.europa.eu/eli/dec_impl/2023/1795/oj/eng> (art. 1 partially read)
+- LCEN, loi no. 2004-575 (consolidated, version as read in session, en vigueur au 15 novembre 2026), Legifrance: <https://www.legifrance.gouv.fr/loda/id/JORFTEXT000000801164> (arts. 1-1, 1-2, 6 I 2, 6 I 3, 6 II, 6 IV A-B, 6 V A-B)
+- Loi no. 78-17 (Loi Informatique et Libertes, consolidated), Legifrance: <https://www.legifrance.gouv.fr/loda/id/JORFTEXT000000886460> (arts. 4 point 5, 6, 51 I-II, 80, 88 - art. 88 concerns the directive 2016/680 regime and does not apply here)
+- Decree no. 2021-1362 of 20 October 2021, Legifrance: <https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000044228912> (arts. 1 to 13, summarised)
+- Deliberation no. 2018-327 of 11 October 2018 (CNIL list of processing requiring a DPIA), Legifrance JO: <https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000037559521> (annex)
+- CNIL, Recommendation 4 (parental consent for minors under 15): <https://www.cnil.fr/fr/recommandation-4-rechercher-le-consentement-dun-parent-pour-les-mineurs-de-moins-de-15-ans>
+- CNIL, Recommendation 7 (verifying age and parental consent): <https://www.cnil.fr/fr/recommandation-7-verifier-lage-de-lenfant-et-laccord-des-parents-dans-le-respect-de-sa-vie-privee>
+- CNIL, cookies and trackers, "Que dit la loi": <https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies/que-dit-la-loi>
+- CNIL, DPIA page (AIPD): <https://www.cnil.fr/fr/RGPD-analyse-impact-protection-des-donnees-aipd> (fetch partial)
+- Creative Commons Attribution 4.0 legal code: <https://creativecommons.org/licenses/by/4.0/legalcode.en>
+- 18 U.S.C. 2713, Cornell LII: <https://www.law.cornell.edu/uscode/text/18/2713>
+- Code de la propriete intellectuelle, Legifrance (table of contents only was read): <https://www.legifrance.gouv.fr/codes/id/LEGITEXT000006069414/>
+- WP248 rev.01 (EDPB/Article 29 DPIA guidelines), not readable in session: <https://ec.europa.eu/newsroom/just/document.cfm?doc_id=47711> [N]
 
 Secondary [S] (used as leads only, verify before reliance):
 
-- Legalnest (LCEN version dates): https://legalnest.io/en/guides/legal-notice-website-france/
-- Village de la Justice, on the SREN rewrite of LCEN art. 6 (the art. 6 I 8 to 6-3 renumbering): https://www.village-justice.com/articles/nouvel-article-lcen-pour-retrait-plus-dynamique-des-contenus-ligne,40611.html
-- Conseil d'Etat, decision no. 459724 of 30 June 2023 (decree 2021-1362 upheld): https://www.conseil-etat.fr/fr/arianeweb/CE/decision/2023-06-30/459724
-- Lexbase, art. 8 decree 2021-1362: https://www.lexbase.fr/texte-de-loi/art-8-decret-n-20211362-du-20-octobre-2021-relatif-a-la-conservation-des-donnees-permettant-didentif/Z30069TM.html
-- Papasavvas, C-291/13 (summary), McCann FitzGerald: https://www.mccannfitzgerald.com/knowledge/technology-and-innovation/cjeu-clarifies-civil-liability-for-internet-publishing ; judgment page https://ipcuria.eu/case?reference=C-291/13
-- CPI art. L121-1 (commentary): https://lawplayer.com/fr/article/LEGITEXT000006069414/LEGIARTI000006278891
-- CPI art. L131-3 (commentary): https://justice.pappers.fr/loi/LEGITEXT000006069414/article/LEGIARTI000006278958
-- CPI art. L112-3 (Legifrance page reference): https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006278879
-- Age-of-consent comparison table (Recording Law): https://www.recordinglaw.com/world-laws/world-data-privacy-laws/eu-data-privacy-laws/gdpr-consent-requirements/ ; Bastion: https://bastion.tech/learn/gdpr/childrens-data-protection/
-- CNIL, retention periods FAQ: https://elections.cnil.fr/fr/cnil-direct/question/dois-je-fixer-une-duree-de-conservation-des-donnees-dans-mon-fichier (fetch did not complete)
+- Legalnest (LCEN version dates): <https://legalnest.io/en/guides/legal-notice-website-france/>
+- Village de la Justice, on the SREN rewrite of LCEN art. 6 (the art. 6 I 8 to 6-3 renumbering): <https://www.village-justice.com/articles/nouvel-article-lcen-pour-retrait-plus-dynamique-des-contenus-ligne,40611.html>
+- Conseil d'Etat, decision no. 459724 of 30 June 2023 (decree 2021-1362 upheld): <https://www.conseil-etat.fr/fr/arianeweb/CE/decision/2023-06-30/459724>
+- Lexbase, art. 8 decree 2021-1362: <https://www.lexbase.fr/texte-de-loi/art-8-decret-n-20211362-du-20-octobre-2021-relatif-a-la-conservation-des-donnees-permettant-didentif/Z30069TM.html>
+- Papasavvas, C-291/13 (summary), McCann FitzGerald: <https://www.mccannfitzgerald.com/knowledge/technology-and-innovation/cjeu-clarifies-civil-liability-for-internet-publishing> ; judgment page <https://ipcuria.eu/case?reference=C-291/13>
+- CPI art. L121-1 (commentary): <https://lawplayer.com/fr/article/LEGITEXT000006069414/LEGIARTI000006278891>
+- CPI art. L131-3 (commentary): <https://justice.pappers.fr/loi/LEGITEXT000006069414/article/LEGIARTI000006278958>
+- CPI art. L112-3 (Legifrance page reference): <https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006278879>
+- Age-of-consent comparison table (Recording Law): <https://www.recordinglaw.com/world-laws/world-data-privacy-laws/eu-data-privacy-laws/gdpr-consent-requirements/> ; Bastion: <https://bastion.tech/learn/gdpr/childrens-data-protection/>
+- CNIL, retention periods FAQ: <https://elections.cnil.fr/fr/cnil-direct/question/dois-je-fixer-une-duree-de-conservation-des-donnees-dans-mon-fichier> (fetch did not complete)
 
 Referenced from knowledge, not read in this session [N]: EDPB Guidelines 05/2020 on consent; EDPB Guidelines 2/2019 on art. 6(1)(b); WP248 rev.01 (see above); Recommendation 2003/361/EC (micro and small enterprise thresholds); Directive 2002/58/EC art. 5(3); Loi I&L art. 82; GDPR arts. 12(3), 13, 14, 17(3)(b) and (e), 32, 34, 37 full text; CPI arts. L121-2, L122-4, L122-5, L122-7, L131-3 full text; LCEN art. 6 I 4 and 5 full text; DSA arts. 2, 3(g), 11, 12, 20 to 28 full text; Code civil art. 2224 (limitation period, not checked).

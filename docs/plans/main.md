@@ -1170,7 +1170,8 @@ The preferred working subtitle is:
 
 Together:
 
-> The Artificial Intelligence Guestbook  
+> The Artificial Intelligence Guestbook
+>
 > A human time capsule of the AI era.
 
 Alternative explanatory phrases may be used in particular contexts, such as:

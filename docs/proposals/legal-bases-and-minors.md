@@ -35,6 +35,8 @@ Whether a non-professional operator hosting submitted testimonies is a "fourniss
 
 Only data the operator actually collects is covered (art. 8).
 
+The notion is defined by reference: LCEN art. 6 I 2 points to DSA art. 3(g)(iii), "the storage of information provided by, and at the request of, a recipient of the service", within an information society service. The definition does cover any site that stores what its users submit, by design. So the question is not whether the Guestbook stores testimonies at contributors' request, which it does, but whether a free, non-commercial archive run by an individual is an information society service at all. That is the same question as D3, and the two answers must agree: assuming the DSA applies (D3) means assuming the decree applies too (legal research, section 6, follow-up of 2026-11-18).
+
 | Option | Effect |
 | --- | --- |
 | A. Assume the decree applies in full | Keep the account email one year after closure; collect and keep raw IP addresses at each submission for one year. More personal data, held longer, contrary to minimisation. |

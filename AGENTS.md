@@ -17,7 +17,7 @@ Operator and publisher: Raphaël Bardini, a private individual in France. GDPR a
 Pre-implementation. Phase A (constitution) and Phase B (data and privacy design) are in progress.
 
 - Stack: Django 5.2 LTS on PostgreSQL 18 ([ADR 0010](docs/decisions/0010-stack-django-postgresql.md)). The archive specification (#13) comes before the application scaffold (#21), as the RFP recommends.
-- Domain: `theaiguestbook.org`, registered at OVHcloud on 2026-11-15 ([ADR 0008](docs/decisions/0008-canonical-domain.md), [docs/operations/domain.md](docs/operations/domain.md)).
+- Domain: `theaiguestbook.org`, registered at OVHcloud on 2026-11-15, with DNSSEC, and the project mailbox `contact@theaiguestbook.org` (SPF, DKIM, DMARC in monitoring mode) ([ADR 0008](docs/decisions/0008-canonical-domain.md), [ADR 0012](docs/decisions/0012-project-mailbox.md), [docs/operations/domain.md](docs/operations/domain.md)).
 
 ## Knowledge lives in the repository
 

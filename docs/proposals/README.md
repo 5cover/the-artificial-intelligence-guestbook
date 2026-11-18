@@ -36,7 +36,6 @@ Decisions waiting for the owner, grouped by the work they unblock. The recommend
 3. Backup window: 30 days proposed and aligned in the [deletion lifecycle](../specs/deletion-lifecycle.md) and [retention schedule](../specs/retention.md).
 4. Transactional email provider ([infrastructure](infrastructure.md), section 5).
 5. Whether test buckets and mail accounts may be created to verify object lock and tracking behaviour ([infrastructure](infrastructure.md), section 8).
-6. The project mailbox: OVHcloud's free plan (#45).
 
 ### Unblocks the archive format and the first edition (#13, #38)
 

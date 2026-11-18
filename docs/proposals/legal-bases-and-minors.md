@@ -69,7 +69,9 @@ GDPR art. 8 lets each member state set the age of digital consent between 13 and
 | B. 16 for everyone | Safe everywhere in the EU, but forces 15-year-olds in France through the parental flow, contrary to plan section 11. |
 | C. Threshold by declared country of residence, from a verified table, with a default of 16 (recommended) | France: 15 (verified through the CNIL). Each other country gets its own threshold once it is verified against national law; until then it gets the GDPR default of 16. Non-EU residents get 16. |
 
-Recommendation: C. The table lives in the code and in `docs/legal/`, with the source of each entry. It grows as entries are verified, and starts with France only.
+Owner: B accepted (2026-11-18). GDPR art. 8(1) lets member states lower the age from 16 but never raise it, so 16 can never fall below a national threshold and needs no monitoring. No authoritative, maintained table of national thresholds was found. The cost is that French 15-year-olds go through the parental path. The per-country table below is not built.
+
+Recommendation (superseded by the owner's choice): C. The table lives in the code and in `docs/legal/`, with the source of each entry. It grows as entries are verified, and starts with France only.
 
 Also decide whether there is a minimum age below which no one may contribute, even with parental consent.
 
@@ -113,11 +115,15 @@ Alternatives:
 
 Recommendation: the design above, documented in the DPIA as the proportionality reasoning.
 
+Owner: accepted as recommended (2026-11-18), with the threshold of D4 (16). The verification itself is light (a declaration and a parent's email); the publication restrictions are the protection that holds even when the declaration is false.
+
 ## D6. Explicit consent wording
 
 Recommendation: one separate, mandatory statement for every submission, distinct from the publication consent and the licence. Draft wording, to be reviewed in both languages in #19:
 
 > I agree that my testimony, which may include information about my health, beliefs, sexuality, political opinions or other sensitive aspects of my life, is published and preserved in the archive. I can withdraw it at any time.
+
+Owner: a lighter form accepted (2026-11-18). The explicit consent is merged into the publication statement, in one sentence such as: "Publish my testimony in the guestbook, including anything personal it reveals about me." The detail (health, beliefs, sexuality, political opinions) goes in the privacy notice, linked from the statement. A notice alone would not be consent, since art. 9(2)(a) requires an act by the person. Whether the merged sentence is explicit enough is a question for the paid consultation (ADR 0007).
 
 The consent screen must also state the honest limits plainly, before submission. The [privacy research](../research/privacy-failures.md), section 5, gives suggested wording. In particular:
 

@@ -14,7 +14,7 @@ Non-secret facts about the project's domain. Credentials, backup codes and accou
 | Registered | 2026-11-15 (RDAP registration event) |
 | Expires | 2027-11-15 (RDAP expiration event) |
 | Term paid | 1 year, first year free with the offer; renewal EUR 12.99 per year (VAT status to confirm from the invoice) |
-| Auto-renew | To confirm in the control panel |
+| Auto-renew | On, for the domain and the free hosting (confirmed by the owner, 2026-11-18) |
 | Locks | `client transfer prohibited` and `client delete prohibited` (RDAP) |
 | Registry lock | Not asked yet (optional) |
 | Registrar notices go to | The owner's personal mailbox, outside the domain |
@@ -46,8 +46,7 @@ The domain serves OVHcloud's default page ("Site en construction", marked `noind
 
 Tracked in #46:
 
-1. Confirm auto-renew in the control panel, for the domain and the free hosting.
-2. Send a message from `contact@` to a personal address and back, and check that the received headers show `dkim=pass`, `spf=pass` and `dmarc=pass` (procedure, section 6.3).
-3. Optionally, ask OVHcloud whether a registry lock is available for `.org`, and at what price.
-4. Run the domain through dnsviz.net once from a network without a TLS-intercepting proxy.
-5. DMARC: review the aggregate reports, then move to `p=quarantine` no earlier than 2026-12-16, and to `p=reject` a few weeks after that if the reports stay clean.
+1. Send a message from `contact@` to a personal address and back, and check that the received headers show `dkim=pass`, `spf=pass` and `dmarc=pass` ([mailbox procedure](../procedures/project-mailbox-and-dmarc.md), section 1.3).
+2. Optionally, ask OVHcloud whether a registry lock is available for `.org`, and at what price.
+3. Run the domain through dnsviz.net once from a network without a TLS-intercepting proxy.
+4. DMARC: review the aggregate reports, then move to `p=quarantine` no earlier than 2026-12-16, and only once the transactional email provider (#10) is configured and passing; then to `p=reject` a few weeks later ([mailbox procedure](../procedures/project-mailbox-and-dmarc.md), section 2.4).

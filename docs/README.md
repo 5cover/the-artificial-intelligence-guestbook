@@ -83,6 +83,7 @@ Open decisions are gathered in the [decision queue](proposals/README.md).
 Step-by-step guides. See [procedures/README.md](procedures/README.md).
 
 - [Register and configure the domain](procedures/register-and-configure-domain.md) (#8)
+- [Use the project mailbox and read DMARC reports](procedures/project-mailbox-and-dmarc.md) (#46)
 
 ## Planned
 

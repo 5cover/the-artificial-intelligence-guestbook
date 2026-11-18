@@ -9,3 +9,4 @@ Each procedure states its status and the date its external facts (prices, interf
 | Procedure | Purpose |
 | --- | --- |
 | [Register and configure the domain](register-and-configure-domain.md) | Buy, secure and configure DNS for `theaiguestbook.org`, with later phases for mail, the VPS and launch |
+| [Use the project mailbox and read DMARC reports](project-mailbox-and-dmarc.md) | Read `contact@` over IMAP or webmail without vendor lock-in, rules for the custodian's computer, the round-trip test, and reading and acting on DMARC reports |

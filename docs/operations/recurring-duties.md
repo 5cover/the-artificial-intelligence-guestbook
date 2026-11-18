@@ -40,7 +40,7 @@ The custodial obligation as a calendar. Each duty names its trigger, what "done"
 | Duty | Done when |
 | --- | --- |
 | Privacy revision of hosted editions, if any withdrawal is pending | Revision published within 30 days of the oldest request (deletion lifecycle, section 4) |
-| Read DMARC aggregate reports | Anomalies investigated |
+| Read DMARC aggregate reports ([procedure](../procedures/project-mailbox-and-dmarc.md), section 2) | Every source accounted for; anomalies investigated |
 | Refresh the disposable-domain blocklist (ADR 0003) | Updated from the maintained list, committed |
 
 ## Yearly

@@ -42,7 +42,7 @@ Deadline: without undue delay and within one month of receipt (GDPR art. 12(3), 
 | 9 | Application and proxy logs | URLs with the public ID, timestamps, hashed or no IP addresses; never text or emails | Yes | Log rotation | Retention schedule (#18) |
 | 10 | Email provider | The account email and message metadata for sign-in and notification emails | Under contract (processor) | The provider's retention, set in the DPA | Per provider (#10) |
 | 11 | Project mailbox | Correspondence with the contributor about the request | Yes | Deleted when the request is complete, except the minimal evidence record | Upon completion |
-| 12 | Custodian's own devices | Nothing by policy: no local exports or copies of unpublished content | Yes | Policy, checked in the drill (section 7) | Not applicable |
+| 12 | Custodian's own devices | The mail client's synced copy of the project mailbox (IMAP); otherwise nothing by policy, with no local exports or copies of unpublished content | Yes | Deletion on the server over IMAP, which the client mirrors; the disk is encrypted ([mailbox procedure](../procedures/project-mailbox-and-dmarc.md), section 1.2) | At the next sync |
 | 13 | Search engines | Cached copies and snippets | No | The 410 response, plus removal requests through the engines' own tools | Days to weeks, not guaranteed |
 | 14 | Web archives (Internet Archive, BnF dépôt légal) | Captures of published pages | No | Exclusion request where the archive offers one. The BnF's handling of erasure is unverified (domain research, section 3.7). | Not guaranteed |
 | 15 | Third-party mirrors and downloads of editions | Full editions | No | The withdrawal list, and notification of known mirrors (section 5) | Not guaranteed |

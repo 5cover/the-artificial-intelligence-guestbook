@@ -1,6 +1,6 @@
 # Retention schedule
 
-Status: Draft (2026-11-15). Assumes the recommendations of [legal bases, retention duty and minors](../proposals/legal-bases-and-minors.md), in particular option C of D2. Periods marked "Proposal" need owner review.
+Status: Draft (2026-11-15). Follows [ADR 0013](../decisions/0013-legal-bases-and-minors.md), in particular option C of D2. Periods marked "Proposal" need owner review.
 
 Issue: #18
 

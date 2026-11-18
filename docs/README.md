@@ -36,6 +36,7 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 - [0010. Application stack: Django 5.2 LTS on PostgreSQL 18](decisions/0010-stack-django-postgresql.md)
 - [0011. The interface calls a contribution a "testimony" ("témoignage")](decisions/0011-testimony-in-the-interface.md)
 - [0012. Project mailbox: `contact@theaiguestbook.org` on OVHcloud's free hosting](decisions/0012-project-mailbox.md)
+- [0013. Legal bases, identification-data retention and minors](decisions/0013-legal-bases-and-minors.md)
 
 ## Proposals
 

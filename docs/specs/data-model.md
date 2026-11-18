@@ -148,15 +148,15 @@ Kept to show that publication was lawful (legal research, sections 2 to 4). One 
 | Field | Class | Notes |
 | --- | --- | --- |
 | `publication_consent_at` | evidence | Consent to publication and archival editions |
-| `explicit_consent_at` | evidence | Explicit consent covering sensitive self-disclosure (GDPR art. 9(2)(a)); required in the flow for everyone, because any text may contain it |
+| `explicit_consent_at` | evidence | Explicit consent covering sensitive self-disclosure (GDPR art. 9(2)(a)); given by the same publication statement as `publication_consent_at` (ADR 0013), required for everyone because any text may contain it |
 | `licence_grant_version` | evidence | Version of the CC BY 4.0 plus project-grant text accepted (ADR 0009) |
 | `terms_version`, `privacy_notice_version` | evidence | Versions shown at submission |
 | `consent_locale` | evidence | Language of the texts shown |
-| `declared_age_band` | evidence | `under-threshold` or `at-or-over-threshold`, plus the country used to choose the threshold. Not the exact age. |
+| `declared_age_band` | evidence | `under-16` or `16-or-over` (single threshold, ADR 0013). Not the exact age. |
 | `consent_path` | evidence | `self` or `parental` |
 | `parental_consent_at`, `parental_method` | evidence | For the parental path only. Verification data itself (such as the parent's email) is deleted once verification completes (CNIL Recommendation 7, legal research section 4). |
 
-The parental flow and its thresholds are proposed in [legal bases and minors](../proposals/legal-bases-and-minors.md) (#12, #17).
+The parental flow and its threshold are decided in [ADR 0013](../decisions/0013-legal-bases-and-minors.md) (#12, #17).
 
 ### 2.9 Translation (`public` once published)
 

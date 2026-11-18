@@ -1,6 +1,6 @@
 # Legal bases, retention duty and minors
 
-Status: Proposal - awaiting owner decision (2026-11-15)
+Status: Concluded by [ADR 0013](../decisions/0013-legal-bases-and-minors.md) (2026-11-18)
 
 Issues: #12 (legal bases and minors policy), #17 (age and parental-consent flow), #18 (retention, partly)
 

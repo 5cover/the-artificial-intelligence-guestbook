@@ -9,7 +9,7 @@ Proposals present options for an owner decision. Once decided, a proposal stays 
 | Proposal | Issues | State |
 | --- | --- | --- |
 | [Stack RFP](stack-rfp.md) | #6, #7 | Concluded: [ADR 0010](../decisions/0010-stack-django-postgresql.md) |
-| [Legal bases, retention duty and minors](legal-bases-and-minors.md) | #12, #17, #18 | Awaiting decision: D1 to D7 |
+| [Legal bases, retention duty and minors](legal-bases-and-minors.md) | #12, #17, #18 | Concluded: [ADR 0013](../decisions/0013-legal-bases-and-minors.md) |
 | [Licences for the project's own material and for editions](project-licensing.md) | #43 | Awaiting decision: L1 to L5 |
 | [Infrastructure](infrastructure.md) | #9, #10, #31 | Awaiting decision: VPS, backups, email |
 | [Context pages](context-pages.md) | #36 | Awaiting review: editorial rules and first set |
@@ -18,16 +18,6 @@ Proposals present options for an owner decision. Once decided, a proposal stays 
 ## Decision queue
 
 Decisions waiting for the owner, grouped by the work they unblock. The recommendation, where there is one, is in the linked section.
-
-### Unblocks the legal drafts and the DPIA (#19)
-
-1. Legal basis for each purpose ([D1](legal-bases-and-minors.md#d1-legal-basis-for-each-processing-purpose)).
-2. Position on decree 2021-1362 ([D2](legal-bases-and-minors.md#d2-decree-2021-1362-retention-of-identification-data-by-hosts)).
-3. Treating the service as an online platform under the DSA ([D3](legal-bases-and-minors.md#d3-treating-the-service-as-an-online-platform-under-the-dsa)).
-4. Age thresholds and any minimum age ([D4](legal-bases-and-minors.md#d4-age-thresholds)).
-5. Parental consent and the restrictions for under-threshold contributors, or refusing them ([D5](legal-bases-and-minors.md#d5-parental-consent-and-verification)).
-6. Explicit-consent wording and the honest-limit statements ([D6](legal-bases-and-minors.md#d6-explicit-consent-wording)).
-7. Carrying out a DPIA ([D7](legal-bases-and-minors.md#d7-dpia)).
 
 ### Unblocks hosting, deployment and backups (#9, #10, #26, #31)
 

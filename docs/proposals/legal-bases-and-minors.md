@@ -43,6 +43,8 @@ The notion is defined by reference: LCEN art. 6 I 2 points to DSA art. 3(g)(iii)
 | B. Assume it does not apply | Simplest. If the assumption is wrong, the operator risks a penalty (LCEN art. 6 V B, up to one year and EUR 250,000) for failing to produce data to a judicial authority. |
 | C. Minimise on the merits, and comply cheaply with what remains (recommended) | Do not collect raw IP addresses at submission. They are not needed for the service: anti-abuse uses keyed, rotating hashes. Art. 5 then has nothing to apply to. Keep the account email for one year after closure in a restricted store, used for nothing else and disclosed only to a judicial authority on request. That covers art. 3 at a small privacy cost. Collect no civil identity, so art. 2 has nothing to apply to. Record the position and its reasoning in the DPIA. |
 
+Owner: C accepted (2026-11-18), on the grounds that it is cheap.
+
 Recommendation: C. Proxy logs must then not store raw IP addresses either (retention schedule, #18). Whether minimising collection is compatible with the decree's purpose is itself uncertain (legal research, section 6, open questions). This is the first question for any paid consultation (ADR 0007).
 
 ## D3. Treating the service as an online platform under the DSA

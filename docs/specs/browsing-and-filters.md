@@ -13,7 +13,7 @@ Visitors choose what to look for: chronological browsing, full-text search and f
 1. The default listing shows published testimonies newest first. Each item shows:
    - an excerpt;
    - the original language;
-   - the publication month and year (R27.6);
+   - the publication date, to the day (owner decision, 2026-11-19; the testimony page shows the day anyway, so a coarser listing date protected nothing);
    - the attribution chosen by the contributor;
    - labels for any available translations.
 2. Order: by publication day, ties broken by public ID, never by submission order or any hidden score (R27.7).
@@ -37,7 +37,7 @@ Visitors choose what to look for: chronological browsing, full-text search and f
 | Original language | Yes | |
 | Translation available in language | Yes | |
 | Country | Yes | Country level only (R27.5) |
-| Region | Proposal: no filter at first | Only once its values pass the threshold. Region also appears on testimony pages only under the same rule (data model, section 2.4). |
+| Region | No (owner decision, 2026-11-19) | Reconsidered after launch, if enough testimonies give a region (proposals README, deferred decisions) |
 | Field (controlled list) | Yes | Not combined with country (R27.4) |
 | Relationship to AI | Yes | |
 | Frequency of AI use | Yes | |
@@ -67,7 +67,7 @@ Thresholds protect the browsing interface, not the testimony page. A testimony p
 
 - every identity field is optional, and empty by default;
 - the consent text explains that each detail makes identification easier (privacy research, section 5);
-- region is withheld from public display until enough testimonies share it.
+- region is never a filter.
 
 ## 5. Editions
 
@@ -78,5 +78,5 @@ Thresholds protect the browsing interface, not the testimony page. A testimony p
 ## 6. Open questions
 
 - The value of N, and whether rarely populated filters should exist at all (privacy research, question 1).
-- Whether region should ever be published (section 3.1).
-- Month and year on listings with the day on the testimony page (proposed), or month only everywhere (privacy research, question 4).
+- Resolved (2026-11-19): no region filter; a region filter is a deferred decision.
+- Resolved (2026-11-19): dates to the day on listings and testimony pages.

@@ -199,7 +199,7 @@ Every field is optional and published only if the contributor fills it in. Becau
 | `display_name` | `line(100)?` | public | For `named` and `pseudonymous` only |
 | `age_range` | `enum(AgeRange)?` | public, with rules | Section 2.4.1 |
 | `country` | `country?` | public | |
-| `region` | `line(100)?` | public | Shown only if the filter rules allow it (#27) |
+| `region` | `line(100)?` | public | Shown on the testimony page as given; not a filter ([browsing and filters](browsing-and-filters.md), section 3.1) |
 | `languages` | `list(lang)?` | public | The languages the contributor lives in, distinct from the testimony's language. No duplicates. |
 | `profession` | `line(100)?` | public | |
 | `field` | `enum(Field)?` | public | Controlled list for browsing, optional alongside the free-text `profession` |

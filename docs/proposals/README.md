@@ -21,8 +21,7 @@ Decisions waiting for the owner, grouped by the work they unblock. The recommend
 
 ### Unblocks the data model and the interface (#14, #23, #27)
 
-1. Whether region is ever shown, and date precision on listings (N = 10 is decided) ([browsing and filters](../specs/browsing-and-filters.md), section 6).
-2. Whether a contributor may delete their account while keeping a testimony published, which would make later withdrawal impossible ([retention schedule](../specs/retention.md), section 4).
+1. Whether a contributor may delete their account while keeping a testimony published, which would make later withdrawal impossible ([retention schedule](../specs/retention.md), section 4).
 
 ### Moderation (#41)
 
@@ -55,4 +54,5 @@ Open on purpose: nothing before launch depends on them. Each is revisited when i
 | A standby transactional mail provider | Sign-in outages become a problem | [ADR 0015](../decisions/0015-backups-and-transactional-email.md), item 6 |
 | WAL archiving, for a recovery point finer than a day | Daily loss becomes unacceptable | [ADR 0015](../decisions/0015-backups-and-transactional-email.md), item 5 |
 | Moving the server away from OVHcloud | An account problem, or the project goes public at scale | [ADR 0014](../decisions/0014-provisional-vps-ovhcloud.md) |
+| A region filter | Enough testimonies give a region | [Browsing and filters](../specs/browsing-and-filters.md), section 3.1 |
 | Registry lock for the domain | Optional, at any time | [Domain record](../operations/domain.md), "Pending" |

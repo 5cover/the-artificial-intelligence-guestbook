@@ -286,14 +286,15 @@ It never records who moderated what.
 
 ## 9. Building and validating
 
-1. The exporter reads only through the domain layer and the public allow-list (ADR 0006; data model, section 1).
+1. The exporter reads only through the domain layer and the public allow-list (ADR 0006; data model, section 1). It refuses to run while a testimony of the period has a pending revision (data model, section 5).
 2. Every record is validated against the schema. Any failure stops the build.
 3. The bag is validated with an independent BagIt implementation, not only the project's own code, for example the Library of Congress `bagit-python` library.
 4. Round-trip test: the edition is imported into an empty database and re-exported. The two packages must be identical apart from `Bagging-Date` and the signature.
 5. The test suite asserts that no `private`, `operational` or `evidence` field name appears anywhere in the package.
 6. The static HTML is checked to work from the file system with no network access.
 7. Independent reader: before publication, the edition is read by a separate program written from `data/schema/README.txt` alone, in a different language from the exporter. It must reconstruct every testimony and the withdrawal list. Since the exporter is Python (ADR 0010), the reader is written in another language, for example TypeScript. This proves that the documentation, not the application, is sufficient (archive-failures research, section 4.2).
-8. Yearly drill: one edition is restored from one copy into an empty directory, verified, and read by the independent reader. The elapsed time is recorded together with the result.
+8. The build is run manually by the custodian once a year, in two steps (owner decision, 2026-11-19). On the server, a management command writes the unsigned bag, which contains public data only. On the custodian's own machine, the bag is validated (items 2 to 7), compressed (section 1.1, which may take hours) and signed with the offline key (section 6). No private data reaches the custodian's machine, and the signing key never reaches the server.
+9. Yearly drill: one edition is restored from one copy into an empty directory, verified, and read by the independent reader. The elapsed time is recorded together with the result.
 
 ## 10. Privacy revisions
 

@@ -21,9 +21,8 @@ Decisions waiting for the owner, grouped by the work they unblock. The recommend
 
 ### Unblocks the data model and the interface (#14, #23, #27)
 
-1. The edition-period rule ([data model](../specs/data-model.md), section 5).
-2. Whether region is ever shown, and date precision on listings (N = 10 is decided) ([browsing and filters](../specs/browsing-and-filters.md), section 6).
-3. Whether a contributor may delete their account while keeping a testimony published, which would make later withdrawal impossible ([retention schedule](../specs/retention.md), section 4).
+1. Whether region is ever shown, and date precision on listings (N = 10 is decided) ([browsing and filters](../specs/browsing-and-filters.md), section 6).
+2. Whether a contributor may delete their account while keeping a testimony published, which would make later withdrawal impossible ([retention schedule](../specs/retention.md), section 4).
 
 ### Moderation (#41)
 

@@ -486,10 +486,10 @@ Invariants (the constraints of section 2.3 enforce the first and third in the da
 
 ## 5. Edition periods
 
-Proposal:
+Accepted by the owner (2026-11-19).
 
 1. A testimony belongs to the period of its `received_at` instant: the period whose cutoff is the next 31 December, in UTC. This follows plan section 19, where a submission received after the cutoff "becomes part of a subsequent archival period".
-2. An edition is built after the moderation queue for its period has been cleared, for example in the following January. Testimonies received before the cutoff but still unmoderated at build time join the edition's first revision.
+2. An edition cannot be built while any testimony of its period has a pending revision: the build refuses to start and lists them. The moderation queue therefore separates pending reviews of testimonies received up to the cutoff from those received after it, and shows the first group first, so that the edition's backlog is visible and cleared with priority. The edition is then built, for example in the following January.
 3. The edition period is public, because readers and researchers need to know which time capsule a testimony belongs to. It reveals no more than the publication date already does.
 
 ## 6. Retention

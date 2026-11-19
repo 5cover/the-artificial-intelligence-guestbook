@@ -47,7 +47,7 @@ The custodial obligation as a calendar. Each duty names its trigger, what "done"
 
 | Duty | Suggested month | Done when |
 | --- | --- | --- |
-| Produce the annual edition (time capsule) | January to February, after the queue for the period is cleared | Edition published, deposited, registered (archive format) |
+| Produce the annual edition (time capsule) | January to February, after every pending review of the period is cleared | Built manually in two steps, server then the custodian's machine; published, copied and registered ([archive format](../specs/archive-format.md), section 9) |
 | Fixity check of every copy of every edition | With the edition | All digests match, or repaired from a matching copy; logged (archive format, section 6.1) |
 | Restore drill: database from backup into an empty server, with erase-on-restore | Before the edition | Restored, with elapsed time recorded (deletion lifecycle, section 7) |
 | Deletion drill on production with a test testimony | With the restore drill | Every place in the inventory verified |

@@ -69,6 +69,7 @@ All Markdown files are constrained to a tractable subset, enforced by markdownli
 - inline links `[text](target)` or autolinks `<https://...>` only; no reference-style links, no bare URLs;
 - tables with leading and trailing pipes and one space of padding;
 - no inline HTML, no trailing whitespace, no two-space line breaks, no line length limit.
+- For open questions, use numbered tasks lists, so they can be referenced unambigously later. Remove the Open Questions section once every question is resolved.
 
 Run `pnpm lint:md` before committing documentation; `pnpm fix:md` applies the mechanical fixes. Review what `fix:md` changes: renumbering a list or removing a line break can change meaning. Source tags such as `[S12]` are plain text, so write two of them as `[S1] [S2]`, never `[S1][S2]`, which Markdown reads as a reference link.
 

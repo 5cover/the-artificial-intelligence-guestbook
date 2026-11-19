@@ -1,14 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://theaiguestbook.org/schema/0/testimony.schema.json",
+  "$id": "https://theaiguestbook.org/data/schema/0/testimony.schema.json",
   "title": "Testimony record",
   "description": "One published testimony in an edition of The Artificial Intelligence Guestbook. Normative definition of docs/specs/archive-format.md section 3. Format version 0 (unstable).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["format_version", "edition_id", "public_id", "url", "language", "published_on", "edition_period", "licence", "citation", "redacted", "body_format", "body", "revisions", "identity", "authorship"],
+  "required": ["format_version", "public_id", "url", "language", "published_on", "edition_period", "licence", "citation", "redacted", "body_format", "body", "revisions", "identity", "authorship"],
   "properties": {
     "format_version": { "const": 0 },
-    "edition_id": { "type": "string", "pattern": "^[0-9]{4}(\\.[0-9]+|-rehearsal\\.[0-9]+)$" },
+    "edition_id": { "description": "Present in editions; absent from the live data URL (docs/specs/identifiers.md section 2.1).", "type": "string", "pattern": "^[0-9]{4}(\\.[0-9]+|-rehearsal\\.[0-9]+)$" },
     "public_id": { "$ref": "#/$defs/public_id" },
     "url": { "type": "string", "pattern": "^https://theaiguestbook\\.org/testimonies/[0-9a-hjkmnp-tv-z]{8}$" },
     "language": { "$ref": "#/$defs/language" },

@@ -36,7 +36,7 @@ Deadline: without undue delay and within one month of receipt (GDPR art. 12(3), 
 | 2 | PostgreSQL storage remnants | Dead row versions and WAL segments still on disk | Yes | Autovacuum and WAL recycling; the deletion job runs `VACUUM` on affected tables | Hours to days. Requirement for #26: the database volume is encrypted at rest, so that remnants are not readable from a detached disk. |
 | 3 | Search vectors | Derived text | Yes | Derived in the database, so deleted with the row | Immediate |
 | 4 | Reverse-proxy page cache | Rendered HTML of the testimony page and listings | Yes | Purge by URL in the deletion job; short cache lifetimes as a backstop | Immediate, at most the cache lifetime |
-| 5 | Static renderings | Pre-rendered testimony pages and listings (ADR 0006) | Yes | Regenerated without the testimony; the testimony page becomes the tombstone | Immediate |
+| 5 | Static renderings | Pre-rendered testimony pages and listings (ADR 0006), and the static data files and Markdown views ([identifiers](identifiers.md), section 2.1) | Yes | Regenerated without the testimony; the testimony page becomes the tombstone | Immediate |
 | 6 | Hosted editions | Edition packages served for download | Yes | Privacy revision (section 4) | Proposal: within 30 days of verification |
 | 7 | Withdrawal list | Public IDs of withdrawn testimonies | Yes | Not removed: it is the mechanism (section 5) | Updated immediately |
 | 8 | Backups | Database dumps and file backups, encrypted | Yes | Expiry by rotation, plus erase-on-restore (section 6) | At most 30 days (ADR 0015) |

@@ -15,14 +15,14 @@ Assessments are inference unless a source is given. "Carried in the edition" mea
 | # | Layer | Dependency | Needed for | Durability assessment | Carried in the edition |
 | --- | --- | --- | --- | --- | --- |
 | 1 | Medium | A readable storage medium and file system | Everything | Outside the project's control; addressed by copies and migration (archive format, section 6.1) | No |
-| 2 | Package | `tar` and `gzip` (proposed) | Opening the package | Decades of use, simple, many independent implementations | No; the README of an unpacked copy cannot explain how to unpack itself |
+| 2 | Package | `tar` (pax) and gzip (decided 2026-11-19); `xz` for the proposed second serialization | Opening the package | tar and gzip: decades of use, simple, many independent implementations. xz: common since about 2010, fewer implementations; the gzip file remains the fallback | No; the README of an unpacked copy cannot explain how to unpack itself |
 | 3 | Characters | Unicode, UTF-8 and NFC normalization | Every text file | UTF-8 dominates text interchange; its encoding rules are short | No |
 | 4 | Text layout | Line feed as line end, blank line as paragraph separator | Reading bodies | Trivial to infer from the content | Partly: `schema/README.txt` |
 | 4a | Light markup | CommonMark 0.31.2, declared in each record (`body_format`) | Reading emphasis, headings, lists and links in bodies | Readable as plain text even if the convention is forgotten, because the marks resemble their meaning; the specification is licensed CC BY-SA 4.0 and could be included | Variant declared; specification not yet included (see section 2) |
 | 5 | Language | English and French, as written in the 2020s | READMEs, labels, testimonies | Long-lived and heavily documented, but drifts over centuries | The testimonies themselves are in many languages, by nature |
 | 6 | Package structure | BagIt (RFC 8493) | Knowing which files belong and verifying them | A small, stable IETF specification used by libraries and archives | No (see section 2, item 1) |
 | 7 | Integrity | SHA-512 and SHA-256 | Verifying files | Standardized and widely implemented; collision resistance may weaken over a long horizon, verification by recomputation stays possible | No |
-| 8 | Authenticity | OpenPGP signatures (RFC 9580, proposed) and the project's public key | Proving the edition is the project's | Depends on surviving tooling and on the key being published elsewhere | Public key only |
+| 8 | Authenticity | OpenPGP signatures (RFC 9580, decided 2026-11-19) and the project's public key, plus the registry digest of the tag manifest | Proving the edition is the project's | Depends on surviving tooling and on the key being published elsewhere | Public key only |
 | 9 | Records | JSON (RFC 8259) | Machine reading of testimony records | Ubiquitous today; the grammar fits on a page | No |
 | 10 | Record meaning | JSON Schema draft 2020-12 | Validating records, knowing field types | Less durable than JSON itself; the meaning is also described in prose | Prose in `schema/README.txt` (archive format, section 9, item 7) |
 | 11 | Tables | CSV (RFC 4180) | Index files | Ubiquitous, with dialect variations | No |
@@ -41,7 +41,7 @@ These are candidates, not decisions. Each would be decided in the archive format
 2. **Describe the record format in prose** independently of JSON Schema, which the archive format already requires through the independent reader.
 3. **Include the CC BY 4.0 legal code** as a plain-text file, as the repository now does in `LICENSE-docs`, instead of only linking to it.
 4. **Include a code table** for every language and country code used in the edition, with English and French names, so that later code changes do not orphan old values.
-5. **A single plain-text file of all testimonies**, already an open question in the archive format (section 12), removes the dependency on JSON and on file-system layout for the most important content.
+5. **A single plain-text file of all testimonies**: adopted (`all-testimonies.txt`, archive format, section 4). It removes the dependency on JSON and on file-system layout for the most important content.
 
 ## 3. Not mitigated, and why
 

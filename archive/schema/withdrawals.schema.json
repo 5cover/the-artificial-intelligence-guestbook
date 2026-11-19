@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://theaiguestbook.org/schema/0/withdrawals.schema.json",
+  "$id": "https://theaiguestbook.org/data/schema/0/withdrawals.schema.json",
   "title": "Withdrawal list",
   "description": "Testimonies withdrawn from any edition (docs/specs/archive-format.md section 5). Content-free by design. Format version 0 (unstable).",
   "type": "object",

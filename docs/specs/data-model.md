@@ -56,6 +56,8 @@ Every field has one of these types. The type fixes its values, its PostgreSQL re
 
 A type followed by `?` is optional: the value may be absent. In PostgreSQL an absent value is `NULL`. In editions it is omitted, never written as `null` (archive format, section 3). A type without `?` is required (`NOT NULL`).
 
+Lengths in `text(max)`, `line(max)` and `markdown(max)` count Unicode code points, not bytes, so that scripts outside ASCII are not penalized. The storage cost of the worst case is bounded anyway: at most 4 bytes per code point, 200 KB for a 50,000-code-point body. A user-perceived character made of several code points (some emoji and combined accents) counts as several.
+
 No field in the model needs a real number. If one ever does, it uses `numeric`, never floating point, so that values survive export and re-import unchanged.
 
 ### 1.3 Time

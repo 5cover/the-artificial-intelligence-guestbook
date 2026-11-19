@@ -99,6 +99,7 @@ Dated research documents in `docs/research/` keep the wording of their date and 
 - Plan files in the repository are committed alongside the work they describe.
 - Never commit secrets. `.env` is ignored and must stay ignored.
 - Do not push anything unless explicitly asked.
+- Fix a typo, a lint failure or another small mistake in an unpushed commit by amending that commit (`git commit --amend`, or a soft reset and amend when it is not the last one), not with a separate commit. A separate commit is for a change of substance. Pushed commits are never rewritten.
 
 ## Product guardrails
 

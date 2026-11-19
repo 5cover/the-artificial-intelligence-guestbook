@@ -38,6 +38,7 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 - [0012. Project mailbox: `contact@theaiguestbook.org` on OVHcloud's free hosting](decisions/0012-project-mailbox.md)
 - [0013. Legal bases, identification-data retention and minors](decisions/0013-legal-bases-and-minors.md)
 - [0014. Provisional VPS: OVHcloud VPS-1](decisions/0014-provisional-vps-ovhcloud.md)
+- [0015. Backups at Hetzner Object Storage, transactional email through Scaleway TEM](decisions/0015-backups-and-transactional-email.md)
 
 ## Proposals
 

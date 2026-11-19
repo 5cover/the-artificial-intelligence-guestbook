@@ -77,7 +77,8 @@ Encoding rules for every file the project writes:
 1. The bag is serialized as a POSIX `tar` archive (pax format) compressed with gzip (RFC 1952), named `the-ai-guestbook-2027.0.tar.gz` (owner decision, 2026-11-19). Both are readable by standard tools on every common system.
 2. Editions are built rarely and downloaded often, so compression favours size over time. Compression uses the strongest gzip-compatible encoder available. Proposal: Zopfli, an encoder that writes standard gzip, typically a few percent smaller than `gzip -9`, at a much higher compression time; otherwise `gzip -9`. Any gzip decoder reads either.
 3. gzip cannot be given a larger dictionary: DEFLATE looks back at most 32 KiB (RFC 1951). Repeated content further apart than that is not deduplicated, so each rendering of a testimony costs roughly its own compressed size. To let gzip find repetitions where it can, tar members are ordered by testimony (the JSON record, plain text and HTML of one testimony are adjacent), not by directory.
-4. Proposal: a second serialization of the same bag, `the-ai-guestbook-2027.0.tar.xz`, compressed with `xz -9e` (LZMA2 with a 64 MiB dictionary), which does deduplicate across renderings. It is offered next to the gzip file, not instead of it. Both are listed in the editions registry with their digests (section 6). Owner decision pending (section 12, question 8).
+4. A second serialization of the same bag, `the-ai-guestbook-2027.0.tar.xz`, compressed with `xz -9e` (LZMA2 with a 64 MiB dictionary), which does deduplicate across renderings. It is offered next to the gzip file, not instead of it (owner decision, 2026-11-19). Both are listed in the editions registry with their digests (section 6), and both unpack to the same bag.
+5. The download page, the editions registry and each edition's README explain the difference in plain words: the `.tar.gz` file opens with the most tools; the `.tar.xz` file is smaller but needs a tool that reads xz; both give the same files.
 
 ### 1.2 Size
 
@@ -129,6 +130,7 @@ Bag rules ([archive-failures research](../research/archive-failures.md), section
 - what it excludes: unmoderated, rejected and withdrawn testimonies, and all private data;
 - its licences;
 - that every date is a Gregorian calendar date in UTC ([data model](data-model.md), section 1.3);
+- the two downloads, and that they unpack to the same files (section 1.1);
 - how to verify the package (section 6), and how to cite the edition and a testimony;
 - its relation to earlier revisions;
 - the withdrawal policy, including that copies distributed before a revision cannot be recalled.
@@ -310,11 +312,11 @@ It never records who moderated what.
 
 Resolved questions stay in the list, marked as such, so that their numbers remain stable.
 
-1. Resolved (2026-11-19): `tar.gz` and an OpenPGP signature (sections 1.1 and 6). A second `tar.xz` serialization is proposed in section 1.1, item 4.
-2. Resolved (2026-11-19): editions include `all-testimonies.txt` (section 4). Its size effect is in section 1.2.
-3. Resolved (2026-11-19): the live withdrawal list and the editions registry are at `/data/withdrawals.json` and `/data/time-capsules.json` ([identifiers](identifiers.md), section 2.1).
-4. Resolved (2026-11-19): one PDF/A file for the whole edition, embedding fonts once; no XML rendering. The PDF/A part (for example PDF/A-2u, for searchable Unicode text) is chosen with the build tooling. Original question: whether canonical testimony bodies are also rendered as PDF/A or an XML format, which the Library of Congress lists as preferred, while plain text is only in its acceptable tier (archive-failures research, question 4). If PDF/A is adopted, one file for the whole edition, embedding fonts once, rather than one per testimony (section 1.2, item 3).
-5. Resolved (2026-11-19): no embargo. Original question: whether contributors may choose an embargo, publication after a dated delay, as oral-history archives offer. If so, each record needs an access field, and the consent text must say that an embargo may not hold against a court order (archive-failures research, section 4.4, the Belfast Project case).
-6. Partly resolved (2026-11-19): three copies at three sites (section 6.1). Still open: the institution for deposit (#42) and the fixity interval (yearly proposed). The [institutional-custodians research](../research/institutional-custodians.md) finds that repositories which keep DOIs, records or captures after withdrawal (Zenodo, Nakala, Software Heritage, the Internet Archive) do not suit editions containing personal data; Zenodo fits documentation and schemas only. The realistic institutional custody is a public archive service (the Archives nationales or a departmental service), under a signed agreement that makes privacy revisions and the removal of superseded packages binding. A revocable deposit is preferable to a gift, which would transfer ownership.
-7. Resolved (2026-11-19): no DOI for editions (domain research, section 3.3: DOI records survive deletion).
-8. Whether the `tar.xz` serialization is published alongside `tar.gz` (section 1.1, item 4).
+1. [x] `tar.gz` and an OpenPGP signature (sections 1.1 and 6). A second `tar.xz` serialization is decided in question 8.
+2. [x] editions include `all-testimonies.txt` (section 4). Its size effect is in section 1.2.
+3. [x] the live withdrawal list and the editions registry are at `/data/withdrawals.json` and `/data/time-capsules.json` ([identifiers](identifiers.md), section 2.1).
+4. [x] one PDF/A file for the whole edition, embedding fonts once; no XML rendering. The PDF/A part (for example PDF/A-2u, for searchable Unicode text) is chosen with the build tooling. Original question: whether canonical testimony bodies are also rendered as PDF/A or an XML format, which the Library of Congress lists as preferred, while plain text is only in its acceptable tier (archive-failures research, question 4). If PDF/A is adopted, one file for the whole edition, embedding fonts once, rather than one per testimony (section 1.2, item 3).
+5. [x] no embargo. Original question: whether contributors may choose an embargo, publication after a dated delay, as oral-history archives offer. If so, each record needs an access field, and the consent text must say that an embargo may not hold against a court order (archive-failures research, section 4.4, the Belfast Project case).
+6. [ ] Partly resolved. Three copies at three sites (section 6.1). Still open: the institution for deposit (#42) and the fixity interval (yearly proposed). The [institutional-custodians research](../research/institutional-custodians.md) finds that repositories which keep DOIs, records or captures after withdrawal (Zenodo, Nakala, Software Heritage, the Internet Archive) do not suit editions containing personal data; Zenodo fits documentation and schemas only. The realistic institutional custody is a public archive service (the Archives nationales or a departmental service), under a signed agreement that makes privacy revisions and the removal of superseded packages binding. A revocable deposit is preferable to a gift, which would transfer ownership.
+7. [x] no DOI for editions (domain research, section 3.3: DOI records survive deletion).
+8. [x] `tar.xz` is published alongside `tar.gz`, and the documentation explains the difference (section 1.1, items 4 and 5).

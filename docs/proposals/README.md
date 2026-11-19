@@ -21,8 +21,7 @@ Decisions waiting for the owner, grouped by the work they unblock. The recommend
 
 ### Unblocks the archive format and the first edition (#13, #38)
 
-1. Whether a `tar.xz` serialization is published alongside `tar.gz` ([archive format](../specs/archive-format.md), section 12, question 8).
-2. The deposit institution and the fixity interval ([archive format](../specs/archive-format.md), section 12, question 6; #42).
+1. The deposit institution and the fixity interval ([archive format](../specs/archive-format.md), section 12, question 6; #42).
 
 ### Unblocks the data model and the interface (#14, #23, #27)
 

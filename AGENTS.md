@@ -27,6 +27,7 @@ Session transcripts, chat logs and agent memories are dispensable. Anything wort
 
 - findings from research go to `docs/research/`;
 - options for an owner decision go to `docs/proposals/`, and stay there once decided;
+- open decisions are listed in the decision queue of [docs/proposals/README.md](docs/proposals/README.md); decisions that block nothing before launch go to its "Deferred until after launch" table, each with the trigger that reopens it;
 - decisions go to `docs/decisions/` as ADRs;
 - issue threads may hold discussion, but the conclusion must be copied into a document.
 

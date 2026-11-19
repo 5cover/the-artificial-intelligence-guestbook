@@ -17,11 +17,7 @@ Proposals present options for an owner decision. Once decided, a proposal stays 
 
 ## Decision queue
 
-Decisions waiting for the owner, grouped by the work they unblock. The recommendation, where there is one, is in the linked section.
-
-### Unblocks the archive format and the first edition (#13, #38)
-
-1. The deposit institution, once there are testimonies to deposit (#42).
+Decisions waiting for the owner, grouped by the work they unblock. The recommendation, where there is one, is in the linked section. Decisions that block nothing before launch are listed separately at the end, so that they are neither forgotten nor mistaken for blockers.
 
 ### Unblocks the data model and the interface (#14, #23, #27)
 
@@ -47,3 +43,17 @@ Decisions waiting for the owner, grouped by the work they unblock. The recommend
 ### Constitution (#2)
 
 1. Ratify the ten constitution documents, or ask for changes ([constitution](../constitution/README.md)).
+
+## Deferred until after launch
+
+Open on purpose: nothing before launch depends on them. Each is revisited when its trigger occurs.
+
+| Decision | Trigger | Where |
+| --- | --- | --- |
+| Institution for deposit of editions, as a fourth copy and second custody | There are testimonies to deposit | [Archive format](../specs/archive-format.md), section 6.1; [institutional custodians](../research/institutional-custodians.md); #42 |
+| Whether documentation and schemas are deposited on Zenodo | Same as above | [Institutional custodians](../research/institutional-custodians.md) |
+| Who reviews moderation appeals | A second moderator joins | [Publishing rules](../legal/publishing-rules.md), "Asking for a review" |
+| A standby transactional mail provider | Sign-in outages become a problem | [ADR 0015](../decisions/0015-backups-and-transactional-email.md), item 6 |
+| WAL archiving, for a recovery point finer than a day | Daily loss becomes unacceptable | [ADR 0015](../decisions/0015-backups-and-transactional-email.md), item 5 |
+| Moving the server away from OVHcloud | An account problem, or the project goes public at scale | [ADR 0014](../decisions/0014-provisional-vps-ovhcloud.md) |
+| Registry lock for the domain | Optional, at any time | [Domain record](../operations/domain.md), "Pending" |

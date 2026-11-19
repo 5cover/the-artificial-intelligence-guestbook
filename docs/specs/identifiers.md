@@ -64,6 +64,7 @@ Every public resource has a machine-readable form at a URL separate from the int
 | Withdrawal list | `https://theaiguestbook.org/data/withdrawals.json` | As the edition's `withdrawals.json` (archive format, section 5) |
 | Editions registry | `https://theaiguestbook.org/data/time-capsules.json` | Every edition revision ever published, with its state and digests (archive format, section 6) |
 | Edition packages | `https://theaiguestbook.org/data/time-capsules/<edition-id>/<file>` | The serialized packages and their signature (archive format, section 1.1) |
+| Signing key | `https://theaiguestbook.org/data/signing-key.asc` | The OpenPGP public key that signs editions, ASCII-armoured, standalone (section 7) |
 | Schemas | `https://theaiguestbook.org/data/schema/<format-version>/<name>.schema.json` | The JSON Schemas, also the `$id` of each schema |
 | Markdown views | The interface URL with `.md` appended, for example `https://theaiguestbook.org/context/<slug>.md` and `https://theaiguestbook.org/testimonies/<public-id>.md` | The source text of documentation, context pages and testimonies, following the llms.txt companion-page convention |
 
@@ -153,6 +154,25 @@ Rules:
 1. `<attribution>` is the display name as given for named and pseudonymous testimonies, and "Anonymous" for anonymous ones, never with other identifying metadata ([data model](data-model.md), section 2.3). Display names are not split into first and last names. How each format renders single-word and multi-word display names is checked when the component is built.
 2. The revision number tells a reader whether the text they find is the one cited; superseded text is not kept (data model, section 2.5).
 3. When an edition is cited, the plain-text form ends with `Time capsule <edition-id>.` after a space, and the structured forms add the edition ID to the title.
+
+## 7. Edition signing key
+
+Editions are signed with one OpenPGP key ([archive format](archive-format.md), section 6). A signature is only as trustworthy as the reader's copy of the public key, so the key is published in several independent places, and its fingerprint wherever the key itself cannot go.
+
+| Place | What | Notes |
+| --- | --- | --- |
+| `https://theaiguestbook.org/data/signing-key.asc` | The public key, standalone | Data URL (section 2.1) |
+| The website's page on verifying editions | The fingerprint, a link to the key, and verification instructions | Human-readable counterpart of the data URL |
+| The repository, `keys/edition-signing-key.asc` | The public key | Versioned and mirrored with the repository, independent of the website |
+| The repository documentation on editions | The fingerprint | |
+| Each edition's `README.txt` and `README.fr.txt` | The fingerprint, and where to get the key | Inside the signed package, so it confirms the key but cannot establish it alone |
+| The editions registry (`/data/time-capsules.json`) | The fingerprint of the key that signed each revision | Keeps old revisions verifiable after a key change |
+| Proposal: the keys.openpgp.org keyserver and a Web Key Directory for `contact@theaiguestbook.org` | The public key | Standard discovery for OpenPGP tools. The Web Key Directory is specified by the IETF Internet-Draft `draft-koch-openpgp-webkey-service`, not an RFC, and serves static files under `/.well-known/openpgpkey/`, a well-known URI path in the sense of RFC 8615. |
+
+Rules:
+
+1. A new key is announced in all these places, signed by the old key where it is still available, and the registry records which key signed each revision.
+2. Key custody and succession belong to the succession arrangements (#33), like the backup key.
 
 ## Open questions
 

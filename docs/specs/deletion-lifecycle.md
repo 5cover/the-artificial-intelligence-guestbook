@@ -58,7 +58,7 @@ The deletion job runs these steps in order, in one transaction where the steps t
 3. Run `VACUUM` on the affected tables.
 4. Purge the reverse-proxy cache for the testimony URL in every locale, and for the listing and search pages.
 5. Regenerate the static renderings affected.
-6. Add the public ID to the withdrawal list, with the month of withdrawal and the editions that contain it.
+6. Add the public ID to the withdrawal list, with the editions that contain it.
 7. Schedule the privacy revision of every hosted edition containing the testimony (section 4).
 8. Add the internal ID to the erase-on-restore list (section 6).
 9. File removal requests with major search engines for the URL if it was indexed, and with the Internet Archive if it holds captures. These are manual steps for the custodian, listed in the job's output.
@@ -79,7 +79,7 @@ Account closure withdraws every testimony of the account, then deletes the accou
 
 ## 5. Withdrawal list and mirrors
 
-1. The project publishes a machine-readable withdrawal list at a permanent URL, with one entry per withdrawn testimony: `public_id`, `withdrawn_in` (year and month only), and the edition IDs that contained it. It contains nothing else (data model, section 2.13).
+1. The project publishes a machine-readable withdrawal list at a permanent URL, with one entry per withdrawn testimony: `public_id` and the edition IDs that contained it. It contains nothing else (data model, section 2.13).
 2. The format is defined in the archive format (#13). It is also included in every edition, so that a mirror can apply it offline.
 3. Mirror operators may register a contact address with the project to be notified. The registry of mirrors is private operational data.
 4. The archive documentation and each edition's README ask mirror operators to apply the withdrawal list. The project does not claim it can enforce this (archival model, principle 9).

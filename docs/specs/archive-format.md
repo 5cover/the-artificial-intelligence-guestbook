@@ -108,6 +108,7 @@ Bag rules ([archive-failures research](../research/archive-failures.md), section
 - how many testimonies it contains;
 - what it excludes: unmoderated, rejected and withdrawn testimonies, and all private data;
 - its licences;
+- that every date is a Gregorian calendar date in UTC ([data model](data-model.md), section 1.3);
 - how to verify the package (section 6), and how to cite the edition and a testimony;
 - its relation to earlier revisions;
 - the withdrawal policy, including that copies distributed before a revision cannot be recalled.
@@ -116,7 +117,7 @@ A collection that does not say what it holds cannot be trusted later (archive-fa
 
 ## 3. Testimony record
 
-One JSON object per testimony, `data/testimonies/<public-id>.json`. Field names and values are the `public` fields of the [data model](data-model.md). Absent optional fields are omitted, never written as `null`, so that "not given" is unambiguous.
+One JSON object per testimony, `data/testimonies/<public-id>.json`. Field names and values are the `public` fields of the [data model](data-model.md). Absent optional fields are omitted, never written as `null`, so that "not given" is unambiguous. There is no separate attribution field: attribution is `identity.mode` plus, for named and pseudonymous testimonies, `identity.display_name`. The `citation` string renders an anonymous testimony as "Anonymous".
 
 ```json
 {
@@ -128,7 +129,6 @@ One JSON object per testimony, `data/testimonies/<public-id>.json`. Field names 
   "published_on": "2027-03-14",
   "edition_period": 2027,
   "licence": "CC-BY-4.0",
-  "attribution": "Anonymous",
   "citation": "Anonymous, testimony 7q4km2xd, The Artificial Intelligence Guestbook, 2027-03-14. https://theaiguestbook.org/testimonies/7q4km2xd",
   "redacted": false,
   "body": "Texte du témoignage...\n\nDeuxième paragraphe.",
@@ -205,7 +205,7 @@ Labels in the plain-text and HTML renderings are in English, with the stable cod
   "format_version": 0,
   "generated_on": "2028-02-01",
   "withdrawals": [
-    { "public_id": "9xk3m2pa", "withdrawn_in": "2027-06", "editions": ["2026-rehearsal.1"] }
+    { "public_id": "9xk3m2pa", "editions": ["2026-rehearsal.1"] }
   ]
 }
 ```

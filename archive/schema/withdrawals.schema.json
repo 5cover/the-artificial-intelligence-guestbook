@@ -14,10 +14,9 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["public_id", "withdrawn_in", "editions"],
+        "required": ["public_id", "editions"],
         "properties": {
           "public_id": { "type": "string", "pattern": "^[0-9a-hjkmnp-tv-z]{8}$" },
-          "withdrawn_in": { "description": "Year and month of withdrawal only (docs/specs/data-model.md section 2.13).", "type": "string", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$" },
           "editions": {
             "type": "array",
             "uniqueItems": true,

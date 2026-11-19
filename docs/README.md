@@ -61,6 +61,7 @@ Open decisions are gathered in the [decision queue](proposals/README.md).
 - [Privacy failures](research/privacy-failures.md): re-identification, stylometry, timing leaks, erasure and minors' data cases, and requirements for the data model, deletion, retention, minors and filters.
 - [Moderation failures](research/moderation-failures.md): how moderation breaks on small platforms, and the French and EU duties for illegal content.
 - [Institutional custodians](research/institutional-custodians.md): who could receive deposits of the editions or succeed as custodian, and how GDPR withdrawal interacts with each (#42).
+- [Interpretability dependencies](research/interpretability-dependencies.md): living diagnostic of the standards and conventions a future reader needs to interpret an edition, with cheap mitigations.
 
 ## Specifications
 

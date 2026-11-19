@@ -5,16 +5,16 @@
   "description": "One published testimony in an edition of The Artificial Intelligence Guestbook. Normative definition of docs/specs/archive-format.md section 3. Format version 0 (unstable).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["format_version", "public_id", "url", "language", "published_on", "edition_period", "licence", "attribution", "citation", "redacted", "body", "identity", "authorship"],
+  "required": ["format_version", "edition_id", "public_id", "url", "language", "published_on", "edition_period", "licence", "citation", "redacted", "body", "identity", "authorship"],
   "properties": {
     "format_version": { "const": 0 },
+    "edition_id": { "type": "string", "pattern": "^[0-9]{4}(\\.[0-9]+|-rehearsal\\.[0-9]+)$" },
     "public_id": { "$ref": "#/$defs/public_id" },
     "url": { "type": "string", "pattern": "^https://theaiguestbook\\.org/testimonies/[0-9a-hjkmnp-tv-z]{8}$" },
     "language": { "$ref": "#/$defs/language" },
     "published_on": { "$ref": "#/$defs/date" },
     "edition_period": { "type": "integer", "minimum": 2026 },
     "licence": { "const": "CC-BY-4.0" },
-    "attribution": { "type": "string", "minLength": 1 },
     "citation": { "type": "string", "minLength": 1 },
     "redacted": { "type": "boolean" },
     "body": { "type": "string", "minLength": 1, "maxLength": 50000 },
@@ -62,7 +62,8 @@
         "link": { "type": "string", "pattern": "^https?://" }
       },
       "if": { "properties": { "mode": { "const": "anonymous" } } },
-      "then": { "not": { "required": ["display_name"] } }
+      "then": { "not": { "required": ["display_name"] } },
+      "else": { "required": ["display_name"] }
     },
     "authorship": {
       "type": "object",

@@ -1,14 +1,16 @@
 # Data model and testimony lifecycle
 
-Status: Draft (2026-11-15). Items marked "Proposal" need owner review.
+Status: Draft (2026-11-15, types, time and constraints added 2026-11-19). Items marked "Proposal" need owner review.
 
 Issue: #14
 
-Basis: plan sections 4 to 12, 22 and 33; the [constitution](../constitution/README.md); [ADR 0003](../decisions/0003-email-magic-link-auth.md), [ADR 0006](../decisions/0006-archive-first-replaceable-application.md), [ADR 0009](../decisions/0009-testimony-licensing.md), [ADR 0010](../decisions/0010-stack-django-postgresql.md); [identifiers](identifiers.md); [threat model](threat-model.md); [legal research](../research/legal-landscape.md), sections 2 to 4, 10 and 12.
+Basis: plan sections 4 to 12, 22 and 33; the [constitution](../constitution/README.md); [ADR 0003](../decisions/0003-email-magic-link-auth.md), [ADR 0006](../decisions/0006-archive-first-replaceable-application.md), [ADR 0009](../decisions/0009-testimony-licensing.md), [ADR 0010](../decisions/0010-stack-django-postgresql.md), [ADR 0013](../decisions/0013-legal-bases-and-minors.md); [identifiers](identifiers.md); [threat model](threat-model.md); [legal research](../research/legal-landscape.md), sections 2 to 4, 10 and 12.
 
-This model is conceptual. It names objects, fields, classifications and transitions, not database tables. The Django implementation (#21) and the archive format (#13) must both conform to it. Field names are given in `snake_case` because they become identifiers in code and in exports.
+This model is conceptual. It names objects, fields, types, classifications, constraints and transitions, not database tables. The Django implementation (#21) and the archive format (#13) must both conform to it. Field names are given in `snake_case` because they become identifiers in code and in exports.
 
-## 1. Field classification
+## 1. Conventions
+
+### 1.1 Field classification
 
 Every field belongs to exactly one class. The class decides where the field may go.
 
@@ -22,8 +24,56 @@ Every field belongs to exactly one class. The class decides where the field may 
 Rules:
 
 1. Exports and public views are built from an explicit allow-list of `public` fields. Nothing reaches them by default.
-2. A field without a class is a defect. An automated test fails if any model field is unclassified, or if a non-`public` field appears in an export or public template (threat model, section 3.6).
-3. Changing a field's class is a data-model change and is recorded in this document.
+2. A field without a class or a type is a defect. An automated test fails if any model field is unclassified, or if a non-`public` field appears in an export or public template (threat model, section 3.6).
+3. Changing a field's class or type is a data-model change and is recorded in this document.
+
+### 1.2 Conceptual types
+
+Every field has one of these types. The type fixes its values, its PostgreSQL representation and its form in editions, so that no type is chosen ad hoc during implementation.
+
+| Type | Values | PostgreSQL | In editions (JSON) |
+| --- | --- | --- | --- |
+| `id` | Opaque internal identifier, a positive integer | `bigint` identity | Never exported |
+| `ref(Object)` | Reference to another object's `id` | `bigint` foreign key | Never exported |
+| `public_id` | 8 lowercase Crockford base32 symbols ([identifiers](identifiers.md), section 1.1) | `text`, with a pattern check | String |
+| `text(max)` | Unicode text in NFC, line feeds allowed, no other control characters, 1 to `max` code points | `text`, with length and character checks | String |
+| `line(max)` | As `text(max)`, but without line feeds and without leading or trailing whitespace | `text`, with checks | String |
+| `nat` | Integer, 0 or more | `integer`, with a check | Integer |
+| `pos` | Integer, 1 or more | `integer`, with a check | Integer |
+| `year` | Gregorian year, 2026 or later | `smallint`, with a check | Integer |
+| `bool` | True or false | `boolean` | `true` or `false` |
+| `enum(a, b, ...)` | One of the listed codes. Codes are stable, lowercase ASCII with hyphens; labels are localized separately. | `text`, with an `IN` check | String |
+| `set(enum)` | A set of codes, without order or duplicates | `text[]`, with checks | Array, sorted, unique items |
+| `list(T)` | An ordered list of values of type `T` | `jsonb` or a child table | Array |
+| `instant` | A point in time, to the microsecond, in UTC (section 1.3) | `timestamptz` | Never exported |
+| `date` | A calendar date in the Gregorian calendar, as a UTC day (section 1.3) | `date` | `YYYY-MM-DD` |
+| `email` | An email address, lowercased, validated by the framework's validator | `text`, with a lowercase check | Never exported |
+| `url` | An absolute `https` or `http` URL, at most 2,000 characters | `text`, with checks | String |
+| `lang` | A BCP 47 language tag in canonical case | `text`, with a pattern check | String |
+| `country` | An ISO 3166-1 alpha-2 code, uppercase | `text`, with a pattern check | String |
+| `hash` | A keyed hash or digest, as bytes | `bytea` | Lowercase hexadecimal, where exported |
+
+A type followed by `?` is optional: the value may be absent. In PostgreSQL an absent value is `NULL`. In editions it is omitted, never written as `null` (archive format, section 3). A type without `?` is required (`NOT NULL`).
+
+No field in the model needs a real number. If one ever does, it uses `numeric`, never floating point, so that values survive export and re-import unchanged.
+
+### 1.3 Time
+
+1. Instants are taken from the server's clock, kept synchronized by NTP, and stored in UTC. The database session time zone is UTC.
+2. No user time zone is collected or stored. It is not needed to run the service, and it would be one more piece of personal data.
+3. A `date` derived from an instant, such as `published_on`, is the UTC calendar date of that instant.
+4. Public data carries dates, never times of day (threat model, section 3.3). Because a date without a time cannot be converted to another time zone, public pages show the UTC date as is, with "UTC" stated in a tooltip or a note. A testimony published shortly after midnight in Paris therefore carries the previous day's date. The methodology page says so.
+5. Private views of the contributor's own account and testimonies show exact instants converted to the browser's time zone, with the UTC value in a tooltip. The conversion happens in the browser and is never sent back.
+6. Editions state in their README that every date is a Gregorian calendar date in UTC (archive format, section 2.2).
+
+### 1.4 Constraints
+
+The aim is that invalid states cannot be stored, not merely that the application avoids them.
+
+1. **Within one row:** every rule that relates fields of the same object is a named PostgreSQL `CHECK` constraint, declared in the Django model. The rules are listed under each object below as "Constraints".
+2. **Across rows:** uniqueness, "exactly one current version" and similar rules are unique or partial unique indexes. References are foreign keys.
+3. **Across objects, and transitions:** rules that span several objects (for example "a minor's testimony publishes no display name", which joins the consent record) and the permitted state transitions (section 3) are enforced in the domain layer, not by triggers. Triggers would duplicate the domain logic in a second language for little extra safety.
+4. Every constraint, at every level, has a test that tries to create the invalid state and expects a failure.
 
 ## 2. Objects
 
@@ -31,26 +81,38 @@ Rules:
 
 The private identity behind contributions ([privacy assumptions](../constitution/privacy-assumptions.md) 2 and 3).
 
-| Field | Class | Notes |
-| --- | --- | --- |
-| `internal_id` | private | Never exposed |
-| `email` | private | Normalized to lowercase; unique. The only contact and withdrawal channel. |
-| `email_verified_at` | private | Set by the first successful magic-link sign-in |
-| `created_at`, `last_sign_in_at` | private | Dates only where precision is not needed |
-| `interface_locale` | private | `en` or `fr` (later more), for emails |
-| `status` | operational | `active`, `restricted`, `closed` |
-| `restriction_reason` | operational | Publishing rule cited (moderation principles, "Practice" 1) |
-| `closed_at` | private | Starts the retention clock (section 6) |
+| Field | Type | Class | Notes |
+| --- | --- | --- | --- |
+| `internal_id` | `id` | private | Never exposed |
+| `email` | `email` | private | Unique. The only contact and withdrawal channel. |
+| `email_verified_at` | `instant?` | private | Set by the first successful magic-link sign-in |
+| `created_at` | `instant` | private | |
+| `last_sign_in_at` | `instant?` | private | |
+| `interface_locale` | `enum(en, fr)` | private | For emails; more locales later |
+| `status` | `enum(active, restricted, closed)` | operational | |
+| `restriction_reason` | `line(200)?` | operational | Publishing rule cited (moderation principles, "Practice" 1) |
+| `closed_at` | `instant?` | private | Starts the retention clock (section 6) |
+
+Constraints:
+
+1. `(status = 'closed') = (closed_at IS NOT NULL)`.
+2. `(status = 'restricted') = (restriction_reason IS NOT NULL)`.
+3. `email_verified_at`, `last_sign_in_at` and `closed_at`, when present, are not earlier than `created_at`.
+4. `email` is unique.
 
 No names, photos, phone numbers, postal addresses or identity-provider data are collected.
 
 ### 2.2 Sign-in token (`operational`, short-lived)
 
-| Field | Class | Notes |
-| --- | --- | --- |
-| `token_hash` | operational | Hash of a single-use random token. The token itself is never stored. |
-| `email` | operational | The address it was sent to |
-| `created_at`, `expires_at`, `used_at` | operational | Expiry 15 minutes (threat model, section 3.1) |
+| Field | Type | Class | Notes |
+| --- | --- | --- | --- |
+| `token_hash` | `hash` | operational | Hash of a single-use random token. The token itself is never stored. Unique. |
+| `email` | `email` | operational | The address it was sent to |
+| `created_at` | `instant` | operational | |
+| `expires_at` | `instant` | operational | 15 minutes after creation (threat model, section 3.1) |
+| `used_at` | `instant?` | operational | |
+
+Constraints: `expires_at > created_at`; `used_at`, when present, lies between `created_at` and `expires_at`.
 
 Deleted once used or expired, after at most 24 hours.
 
@@ -58,59 +120,82 @@ Deleted once used or expired, after at most 24 hours.
 
 The primary object. One account may have several testimonies. Their public identities are independent and must not be publicly linkable to each other (section 2.4).
 
-| Field | Class | Notes |
-| --- | --- | --- |
-| `internal_id` | private | Assigned at draft creation; stable for the object's whole life ([identifiers](identifiers.md), section 1) |
-| `public_id` | public | Assigned at first publication; never reused ([identifiers](identifiers.md), section 1.1) |
-| `account` | private | Link to the account. Never public, never exported. |
-| `state` | operational | See section 3 |
-| `language` | public | BCP 47 tag of the original text, declared by the contributor |
-| `body` | public | The current public text (section 2.5) |
-| `received_at` | private | First submission. Decides the edition period (section 5). |
-| `published_on` | public | Date only, no time, to limit correlation with events (threat model, section 3.3) |
-| `withdrawn_on` | private | The exact date stays private. The tombstone shows the month only (section 2.13). |
-| `edition_period` | public | The cutoff year of the period the testimony belongs to (section 5) |
-| `licence` | public | `CC-BY-4.0` (ADR 0009), stored per testimony so a future change does not rewrite history |
-| `attribution` | public | Derived from the public identity: display name, pseudonym, or "Anonymous" |
-| `redacted` | public | Boolean. When true, the public page says part of the text was redacted, not what (moderation principles, "Practice" 3). |
+| Field | Type | Class | Notes |
+| --- | --- | --- | --- |
+| `internal_id` | `id` | private | Assigned at draft creation; stable for the object's whole life ([identifiers](identifiers.md), section 1) |
+| `public_id` | `public_id?` | public | Assigned at first publication; never reused ([identifiers](identifiers.md), section 1.1). Unique. |
+| `account` | `ref(Account)?` | private | Never public, never exported. Cleared at withdrawal. |
+| `state` | `enum(draft, submitted, under_review, published, rejected, withdrawn, quarantined)` | operational | See section 3 |
+| `language` | `lang?` | public | Of the original text, declared by the contributor. Required from submission. |
+| `body` | derived | public | The body of the current public version (section 2.5); not stored on the testimony |
+| `received_at` | `instant?` | private | First submission. Decides the edition period (section 5). |
+| `published_on` | `date?` | public | First publication. Date only, to limit correlation with events (threat model, section 3.3). |
+| `withdrawn_on` | `date?` | private | Kept privately to schedule privacy revisions and prune the erase-on-restore list. Never public. |
+| `edition_period` | `year?` | public | The cutoff year of the period the testimony belongs to (section 5) |
+| `licence` | `enum(CC-BY-4.0)` | public | Stored per testimony so a future change does not rewrite history (ADR 0009) |
+| `redacted` | `bool` | public | When true, the public page says part of the text was redacted, not what (moderation principles, "Practice" 3) |
 
-Text rules: plain text, Unicode NFC, paragraphs separated by blank lines, no markup (threat model, section 3.3). Proposal: a maximum of 50,000 characters and a minimum of 1 non-whitespace character. The maximum stops abuse without constraining a long essay, and is reviewed if real testimonies approach it.
+Attribution is not a stored string. It is derived from the public identity (section 2.4): `identity_mode` and, for named and pseudonymous testimonies, `display_name`. An anonymous testimony has no attribution value at all, and interfaces and citations render it with the localized label "Anonymous" or "Anonyme". A pseudonymous contributor who calls themselves "Anonymous" therefore stays distinguishable from an anonymous testimony in the data. The rendered attribution string of ADR 0009 is produced from these fields at display and export time.
+
+Constraints:
+
+1. `(public_id IS NULL) = (published_on IS NULL)`.
+2. `state IN ('published', 'withdrawn')` implies `public_id IS NOT NULL`.
+3. `(state = 'withdrawn') = (withdrawn_on IS NOT NULL)`.
+4. `state <> 'draft'` implies `received_at IS NOT NULL`, `language IS NOT NULL` and `edition_period IS NOT NULL`.
+5. `edition_period` equals the UTC year of `received_at` (section 5).
+6. `state = 'withdrawn'` implies `account IS NULL`.
+
+Text rules, applying to every version body: type `text(50000)`, plain text, paragraphs separated by blank lines, no markup (threat model, section 3.3), and at least one non-whitespace character. Proposal: the maximum of 50,000 characters stops abuse without constraining a long essay, and is reviewed if real testimonies approach it.
 
 ### 2.4 Public identity (per testimony, all optional)
 
 Every field is optional and published only if the contributor fills it in. Identity is per testimony, not per account, so that a person can publish one testimony under their name and another anonymously without the two being linkable.
 
-| Field | Class | Values |
-| --- | --- | --- |
-| `identity_mode` | public | `named`, `pseudonymous`, `anonymous` |
-| `display_name` | public | Free text, for `named` and `pseudonymous` only |
-| `age_range` | public, with rules | Controlled list (section 2.4.1) |
-| `country` | public | ISO 3166-1 alpha-2 |
-| `region` | public | Free text, shown only if the filter rules allow it (#27) |
-| `languages` | public | BCP 47 tags of the languages the contributor lives in, distinct from the testimony's language |
-| `profession` | public | Free text |
-| `field` | public | Controlled list for browsing (to be defined in #27), optional alongside the free text |
-| `organization` | public | Free text |
-| `organization_type` | public | Controlled list: for example `none`, `self-employed`, `company`, `public-sector`, `education`, `non-profit`, `other` |
-| `relationship_to_ai` | public | Multi-select controlled list, for example `user`, `non-user`, `refuser`, `builder`, `researcher`, `affected-by`, `unsure`. It must not invite sensitive disclosure (legal research, section 3). |
-| `link` | public | One URL, rendered `rel="ugc nofollow noopener"` (ADR 0003) |
+| Field | Type | Class | Notes |
+| --- | --- | --- | --- |
+| `identity_mode` | `enum(named, pseudonymous, anonymous)` | public | |
+| `display_name` | `line(100)?` | public | For `named` and `pseudonymous` only |
+| `age_range` | `enum(18-24, 25-34, 35-44, 45-54, 55-64, 65-74, 75-plus)?` | public, with rules | Section 2.4.1 |
+| `country` | `country?` | public | |
+| `region` | `line(100)?` | public | Shown only if the filter rules allow it (#27) |
+| `languages` | `list(lang)?` | public | The languages the contributor lives in, distinct from the testimony's language. No duplicates. |
+| `profession` | `line(100)?` | public | |
+| `field` | `enum(...)?` | public | Controlled list for browsing (to be defined in #27), optional alongside the free text |
+| `organization` | `line(200)?` | public | |
+| `organization_type` | `enum(none, self-employed, company, public-sector, education, non-profit, other)?` | public | |
+| `relationship_to_ai` | `set(enum(user, non-user, refuser, builder, researcher, affected-by, unsure))?` | public | Must not invite sensitive disclosure (legal research, section 3) |
+| `link` | `url?` | public | Rendered `rel="ugc nofollow noopener"` (ADR 0003) |
+
+Constraints:
+
+1. `(identity_mode = 'anonymous') = (display_name IS NULL)`.
+2. Domain layer, because it joins the consent record: a testimony whose consent record has `declared_age_band = 'under-16'` has `identity_mode` `anonymous` or `pseudonymous`, and no `age_range`, `link`, `organization` or `region` (ADR 0013, D5). A display name that looks like a real name is a moderator check, not a constraint.
 
 #### 2.4.1 Age ranges
 
-Public values: `18-24`, `25-34`, `35-44`, `45-54`, `55-64`, `65-74`, `75-plus`. A minor's testimony shows no age and no age range at all. An "under-18" label would itself mark the contributor as a minor, which makes them a target ([privacy research](../research/privacy-failures.md), R17.2; legal research, section 4). A minor who wants to say they are young can say so in the text. The declared age used for consent (section 2.8) is a separate, private field, and is never derived from or into the public value.
+Public values: `18-24`, `25-34`, `35-44`, `45-54`, `55-64`, `65-74`, `75-plus`. A minor's testimony shows no age and no age range at all. An "under-18" label would itself mark the contributor as a minor, which makes them a target ([privacy research](../research/privacy-failures.md), R17.2; legal research, section 4). A minor who wants to say they are young can say so in the text. The declared age band used for consent (section 2.8) is a separate field, and is never derived from or into the public value.
 
 ### 2.5 Text versions (`private` history, one `public` current version)
 
 The original submission and every later change are kept privately, so that redaction never destroys the original while the testimony exists (moderation principles, "Practice" 3).
 
-| Field | Class | Notes |
-| --- | --- | --- |
-| `version_number` | operational | 1 is the submission |
-| `body` | private | The text of this version |
-| `source` | operational | `contributor` (submission or correction), `moderator` (redaction) |
-| `reason` | operational | For redactions: the publishing rule cited. For corrections: optional contributor note. |
-| `created_at` | operational | |
-| `is_current_public` | operational | Exactly one version is current once the testimony is published |
+| Field | Type | Class | Notes |
+| --- | --- | --- | --- |
+| `testimony` | `ref(Testimony)` | operational | |
+| `version_number` | `pos` | operational | 1 is the submission |
+| `body` | `text(50000)` | private | The text of this version |
+| `source` | `enum(contributor, moderator)` | operational | `contributor` for a submission or correction, `moderator` for a redaction |
+| `reason` | `line(500)?` | operational | For redactions: the publishing rule cited. For corrections: optional contributor note. |
+| `created_at` | `instant` | operational | |
+| `is_current_public` | `bool` | operational | |
+
+Constraints:
+
+1. `(testimony, version_number)` is unique.
+2. At most one version per testimony has `is_current_public`, by a partial unique index.
+3. `source = 'moderator'` implies `reason IS NOT NULL`.
+4. Domain layer: a `published` testimony has exactly one current public version.
 
 Post-publication corrections by the contributor (rectification right) create a new version, which goes through moderation before it becomes public. A correction after an edition has been built appears in the next edition. The edition keeps the version that was current at build time.
 
@@ -118,26 +203,31 @@ Post-publication corrections by the contributor (rectification right) create a n
 
 As defined in [authorship disclosure](../constitution/authorship-disclosure.md).
 
-| Field | Class | Notes |
-| --- | --- | --- |
-| `category` | public | One of `none`, `assisted-language`, `assisted-structure`, `substantially-generated`, `fully-generated`, `undisclosed` (required) |
-| `model_or_product` | public | Optional, free text |
-| `model_version` | public | Optional |
-| `mode_or_setting` | public | Optional |
-| `workflow` | public | Optional: prompts or workflow description |
-| `changes_after` | public | Optional: what the person changed afterwards |
-| `comment` | public | Optional |
+| Field | Type | Class | Notes |
+| --- | --- | --- | --- |
+| `category` | `enum(none, assisted-language, assisted-structure, substantially-generated, fully-generated, undisclosed)` | public | Required |
+| `model_or_product` | `line(200)?` | public | |
+| `model_version` | `line(100)?` | public | |
+| `mode_or_setting` | `line(200)?` | public | |
+| `workflow` | `text(5000)?` | public | Prompts or workflow description |
+| `changes_after` | `text(5000)?` | public | What the person changed afterwards |
+| `comment` | `text(2000)?` | public | |
+
+Constraint: `category IN ('none', 'undisclosed')` implies that `model_or_product`, `model_version`, `mode_or_setting` and `workflow` are absent.
 
 ### 2.7 Structured testimony fields (`public`, optional)
 
 Proposal: a deliberately short set, to keep the form from feeling like a survey (editorial principles, "Testimonies" 3). The free text remains the testimony.
 
-| Field | Values |
+| Field | Type |
 | --- | --- |
-| `ai_use_frequency` | `never`, `rarely`, `monthly`, `weekly`, `daily`, `constantly`, `unsure` |
-| `tools_used` | Free-text list |
-| `attitude` | Self-described: `enthusiastic`, `positive`, `mixed`, `indifferent`, `negative`, `hostile`, `unsure` |
-| `prediction` | Optional free text "to leave on record", with an optional `prediction_horizon` year |
+| `ai_use_frequency` | `enum(never, rarely, monthly, weekly, daily, constantly, unsure)?` |
+| `tools_used` | `list(line(100))?` |
+| `attitude` | `enum(enthusiastic, positive, mixed, indifferent, negative, hostile, unsure)?`, self-described |
+| `prediction` | `text(2000)?`, free text "to leave on record" |
+| `prediction_horizon` | `year?` |
+
+Constraint: `prediction_horizon IS NOT NULL` implies `prediction IS NOT NULL`.
 
 Controlled values are stable codes with localized labels, like the authorship codes.
 
@@ -145,16 +235,23 @@ Controlled values are stable codes with localized labels, like the authorship co
 
 Kept to show that publication was lawful (legal research, sections 2 to 4). One record per submission, and per correction.
 
-| Field | Class | Notes |
-| --- | --- | --- |
-| `publication_consent_at` | evidence | Consent to publication and archival editions |
-| `explicit_consent_at` | evidence | Explicit consent covering sensitive self-disclosure (GDPR art. 9(2)(a)); given by the same publication statement as `publication_consent_at` (ADR 0013), required for everyone because any text may contain it |
-| `licence_grant_version` | evidence | Version of the CC BY 4.0 plus project-grant text accepted (ADR 0009) |
-| `terms_version`, `privacy_notice_version` | evidence | Versions shown at submission |
-| `consent_locale` | evidence | Language of the texts shown |
-| `declared_age_band` | evidence | `under-16` or `16-or-over` (single threshold, ADR 0013). Not the exact age. |
-| `consent_path` | evidence | `self` or `parental` |
-| `parental_consent_at`, `parental_method` | evidence | For the parental path only. Verification data itself (such as the parent's email) is deleted once verification completes (CNIL Recommendation 7, legal research section 4). |
+| Field | Type | Class | Notes |
+| --- | --- | --- | --- |
+| `testimony` | `ref(Testimony)` | evidence | |
+| `publication_consent_at` | `instant` | evidence | The single publication statement, which is also the explicit consent to sensitive self-disclosure under GDPR art. 9(2)(a) (ADR 0013, D6). One field, so the two consents cannot diverge. |
+| `licence_grant_version` | `line(20)` | evidence | Version of the CC BY 4.0 plus project-grant text accepted (ADR 0009) |
+| `terms_version`, `privacy_notice_version` | `line(20)` | evidence | Versions shown at submission |
+| `consent_locale` | `enum(en, fr)` | evidence | Language of the texts shown |
+| `declared_age_band` | `enum(under-16, 16-or-over)` | evidence | Single threshold (ADR 0013, D4). Not the exact age. |
+| `consent_path` | `enum(self, parental)` | evidence | |
+| `parental_consent_at` | `instant?` | evidence | Parental path only |
+| `parental_method` | `enum(email-link)?` | evidence | Parental path only. Verification data itself, such as the parent's email, is deleted once verification completes (CNIL Recommendation 7, legal research section 4). |
+
+Constraints:
+
+1. `(consent_path = 'parental') = (declared_age_band = 'under-16')`.
+2. `parental_consent_at IS NOT NULL` implies `consent_path = 'parental'`, and `(parental_consent_at IS NULL) = (parental_method IS NULL)`.
+3. Domain layer: a testimony on the parental path cannot be published before `parental_consent_at` is set.
 
 The parental flow and its threshold are decided in [ADR 0013](../decisions/0013-legal-bases-and-minors.md) (#12, #17).
 
@@ -162,83 +259,100 @@ The parental flow and its threshold are decided in [ADR 0013](../decisions/0013-
 
 As required by the [multilingual principles](../constitution/multilingual-principles.md).
 
-| Field | Class | Notes |
-| --- | --- | --- |
-| `translation_id` | public | Short opaque ID, unique within the testimony. Several translations per language are allowed, for example machine and human. |
-| `language` | public | BCP 47 |
-| `body` | public | |
-| `source_version` | public | Which text version was translated. A translation of an older version is flagged as possibly outdated. |
-| `producer_kind` | public | `contributor`, `project-human`, `machine` |
-| `producer_name` | public | For machines: system name and version. For people: as they wish to be credited, or "the project". |
-| `created_on` | public | Date |
-| `reviewed` | public | Whether a person reviewed it, and `reviewed_on` |
-| `state` | operational | `draft`, `published`, `retracted` |
+| Field | Type | Class | Notes |
+| --- | --- | --- | --- |
+| `testimony` | `ref(Testimony)` | operational | |
+| `translation_id` | `line(16)`, lowercase letters and digits | public | Unique within the testimony. Several translations per language are allowed, for example machine and human. |
+| `language` | `lang` | public | Differs from the testimony's language |
+| `body` | `text(100000)` | public | |
+| `source_version` | `pos` | public | Which text version was translated. A translation of an older version is flagged as possibly outdated. |
+| `producer_kind` | `enum(contributor, project-human, machine)` | public | |
+| `producer_name` | `line(200)` | public | For machines: system name and version. For people: as they wish to be credited, or "the project". |
+| `created_on` | `date` | public | |
+| `reviewed_on` | `date?` | public | Present if a person reviewed it. Editions also carry a derived `reviewed` boolean for readability. |
+| `state` | `enum(draft, published, retracted)` | operational | |
+
+Constraints: `(testimony, translation_id)` is unique; `reviewed_on`, when present, is not earlier than `created_on`.
 
 Only published testimonies may be machine-translated, and only through an EU processor under a DPA or a self-hosted system (threat model, section 3.6).
 
 ### 2.10 Moderation record (`operational`)
 
-| Field | Class | Notes |
-| --- | --- | --- |
-| `testimony` | operational | |
-| `decision` | operational | `publish`, `request-changes`, `redact`, `reject`, `remove`, `restrict-account` |
-| `rule` | operational | Identifier of the publishing rule applied (moderation principles, "Practice" 1) |
-| `note` | operational | Private moderator note. Must not copy the offending content (#41). |
-| `decided_by`, `decided_at` | operational | |
-| `statement_sent_at` | operational | Statement of reasons to the contributor (DSA art. 17, legal research section 5) |
+| Field | Type | Class | Notes |
+| --- | --- | --- | --- |
+| `testimony` | `ref(Testimony)?` | operational | Cleared at withdrawal unless a legal hold applies (deletion lifecycle, section 3) |
+| `decision` | `enum(publish, request-changes, redact, reject, remove, restrict-account)` | operational | |
+| `rule` | `line(50)?` | operational | Identifier of the publishing rule applied (moderation principles, "Practice" 1) |
+| `note` | `text(5000)?` | operational | Private moderator note. Must not copy the offending content (#41). |
+| `decided_by` | `line(100)` | operational | |
+| `decided_at` | `instant` | operational | |
+| `statement_sent_at` | `instant?` | operational | Statement of reasons to the contributor (DSA art. 17, legal research section 5) |
+
+Constraint: `decision IN ('redact', 'reject', 'remove', 'restrict-account')` implies `rule IS NOT NULL`.
 
 ### 2.11 Notice (`operational`)
 
 A third-party notice about published content (DSA art. 16, LCEN; #41).
 
-| Field | Class | Notes |
-| --- | --- | --- |
-| `received_at`, `channel` | operational | |
-| `testimony_public_id` | operational | |
-| `notifier_contact` | operational | Only what the notifier gives and the procedure needs |
-| `grounds`, `outcome`, `outcome_at` | operational | |
+| Field | Type | Class | Notes |
+| --- | --- | --- | --- |
+| `received_at` | `instant` | operational | |
+| `channel` | `enum(form, email, post, authority)` | operational | |
+| `testimony_public_id` | `public_id` | operational | |
+| `notifier_contact` | `text(1000)?` | operational | Only what the notifier gives and the procedure needs |
+| `grounds` | `text(5000)` | operational | |
+| `outcome` | `enum(no-action, redacted, removed, quarantined, referred)?` | operational | |
+| `outcome_at` | `instant?` | operational | |
+
+Constraint: `(outcome IS NULL) = (outcome_at IS NULL)`.
 
 ### 2.12 Withdrawal request (`operational`, then minimal `evidence`)
 
-| Field | Class | Notes |
-| --- | --- | --- |
-| `scope` | operational | `testimony`, `field` (one public-identity field), `account` (all testimonies and the account) |
-| `testimony` | operational | Cleared when the request completes |
-| `requested_at`, `verified_at` | operational | Verification by magic link to the account email |
-| `steps` | operational | Propagation checklist ([deletion lifecycle](deletion-lifecycle.md)) |
-| `completed_at` | evidence | Kept with the tombstone's `public_id` only, no account link (legal research, section 10) |
-| `minor_at_collection` | evidence | Whether the accelerated erasure right for data collected from minors applied (Loi I&L art. 51 II) |
+| Field | Type | Class | Notes |
+| --- | --- | --- | --- |
+| `scope` | `enum(testimony, field, account)` | operational | One testimony, one public-identity field, or all testimonies and the account |
+| `field_name` | `enum(display_name, age_range, country, region, languages, profession, field, organization, organization_type, relationship_to_ai, link)?` | operational | For `scope = 'field'` only |
+| `testimony` | `ref(Testimony)?` | operational | Cleared when the request completes |
+| `requested_at` | `instant` | operational | |
+| `verified_at` | `instant?` | operational | Verification by magic link to the account email |
+| `steps` | `list(enum(...))` | operational | Propagation checklist ([deletion lifecycle](deletion-lifecycle.md), section 3) |
+| `public_id` | `public_id?` | evidence | Kept after completion, with no account link (legal research, section 10) |
+| `completed_at` | `instant?` | evidence | |
+| `minor_at_collection` | `bool` | evidence | Whether the accelerated erasure right for data collected from minors applied (Loi I&L art. 51 II) |
+
+Constraints:
+
+1. `(scope = 'field') = (field_name IS NOT NULL)`.
+2. `requested_at <= verified_at <= completed_at`, where present.
+3. `completed_at IS NOT NULL` implies `testimony IS NULL`.
 
 ### 2.13 Tombstone (`public`)
 
-What remains of a withdrawn or removed testimony.
+What remains publicly of a withdrawn or removed testimony: its `public_id` and the fact that it was withdrawn. It is not a separate object. It is the testimony row in state `withdrawn`, with everything else deleted except the private `withdrawn_on`.
 
-| Field | Class |
-| --- | --- |
-| `public_id` | public |
-| `status` | public: always `withdrawn` |
-| `withdrawn_in` | public: year and month only (`2027-06`), so that the withdrawal cannot be pinned to a day and correlated with events ([privacy research](../research/privacy-failures.md), R16.5) |
-
-Nothing else: no text, identity, language, country, edition labels or cause (legal research, section 10). Contributor withdrawal and moderation removal look the same publicly, so a tombstone never says "removed for illegal content". The cause stays in the operational records for as long as they are retained.
+Nothing else is shown or exported: no text, identity, language, country, edition labels, cause or date. Contributor withdrawal and moderation removal look the same publicly, so a tombstone never says "removed for illegal content". The cause stays in the operational records for as long as they are retained. The withdrawal date is not shown either, even coarsened to the month, because no reader or mirror needs it and each published detail narrows who withdrew and when (owner decision, 2026-11-19).
 
 ### 2.14 Context document and reference record (`public`, project-authored)
 
-Context documents (plan section 16): `slug`, `language`, `title`, `body` (Markdown in the repository; ADR 0010 follow-up), `published_on`, `updated_on`, `sources`. Each language version is a separate document linked by `slug`.
+Context documents (plan section 16): `slug` (`line(100)`), `language` (`lang`), `title` (`line(200)`), `body` (Markdown in the repository; ADR 0010 follow-up), `published_on` (`date`), `updated_on` (`date?`), `sources` (`list(text(1000))`). Each language version is a separate document linked by `slug`.
 
-Reference records (plan section 18): `slug`, `name`, `role`, `homepage`, `resource_url`, `description`, `verified_on`, `local_snapshot` (path and checksum in the edition, if lawful), `licence`, `notes`.
+Reference records (plan section 18): `slug`, `name`, `role`, `homepage` (`url`), `resource_url` (`url?`), `description`, `verified_on` (`date`), `local_snapshot` (path and checksum in the edition, if lawful), `licence`, `notes`.
 
-Both are project material: their licence is decided in #43, not by ADR 0009.
+Both are project material, licensed CC BY 4.0 ([ADR 0016](../decisions/0016-project-licensing.md)).
 
 ### 2.15 Edition (`public`)
 
-| Field | Class | Notes |
-| --- | --- | --- |
-| `edition_id` | public | `<cutoff-year>.<revision>`, or `<year>-rehearsal.<n>` ([identifiers](identifiers.md), section 4) |
-| `cutoff` | public | Last `received_at` date included |
-| `built_on` | public | |
-| `supersedes` | public | The previous revision, if any |
-| `state` | public | `rehearsal`, `current`, `superseded` |
-| `manifest_digest`, `signature` | public | Defined by the archive format (#13) |
+| Field | Type | Class | Notes |
+| --- | --- | --- | --- |
+| `edition_id` | `line(30)`, pattern `<cutoff-year>.<revision>` or `<year>-rehearsal.<n>` | public | [Identifiers](identifiers.md), section 4. Unique. |
+| `cutoff` | `date` | public | Last `received_at` date included |
+| `built_on` | `date` | public | |
+| `supersedes` | `line(30)?` | public | The previous revision, if any |
+| `state` | `enum(rehearsal, current, superseded)` | public | |
+| `manifest_digest` | `hash` | public | Defined by the archive format (#13) |
+| `signature` | `text(10000)?` | public | Defined by the archive format (#13) |
+
+Constraint: `built_on >= cutoff`.
 
 ### 2.16 Operational records
 
@@ -261,13 +375,13 @@ draft or submitted --discard, or abandon after inactivity--> deleted
 | From | To | Who | Effect |
 | --- | --- | --- | --- |
 | none | `draft` | contributor | `internal_id` assigned |
-| `draft` | `submitted` | contributor | Consent record written. `received_at` is set on first submission only. The pending cap is checked (ADR 0003). |
+| `draft` | `submitted` | contributor | Consent record written. `received_at` and `edition_period` are set on first submission only. The pending cap is checked (ADR 0003). |
 | `submitted` | `under_review` | moderator | Claimed; another moderator would not take it |
-| `under_review` | `published` | moderator | `public_id` assigned on first publication, `published_on` set, search index and static rendering updated |
+| `under_review` | `published` | moderator | `public_id` and `published_on` set on first publication, search index and static rendering updated |
 | `under_review` | `draft` | moderator | Changes requested with a message (moderation principles, "Practice" 2) |
 | `under_review` | `rejected` | moderator | Statement of reasons sent |
 | `published` | `published` | moderator or contributor | New public version after redaction or a moderated correction |
-| `published` | `withdrawn` | contributor | Withdrawal request verified. Deletion lifecycle runs and a tombstone is created. |
+| `published` | `withdrawn` | contributor | Withdrawal request verified. Deletion lifecycle runs and a tombstone remains. |
 | `published` | `withdrawn` | moderator | Removal after a notice or a later finding. Same public effect, cause recorded privately. |
 | `submitted`, `under_review`, `published` | `quarantined` | moderator | Suspected illegal content or a threat, per the [illegal-content protocol](../operations/illegal-content.md). The testimony is hidden everywhere, excluded from exports, search and caches. It is not deleted, and the moderation interface shows its metadata only, never its text, unless the custodian deliberately opens it. A published testimony's URL answers 410, like a withdrawal. |
 | `quarantined` | `withdrawn`, `rejected` or deleted | moderator | Only as the protocol and the authorities' instructions allow, recorded in the moderation record |
@@ -275,7 +389,7 @@ draft or submitted --discard, or abandon after inactivity--> deleted
 | `draft` | deleted | system | Abandoned after the inactivity period |
 | `rejected` | deleted | system | After the retention period |
 
-Invariants:
+Invariants (the constraints of section 2.3 enforce the first and third in the database):
 
 1. A testimony has a `public_id` if and only if it has been published at least once.
 2. Only `published` testimonies are rendered at their URL. Every other state, including deleted, answers the same 404, except withdrawn, which answers 410 with the tombstone ([identifiers](identifiers.md), section 3).
@@ -293,13 +407,13 @@ Invariants:
 
 Proposal:
 
-1. A testimony belongs to the period of its `received_at` date: the period whose cutoff is the next 31 December. This follows plan section 19, where a submission received after the cutoff "becomes part of a subsequent archival period".
+1. A testimony belongs to the period of its `received_at` instant: the period whose cutoff is the next 31 December, in UTC. This follows plan section 19, where a submission received after the cutoff "becomes part of a subsequent archival period".
 2. An edition is built after the moderation queue for its period has been cleared, for example in the following January. Testimonies received before the cutoff but still unmoderated at build time join the edition's first revision.
 3. The edition period is public, because readers and researchers need to know which time capsule a testimony belongs to. It reveals no more than the publication date already does.
 
 ## 6. Retention
 
-Retention periods are specified in the retention schedule (#18), because some depend on the legal decisions of #12, notably whether decree 2021-1362 applies. This model fixes what each period starts from:
+Retention periods are specified in the [retention schedule](retention.md). This model fixes what each period starts from:
 
 | Object | Clock starts at |
 | --- | --- |
@@ -320,6 +434,6 @@ Full-text search uses PostgreSQL per-language configurations: `french` and `engl
 
 - The controlled vocabularies (`field`, `relationship_to_ai`, `attitude` and others) need wording and translation review, and filter thresholds (#27).
 - Whether contributors may edit their own pending submission after submitting, or only through "request changes".
-- The maximum text length (section 2.3) and the structured-field set (section 2.7) are proposals.
+- The maximum lengths in section 2 and the structured-field set (section 2.7) are proposals.
 - Whether a redacted testimony shows a visible "part of this text was redacted" note, on the site and in editions. The note serves transparency, but the Hurbain v. Belgium court found such notes can perpetuate stigma ([privacy research](../research/privacy-failures.md), R16.8, question 8).
 - Filter thresholds and the allowed filters belong to #27 (privacy research, R27.1 to R27.10). For example: no value shown below 10 matches, no age or sensitive-category filters, country-level geography only.

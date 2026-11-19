@@ -67,5 +67,4 @@ These one-time duties are tracked as issues:
 - the privacy and security review gate (#34);
 - extending the domain registration to at least 5 years (ADR 0008);
 - a succession arrangement (#33);
-- the outside contact for moderation wellbeing and qualification ([illegal-content protocol](illegal-content.md), section 8);
 - a rehearsal edition (#38).

@@ -150,7 +150,7 @@ Draft neutral wording, to be reviewed: "Your testimony has not been published be
 
 1. View the minimum. Decide from text and metadata, and never open suspected child abuse media. Where media exists, use blurring or grayscale by default, as the Stanford report recommends ([fetched](https://stacks.stanford.edu/file/druid:vb515nd6874/20230724-fediverse-csam-report.pdf), section 5.3).
 2. Work the queue in fixed sessions with breaks. Do not review flagged material late at night or just before sleep [inference].
-3. Do not carry a suspected child abuse case alone. The hotline guide says such work should not fall to one person and that employees should be able to consult a psychologist free of charge ([fetched](https://www.pointdecontact.net/wp-content/uploads/2023/10/2014-04-guide_pedopornographie.pdf), section "Vos contacts"). For a sole custodian, arrange before launch a confidential outside contact and a professional who can be consulted. Uncertain: which services are available and at what cost has not been checked [inference].
+3. Do not carry a suspected child abuse case alone. The hotline guide says such work should not fall to one person and that employees should be able to consult a psychologist free of charge ([fetched](https://www.pointdecontact.net/wp-content/uploads/2023/10/2014-04-guide_pedopornographie.pdf), section "Vos contacts"). For a sole custodian, arrange before launch a confidential outside contact and a professional who can be consulted. Done (2026-11-20): the custodian has arranged one; its details are personal and kept outside the repository.
 4. Qualification help: where in doubt, use the Point de Contact orientation ([fetched](https://www.pointdecontact.net/wp-content/uploads/2023/10/2014-04-guide_pedopornographie.pdf), section "Le signalement").
 5. After a severe exposure, stop the session, write a short note, and do not return to the queue that day [inference].
 6. Decline a case that cannot be assessed without viewing the material. Reporting it is the answer, not viewing it ([inference](../research/moderation-failures.md), section 2.4).
@@ -173,7 +173,7 @@ The harm is documented. Gonzalez and Matias list anxiety, nightmares, fatigue an
 4. Legifrance: confirm the scope of Code pénal arts. 223-6, 434-1, 434-3 and 434-4 (sections 3.1 and 3.2).
 5. Lawyer: the tipping-off question under DSA art. 17 (section 7).
 6. Lawyer: whether decree 2021-1362 applies to the operator, and so whether identification data must be kept (section 3.1, step 9).
-7. Arrange the confidential outside contact for wellbeing and qualification (section 8).
+7. Resolved (2026-11-20): the confidential outside contact for wellbeing is arranged, with its details kept outside the repository; qualification help comes from Point de Contact (section 8, items 3 and 4).
 8. Read the current Point de Contact terms before adding any link to its form ([fetched](https://www.pointdecontact.net/wp-content/uploads/2023/10/2014-04-guide_pedopornographie.pdf), section "Le signalement").
 9. Re-read every [fetched, summarised] text verbatim on Legifrance or EUR-Lex before publication.
 10. Lawyer: whether publishing edits to approved testimonies before review is compatible with the operator's position as director of publication (loi no. 82-652, art. 93-3, on contributions not reviewed before publication; cited from recollection, to verify), and with the hosting regime of DSA art. 6 (section 2, step 6).

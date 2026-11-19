@@ -19,10 +19,6 @@ Proposals present options for an owner decision. Once decided, a proposal stays 
 
 Decisions waiting for the owner, grouped by the work they unblock. The recommendation, where there is one, is in the linked section. Decisions that block nothing before launch are listed separately at the end, so that they are neither forgotten nor mistaken for blockers.
 
-### Moderation (#41)
-
-1. The outside contact for wellbeing and qualification ([illegal-content protocol](../operations/illegal-content.md), section 8).
-
 ### Context (#36)
 
 1. Editorial rules, first set of pages and who writes them ([context pages](context-pages.md)).

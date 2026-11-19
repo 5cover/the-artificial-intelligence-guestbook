@@ -20,7 +20,8 @@ The report form asks for one reason. Each maps to a publishing rule, so that the
 | It is about me, or names me, and exposes my private life | `third-party-privacy` | High |
 | Someone is publishing under my name, or under the name of a person I represent | `impersonation` | High |
 | It contains a password, key or other secret | `secrets` | High |
-| Other illegal content: hatred, terrorism, defamation | `illegal` | Normal |
+| It makes false or damaging accusations against an identifiable person | `defamation` | Normal |
+| Other illegal content: hatred, terrorism | `illegal` | Normal |
 | Harassment | `harassment` | Normal |
 | Spam, advertising, or not a testimony | `spam`, `advertising`, `not-testimony` | Low |
 | Something else | none | Low |

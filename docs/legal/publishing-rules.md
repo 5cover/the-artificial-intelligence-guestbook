@@ -1,6 +1,6 @@
 # Publishing rules
 
-Status: Draft (2026-11-15). Public text to be finalized in English and French, and reviewed before launch (#19).
+Status: Draft (2026-11-15; rules and review window accepted by the owner 2026-11-20). Public wording to be finalized in English and French during implementation, and reviewed before launch (#19); it does not block the first prototype.
 
 Basis: [moderation principles](../constitution/moderation-principles.md); [editorial principles](../constitution/editorial-principles.md); [authorship disclosure](../constitution/authorship-disclosure.md); [illegal-content protocol](../operations/illegal-content.md); [moderation-failures research](../research/moderation-failures.md); DSA arts. 14, 16 and 17 as summarized in the [legal research](../research/legal-landscape.md), section 5.
 
@@ -18,7 +18,8 @@ Names are not verified. A display name is what the contributor chose to give, an
 
 | Code | Rule | Usual action |
 | --- | --- | --- |
-| `illegal` | Content that is illegal under French or EU law, for example child sexual abuse material, incitement to hatred or violence, apology of terrorism, or defamation of an identifiable person | Not published, and reported to the authorities where the law requires it |
+| `illegal` | Content that is illegal under French or EU law, for example child sexual abuse material, incitement to hatred or violence, or apology of terrorism | Not published, and reported to the authorities where the law requires it |
+| `defamation` | Presenting as fact an allegation that damages the honour or reputation of an identifiable person (loi du 29 juillet 1881, art. 29) | We ask you to change the passage, for example to describe your own experience rather than accuse |
 | `threat` | Threats against a person or group | Not published; reported if there is a danger to life or safety |
 | `harassment` | Content whose purpose is to harass, demean or intimidate an identifiable person | Not published |
 | `third-party-privacy` | Private or sensitive information about another identifiable person: their health, address, contact details, workplace, or anything that could locate or expose them | We ask you to change the passage |
@@ -46,7 +47,7 @@ The exception: when the law or an authority requires discretion, for example dur
 
 ## Asking for a review
 
-You can ask for a review of any decision within 30 days, by replying to the decision email. We look at the testimony again, with your explanation, and answer with our reasons. Proposal: a review is never done on the same day as the original decision. When the Guestbook has a second moderator, that person handles reviews (#41; the moderation-failures research recommends it).
+You can ask for a review of any decision within 30 days, by replying to the decision email. We look at the testimony again, with your explanation, and answer with our reasons. A review is never done on the same day as the original decision. Until the Guestbook has a second moderator, the custodian handles reviews; a second reviewer is a decision deferred until after launch (#41; the moderation-failures research recommends it).
 
 ## Reporting a published testimony
 
@@ -69,6 +70,6 @@ These rules change rarely, and only to make them clearer or to follow the law. E
 
 ## Open questions for the owner
 
-- The 30-day review window, and who reviews while the custodian moderates alone.
-- Whether `defamation` should be its own code rather than part of `illegal`. French defamation law (loi du 29 juillet 1881) is a common trap for testimony that names people.
-- Final wording, in both languages, after the legal review of #19.
+1. [x] The 30-day review window is accepted; the custodian reviews alone until a second moderator joins (2026-11-20).
+2. [x] `defamation` is its own code, so that it can be recognized and filtered in moderation records (2026-11-20).
+3. [x] The final wording, in both languages, is fixed during implementation and the legal review of #19; it does not block the prototype (2026-11-20).

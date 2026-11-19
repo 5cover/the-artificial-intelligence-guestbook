@@ -4,9 +4,12 @@
   "packageManager": "pnpm@12.18.0",
   "scripts": {
     "lint:md": "markdownlint-cli2",
-    "fix:md": "markdownlint-cli2 --fix"
+    "fix:md": "markdownlint-cli2 --fix",
+    "fmt:json": "prettier --write \"**/*.json\"",
+    "lint:json": "prettier --check \"**/*.json\""
   },
   "devDependencies": {
-    "markdownlint-cli2": "^0.24.1"
+    "markdownlint-cli2": "^0.24.1",
+    "prettier": "^3.10.1"
   }
 }

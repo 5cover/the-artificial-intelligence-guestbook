@@ -5,25 +5,56 @@
   "description": "One published testimony in an edition of The Artificial Intelligence Guestbook. Normative definition of docs/specs/archive-format.md section 3. Format version 0 (unstable).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["format_version", "public_id", "url", "language", "published_on", "edition_period", "licence", "citation", "redacted", "body_format", "body", "revisions", "identity", "authorship"],
+  "required": [
+    "format_version",
+    "public_id",
+    "url",
+    "language",
+    "published_on",
+    "edition_period",
+    "licence",
+    "citation",
+    "body_format",
+    "body",
+    "revisions",
+    "identity",
+    "authorship"
+  ],
   "properties": {
     "format_version": { "const": 0 },
-    "edition_id": { "description": "Present in editions; absent from the live data URL (docs/specs/identifiers.md section 2.1).", "type": "string", "pattern": "^[0-9]{4}(\\.[0-9]+|-rehearsal\\.[0-9]+)$" },
+    "edition_id": {
+      "description": "Present in editions; absent from the live data URL (docs/specs/identifiers.md section 2.1).",
+      "type": "string",
+      "pattern": "^[0-9]{4}(\\.[0-9]+|-rehearsal\\.[0-9]+)$"
+    },
     "public_id": { "$ref": "#/$defs/public_id" },
-    "url": { "type": "string", "pattern": "^https://theaiguestbook\\.org/testimonies/[0-9a-hjkmnp-tv-z]{8}$" },
+    "url": {
+      "type": "string",
+      "pattern": "^https://theaiguestbook\\.org/testimonies/[0-9a-hjkmnp-tv-z]{8}$"
+    },
     "language": { "$ref": "#/$defs/language" },
     "published_on": { "$ref": "#/$defs/date" },
     "edition_period": { "type": "integer", "minimum": 2026 },
     "licence": { "const": "CC-BY-4.0" },
     "citation": { "type": "string", "minLength": 1 },
-    "redacted": { "type": "boolean" },
-    "body_format": { "description": "CommonMark version of the body source text (docs/specs/data-model.md section 2.3.1).", "const": "commonmark-0.31.2" },
+    "body_format": {
+      "description": "CommonMark version of the body source text (docs/specs/data-model.md section 2.3.1).",
+      "const": "commonmark-0.31.2"
+    },
     "body": { "type": "string", "minLength": 1, "maxLength": 50000 },
-    "revisions": { "description": "Public timeline of the testimony (docs/specs/data-model.md section 2.5), in order.", "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/revision" } },
+    "revisions": {
+      "description": "Public timeline of the testimony (docs/specs/data-model.md section 2.5), in order.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/revision" }
+    },
     "identity": { "$ref": "#/$defs/identity" },
     "authorship": { "$ref": "#/$defs/authorship" },
     "structured": { "$ref": "#/$defs/structured" },
-    "translations": { "type": "array", "items": { "$ref": "#/$defs/translation" } }
+    "translations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/translation" }
+    }
   },
   "$defs": {
     "public_id": {
@@ -44,11 +75,10 @@
     "revision": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["revision_number", "published_on", "source"],
+      "required": ["revision_number", "live_on"],
       "properties": {
         "revision_number": { "type": "integer", "minimum": 1 },
-        "published_on": { "$ref": "#/$defs/date" },
-        "source": { "enum": ["contributor", "moderator"] },
+        "live_on": { "$ref": "#/$defs/date" },
         "summary": { "type": "string", "minLength": 1, "maxLength": 200 }
       }
     },
@@ -59,18 +89,65 @@
       "properties": {
         "mode": { "enum": ["named", "pseudonymous", "anonymous"] },
         "display_name": { "type": "string", "minLength": 1 },
-        "age_range": { "description": "Never present for minors (docs/specs/data-model.md section 2.4.1).", "enum": ["18-24", "25-34", "35-44", "45-54", "55-64", "65-74", "75-plus"] },
+        "age_range": {
+          "description": "Never present for minors (docs/specs/data-model.md section 2.4.1).",
+          "enum": [
+            "18-24",
+            "25-34",
+            "35-44",
+            "45-54",
+            "55-64",
+            "65-74",
+            "75-plus"
+          ]
+        },
         "country": { "type": "string", "pattern": "^[A-Z]{2}$" },
         "region": { "type": "string", "minLength": 1 },
-        "languages": { "type": "array", "items": { "$ref": "#/$defs/language" }, "uniqueItems": true },
+        "languages": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/language" },
+          "uniqueItems": true
+        },
         "profession": { "type": "string", "minLength": 1 },
         "field": { "type": "string", "minLength": 1 },
         "organization": { "type": "string", "minLength": 1 },
-        "organization_type": { "enum": ["none", "self-employed", "company", "public-sector", "education", "non-profit", "other"] },
+        "organization_type": {
+          "enum": [
+            "none",
+            "self-employed",
+            "company",
+            "public-sector",
+            "education",
+            "non-profit",
+            "other"
+          ]
+        },
+        "organization_type_note": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "relationship_to_ai_note": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "field_note": { "type": "string", "minLength": 1, "maxLength": 200 },
         "relationship_to_ai": {
           "type": "array",
           "uniqueItems": true,
-          "items": { "enum": ["user", "non-user", "refuser", "builder", "researcher", "affected-by", "unsure"] }
+          "items": {
+            "enum": [
+              "user",
+              "non-user",
+              "refuser",
+              "builder",
+              "researcher",
+              "affected-by",
+              "unsure",
+              "other"
+            ]
+          }
         },
         "link": { "type": "string", "pattern": "^https?://" }
       },
@@ -83,7 +160,16 @@
       "additionalProperties": false,
       "required": ["category"],
       "properties": {
-        "category": { "enum": ["none", "assisted-language", "assisted-structure", "substantially-generated", "fully-generated", "undisclosed"] },
+        "category": {
+          "enum": [
+            "none",
+            "assisted-language",
+            "assisted-structure",
+            "substantially-generated",
+            "fully-generated",
+            "undisclosed"
+          ]
+        },
         "model_or_product": { "type": "string", "minLength": 1 },
         "model_version": { "type": "string", "minLength": 1 },
         "mode_or_setting": { "type": "string", "minLength": 1 },
@@ -96,9 +182,34 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "ai_use_frequency": { "enum": ["never", "rarely", "monthly", "weekly", "daily", "constantly", "unsure"] },
-        "tools_used": { "type": "array", "items": { "type": "string", "minLength": 1 } },
-        "attitude": { "enum": ["enthusiastic", "positive", "mixed", "indifferent", "negative", "hostile", "unsure"] },
+        "ai_use_frequency": {
+          "enum": [
+            "never",
+            "rarely",
+            "monthly",
+            "weekly",
+            "daily",
+            "constantly",
+            "unsure"
+          ]
+        },
+        "tools_used": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "attitude": {
+          "enum": [
+            "enthusiastic",
+            "positive",
+            "mixed",
+            "indifferent",
+            "negative",
+            "hostile",
+            "unsure",
+            "other"
+          ]
+        },
+        "attitude_note": { "type": "string", "minLength": 1, "maxLength": 200 },
         "prediction": { "type": "string", "minLength": 1 },
         "prediction_horizon": { "type": "integer", "minimum": 2026 }
       }
@@ -106,13 +217,24 @@
     "translation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["translation_id", "language", "body", "source_revision", "producer_kind", "producer_name", "created_on", "reviewed"],
+      "required": [
+        "translation_id",
+        "language",
+        "body",
+        "source_revision",
+        "producer_kind",
+        "producer_name",
+        "created_on",
+        "reviewed"
+      ],
       "properties": {
         "translation_id": { "type": "string", "pattern": "^[a-z0-9]{1,16}$" },
         "language": { "$ref": "#/$defs/language" },
         "body": { "type": "string", "minLength": 1 },
         "source_revision": { "type": "integer", "minimum": 1 },
-        "producer_kind": { "enum": ["contributor", "project-human", "machine"] },
+        "producer_kind": {
+          "enum": ["contributor", "project-human", "machine"]
+        },
         "producer_name": { "type": "string", "minLength": 1 },
         "created_on": { "$ref": "#/$defs/date" },
         "reviewed": { "type": "boolean" },

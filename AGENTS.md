@@ -71,6 +71,10 @@ All Markdown files are constrained to a tractable subset, enforced by markdownli
 - no inline HTML, no trailing whitespace, no two-space line breaks, no line length limit.
 - For open questions, use numbered tasks lists, so they can be referenced unambigously later. Remove the Open Questions section once every question is resolved.
 
+Diagrams are written in Mermaid (fenced as `mermaid`), never as text art. Use the diagram type that fits the content, for example `stateDiagram-v2` for states and transitions, `sequenceDiagram` for exchanges, `flowchart` only for flows and architectures; do not reduce everything to a generic flowchart.
+
+JSON files are formatted with Prettier: `pnpm fmt:json` writes, `pnpm lint:json` checks. Because the formatter owns the layout, JSON may be rewritten programmatically (parse, modify, serialize without indentation, then run `pnpm fmt:json`; Prettier keeps objects expanded when they already span several lines, so indented output would defeat its layout) rather than edited by text replacement.
+
 Run `pnpm lint:md` before committing documentation; `pnpm fix:md` applies the mechanical fixes. Review what `fix:md` changes: renumbering a list or removing a line break can change meaning. Source tags such as `[S12]` are plain text, so write two of them as `[S1] [S2]`, never `[S1][S2]`, which Markdown reads as a reference link.
 
 ## Terminology

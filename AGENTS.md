@@ -97,6 +97,7 @@ Dated research documents in `docs/research/` keep the wording of their date and 
 - Commit on the current branch. No branching workflow has been defined yet; ask the owner before creating one.
 - Plan files in the repository are committed alongside the work they describe.
 - Never commit secrets. `.env` is ignored and must stay ignored.
+- Do not push anything unless explicitly asked.
 
 ## Product guardrails
 

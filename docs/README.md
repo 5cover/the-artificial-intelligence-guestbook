@@ -37,6 +37,7 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 - [0011. The interface calls a contribution a "testimony" ("témoignage")](decisions/0011-testimony-in-the-interface.md)
 - [0012. Project mailbox: `contact@theaiguestbook.org` on OVHcloud's free hosting](decisions/0012-project-mailbox.md)
 - [0013. Legal bases, identification-data retention and minors](decisions/0013-legal-bases-and-minors.md)
+- [0014. Provisional VPS: OVHcloud VPS-1](decisions/0014-provisional-vps-ovhcloud.md)
 
 ## Proposals
 

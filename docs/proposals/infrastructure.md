@@ -1,6 +1,6 @@
 # Infrastructure proposal: VPS, backups and transactional email
 
-Status: Proposal - awaiting owner decision (2026-11-15)
+Status: Partly decided. VPS: OVHcloud VPS-1, provisionally ([ADR 0014](../decisions/0014-provisional-vps-ovhcloud.md), 2026-11-19). Backups and email: awaiting owner decision.
 
 Issues: #9, #10, #31
 
@@ -26,7 +26,7 @@ Research date: 2026-11-15. Source tags: [fetched] means the page was read in thi
 
 ## 2. Requirements derived from the ADRs and the threat model
 
-- The VPS is a single, self-managed EU machine, and its provider must differ from OVHcloud, which holds the domain, DNS and the project mailbox ([ADR 0002](../decisions/0002-single-eu-vps.md), [ADR 0008](../decisions/0008-canonical-domain.md)).
+- The VPS is a single, self-managed EU machine. This proposal also asked that its provider differ from OVHcloud, which holds the domain, DNS and the project mailbox; the owner accepted that concentration provisionally in ADR 0014 ([ADR 0002](../decisions/0002-single-eu-vps.md), [ADR 0008](../decisions/0008-canonical-domain.md)).
 - The stack is Django 5.2 LTS on PostgreSQL 18, behind a reverse proxy, with systemd timers and encrypted off-site backups ([ADR 0010](../decisions/0010-stack-django-postgresql.md), section 8 of the [stack RFP](stack-rfp.md)). The sizing brief for this proposal is 2 to 4 vCPU and 4 to 8 GB of RAM, and traffic is modest and text-only.
 - Backups are encrypted client-side before they leave the VPS, the keys are held offline and in succession escrow, and the backup target is append-only or object-locked for the retention window, at a different provider with separate credentials ([threat model](../specs/threat-model.md) section 3.7, required).
 - Hardening: SSH keys only, no root login, automatic security updates, services as unprivileged users, and secrets readable only by the application user (threat model section 3.5, required).
@@ -43,6 +43,8 @@ Research date: 2026-11-15. Source tags: [fetched] means the page was read in thi
 | Hetzner Cloud CPX22 | 2 vCPU, 4 GB, 80 GB NVMe [fetched] [S2] | EUR 16.99 Helsinki, EUR 19.99 Nuremberg; prices include IPv4 [fetched] [S2] | Falkenstein, Nuremberg, Helsinki [fetched] [S1] | Daily automatic backups, 7 kept [fetched] [S3]; backup starting price EUR 1.098 per month [fetched] [S2], which a third-party source describes as 20 percent of the server price [search] [S4]; snapshots EUR 0.0143 per GB-month [fetched] [S2] | Free [search] [S5] | DPA accepted as a checkbox in the customer account [fetched] [S6]; sample text [search] [S7] | Hetzner Online GmbH, Gunzenhausen, Germany; managing directors named in its DPA [search] [S7]; shareholders not verified; US subsidiary exists [fetched] [S6] |
 | Hetzner Cloud CPX32 | 4 vCPU, 8 GB, 160 GB NVMe [fetched] [S2] | EUR 30.49 Helsinki, EUR 35.99 Nuremberg [fetched] [S2] | As above | As above | Free [search] [S5] | As above | As above |
 | netcup VPS Lite 2 | 4 vCPU, 8 GB, 160 GB SSD [fetched] [S25] | EUR 7.98, computed by dividing the displayed VAT-inclusive price by 1.19 [fetched] [S25] | Nuremberg, Vienna or Amsterdam, depending on availability [fetched] [S25] | "Snapshots listed", no price and no backup option shown [fetched] [S25] | IPv4 and IPv6 option [fetched] [S25] | Not verified | netcup GmbH, Karlsruhe; owned by the Anexia group since 2016 per several secondary sources [search] [S27] |
+| OVHcloud VPS-1 (added 2026-11-19) | 2 vCores, 4 GB, 40 GB NVMe [search] [S72] | EUR 4.49 per month without commitment, EUR 3.81 with 12 months prepaid; IPv4 included [search] [S72] | Several; Strasbourg to be avoided | Daily backup of the last 24 hours included [search] [S72] | Not read | Not read | OVHcloud SAS, French; same provider as the domain and mailbox |
+| OVHcloud VPS-2 (added 2026-11-19) | 4 vCores, 8 GB, 75 GB NVMe [search] [S72] | EUR 8.49 without commitment, EUR 7.21 with 12 months prepaid [search] [S72] | As above | As above | Not read | Not read | As above |
 | Infomaniak VPS Lite | 4 vCPU, 8 GB, 160 GB [search] [S28] | CHF 18.00 per month with a 12-month prepayment [search] [S28] | Switzerland [search] [S28] | Not read | Not read | DPA template reportedly cites GDPR article 28; not verified on Infomaniak's pages [search] | Swiss; a foundation became majority owner in May 2026 [search] [S29]; Switzerland's EU adequacy stands [search] [S30] |
 
 Abuse handling and suspension record:
@@ -163,6 +165,8 @@ Design requirements that apply to any provider: tracking off, verified by sendin
 | Domain and DNS | OVHcloud, ADR 0008; price not read | Not included |
 | Recommended total | | 21.41 |
 
+Decided set (ADR 0014), with the proposed backup and mail: OVHcloud VPS-1 EUR 4.49 + 6.49 + 0.18 = EUR 11.16 [search] [S72].
+
 Alternatives for comparison:
 
 - Hetzner CPX22 in Helsinki, with the same backup and mail: EUR 16.99 + 6.49 + 0.18 = EUR 23.66, with IPv4 included per the page [fetched] [S2]. The IPv4 price is contradicted in search summaries [search] [S5].
@@ -259,3 +263,4 @@ Limits of this research: several official pages could not be read (Scaleway pric
 - [S70] <https://www.trustpilot.com/review/scaleway.com> - search. Anecdotal Scaleway reviews of lockouts.
 - Repository documents, cited by relative link in the text: [ADR 0002](../decisions/0002-single-eu-vps.md), [ADR 0003](../decisions/0003-email-magic-link-auth.md), [ADR 0006](../decisions/0006-archive-first-replaceable-application.md), [ADR 0007](../decisions/0007-privacy-review-path.md), [ADR 0008](../decisions/0008-canonical-domain.md), [ADR 0010](../decisions/0010-stack-django-postgresql.md), [threat model](../specs/threat-model.md), [plan](../plans/main.md), [deletion philosophy](../constitution/deletion-philosophy.md), [stack RFP](stack-rfp.md).
 - [S71] Repository threat model, sections 3.1, 3.5, 3.6, 3.7, 3.8, and the domain research note `docs/research/domain-and-persistence.md`, which covers SPF, DKIM and DMARC (section 1.8).
+- [S72] <https://dev.to/neurau_tech/vps-pas-cher-en-novembre-2026-8-hebergeurs-compares-au-prix-officiel-25k6>, <https://quasa.io/fr/media/ovhcloud-ou-scaleway-le-produit-compare-peut-inverser-l-ecart-de-prix>, <https://valebyte.com/en/providers/ovh/> - search summaries, 2026-11-19. OVHcloud VPS range of June 2026; prices raised in March 2026.

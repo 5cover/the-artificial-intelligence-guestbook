@@ -18,6 +18,8 @@ Pre-implementation. Phase A (constitution) and Phase B (data and privacy design)
 
 - Stack: Django 5.2 LTS on PostgreSQL 18 ([ADR 0010](docs/decisions/0010-stack-django-postgresql.md)). The archive specification (#13) comes before the application scaffold (#21), as the RFP recommends.
 - Domain: `theaiguestbook.org`, registered at OVHcloud on 2026-11-15, with DNSSEC, and the project mailbox `contact@theaiguestbook.org` (SPF, DKIM, DMARC in monitoring mode) ([ADR 0008](docs/decisions/0008-canonical-domain.md), [ADR 0012](docs/decisions/0012-project-mailbox.md), [docs/operations/domain.md](docs/operations/domain.md)).
+- Server: OVHcloud VPS-1, provisionally, with backups at another provider ([ADR 0014](docs/decisions/0014-provisional-vps-ovhcloud.md)). Not ordered yet.
+- Legal positions: [ADR 0013](docs/decisions/0013-legal-bases-and-minors.md) (legal bases, decree 2021-1362, DSA, a single age threshold of 16, parental path).
 
 ## Knowledge lives in the repository
 

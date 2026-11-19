@@ -21,6 +21,7 @@ The Digital Services Act duties in arts. 16 to 18 are assumed to apply to the ar
 3. Set the item to quarantine: not published, not visible to anyone else, not previewed, and not deleted ([fetched](https://www.pointdecontact.net/wp-content/uploads/2023/10/2014-04-guide_pedopornographie.pdf), section "Le traitement").
 4. Do not screenshot, copy, print, forward or paste any part of the item into any other tool, including AI services. Unpublished testimonies are never sent to external services ([threat model](../specs/threat-model.md), section 3.6).
 5. If the scenario is still unclear after triage, consult the hotline (section 5) before deciding. If a life may be at risk, call 17 or 112 first.
+6. Edits to published testimonies go live before review ([data model](../specs/data-model.md), section 2.5). A flagged testimony with unreviewed edits is reviewed first, from the word diff against its last reviewed revision. Quarantine freezes the testimony with that revision and the current one, so that neither is deleted while the item is handled. Whether review after publication fits the director-of-publication regime of loi 82-652 art. 93-3, which this protocol cites from recollection only, is an open item (section 10).
 
 ## 3. Procedures
 
@@ -175,3 +176,4 @@ The harm is documented. Gonzalez and Matias list anxiety, nightmares, fatigue an
 7. Arrange the confidential outside contact for wellbeing and qualification (section 8).
 8. Read the current Point de Contact terms before adding any link to its form ([fetched](https://www.pointdecontact.net/wp-content/uploads/2023/10/2014-04-guide_pedopornographie.pdf), section "Le signalement").
 9. Re-read every [fetched, summarised] text verbatim on Legifrance or EUR-Lex before publication.
+10. Lawyer: whether publishing edits to approved testimonies before review is compatible with the operator's position as director of publication (loi no. 82-652, art. 93-3, on contributions not reviewed before publication; cited from recollection, to verify), and with the hosting regime of DSA art. 6 (section 2, step 6).

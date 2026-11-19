@@ -58,7 +58,7 @@ The reverse proxy and the application are configured to log no raw IP address. A
 | 24 | Email provider logs | As short as the provider allows; target 30 days or less | Sending | Provider, per the DPA | Processor (#10) |
 | 25 | Project mailbox: correspondence about a request | Until the request is complete | | Manual, part of the deletion procedure | |
 | 26 | Project mailbox: other correspondence | Proposal: 12 months | Receipt | Manual, yearly review | |
-| 27 | Backups | Proposal: 30 days, equal to the object-lock period ([infrastructure proposal](../proposals/infrastructure.md), section 4.4) | Backup | Lock expiry and rotation, plus erase-on-restore | Recovery (deletion lifecycle, section 6) |
+| 27 | Backups | 30 days, equal to the object-lock period ([ADR 0015](../decisions/0015-backups-and-transactional-email.md)) | Backup | Lock expiry and rotation, plus erase-on-restore | Recovery (deletion lifecycle, section 6) |
 | 28 | Erase-on-restore list (internal IDs only) | The backup window plus 7 days | Withdrawal | Scheduled job | Deletion lifecycle |
 | 29 | Hosted editions | As published; superseded revisions deleted when a privacy revision is published | | Privacy revision | Consent; archival model |
 | 30 | Mirror-operator contacts | While they ask to be notified | Registration | On request | Legitimate interest |

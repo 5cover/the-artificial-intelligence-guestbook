@@ -38,7 +38,7 @@ Deadline: without undue delay and within one month of receipt (GDPR art. 12(3), 
 | 5 | Static renderings | Pre-rendered testimony pages and listings (ADR 0006) | Yes | Regenerated without the testimony; the testimony page becomes the tombstone | Immediate |
 | 6 | Hosted editions | Edition packages served for download | Yes | Privacy revision (section 4) | Proposal: within 30 days of verification |
 | 7 | Withdrawal list | Public IDs of withdrawn testimonies | Yes | Not removed: it is the mechanism (section 5) | Updated immediately |
-| 8 | Backups | Database dumps and file backups, encrypted | Yes | Expiry by rotation, plus erase-on-restore (section 6) | Proposal: at most 30 days |
+| 8 | Backups | Database dumps and file backups, encrypted | Yes | Expiry by rotation, plus erase-on-restore (section 6) | At most 30 days (ADR 0015) |
 | 9 | Application and proxy logs | URLs with the public ID, timestamps, hashed or no IP addresses; never text or emails | Yes | Log rotation | Retention schedule (#18) |
 | 10 | Email provider | The account email and message metadata for sign-in and notification emails | Under contract (processor) | The provider's retention, set in the DPA | Per provider (#10) |
 | 11 | Project mailbox | Correspondence with the contributor about the request | Yes | Deleted when the request is complete, except the minimal evidence record | Upon completion |
@@ -86,7 +86,7 @@ Account closure withdraws every testimony of the account, then deletes the accou
 
 ## 6. Backups
 
-1. Proposal: backups rotate so that no backup older than 30 days is kept. A withdrawn testimony disappears from all backups at most 30 days after withdrawal. The window equals the 30-day compliance-mode object lock proposed in the [infrastructure proposal](../proposals/infrastructure.md), section 4.4. Each daily backup is immutable for 30 days, even against a compromised server, and expires when its lock ends. The window is published in the privacy notice. The tradeoff is recovery depth (60 or 90 days would allow later detection of corruption) against how long withdrawn data persists.
+1. Backups rotate (ADR 0015) so that no backup older than 30 days is kept. A withdrawn testimony disappears from all backups at most 30 days after withdrawal. The window equals the 30-day compliance-mode object lock proposed in the [infrastructure proposal](../proposals/infrastructure.md), section 4.4. Each daily backup is immutable for 30 days, even against a compromised server, and expires when its lock ends. The window is published in the privacy notice. The tradeoff is recovery depth (60 or 90 days would allow later detection of corruption) against how long withdrawn data persists.
 2. Erase-on-restore: the erase-on-restore list holds internal IDs only, never content. It is kept outside the database backups. After any restore, the deletion job is re-run for every ID on the list before the service is reopened. The list is pruned when an ID is older than the backup window.
 3. Backups are encrypted client-side (threat model, section 3.7). Their keys are part of the succession arrangements (#33).
 
@@ -103,7 +103,7 @@ Account closure withdraws every testimony of the account, then deletes the accou
 
 ## 8. Open questions
 
-- The backup window (30 days proposed, aligned with the infrastructure proposal) and the privacy-revision cadence (monthly, within 30 days, proposed).
+- The privacy-revision cadence (monthly, within 30 days, proposed). The backup window is 30 days (ADR 0015).
 - Whether decree 2021-1362 retention applies to the account email after closure (#12).
 - How long moderation records and notices are kept after a removal that involved illegal content (#41, #18).
 - The BnF's position on erasure requests for collected material (domain research, section 3.7).

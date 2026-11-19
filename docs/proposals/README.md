@@ -11,19 +11,13 @@ Proposals present options for an owner decision. Once decided, a proposal stays 
 | [Stack RFP](stack-rfp.md) | #6, #7 | Concluded: [ADR 0010](../decisions/0010-stack-django-postgresql.md) |
 | [Legal bases, retention duty and minors](legal-bases-and-minors.md) | #12, #17, #18 | Concluded: [ADR 0013](../decisions/0013-legal-bases-and-minors.md) |
 | [Licences for the project's own material and for editions](project-licensing.md) | #43 | Awaiting decision: L1 to L5 |
-| [Infrastructure](infrastructure.md) | #9, #10, #31 | VPS, backup target and email decided ([ADR 0014](../decisions/0014-provisional-vps-ovhcloud.md), [ADR 0015](../decisions/0015-backups-and-transactional-email.md)); awaiting decision: retention window, key custody, test accounts |
+| [Infrastructure](infrastructure.md) | #9, #10, #31 | Concluded: [ADR 0014](../decisions/0014-provisional-vps-ovhcloud.md), [ADR 0015](../decisions/0015-backups-and-transactional-email.md) |
 | [Context pages](context-pages.md) | #36 | Awaiting review: editorial rules and first set |
 | [Reference shelf](reference-shelf.md) | #37 | Awaiting review: record format, selection criteria, 22 verified records |
 
 ## Decision queue
 
 Decisions waiting for the owner, grouped by the work they unblock. The recommendation, where there is one, is in the linked section.
-
-### Unblocks hosting, deployment and backups (#9, #10, #26, #31)
-
-1. Backup key custody ([infrastructure](infrastructure.md), sections 4.3 and 4.6).
-2. Backup window: 30 days proposed and aligned in the [deletion lifecycle](../specs/deletion-lifecycle.md) and [retention schedule](../specs/retention.md).
-3. Whether test buckets and mail accounts may be created to verify object lock and tracking behaviour ([infrastructure](infrastructure.md), section 8).
 
 ### Unblocks the archive format and the first edition (#13, #38)
 

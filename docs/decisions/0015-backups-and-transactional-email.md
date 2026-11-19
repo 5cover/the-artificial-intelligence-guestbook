@@ -13,7 +13,11 @@ The server is an OVHcloud VPS-1 ([ADR 0014](0014-provisional-vps-ovhcloud.md)). 
 1. **Backups:** daily PostgreSQL dumps, encrypted on the VPS with age to a public recipient only, uploaded to a Hetzner Object Storage bucket in Helsinki or Nuremberg (not Falkenstein), with object lock in compliance mode. The private key is held offline.
 2. **Transactional email:** Scaleway Transactional Email (TEM), over SMTP or its API, with SPF and DKIM on `theaiguestbook.org`. No open or click tracking and no link rewriting.
 
-Still open in the proposal: the retention window (30 days proposed), the second custodian of the backup key, WAL archiving, a tested standby mail provider (Mailjet), and test accounts to verify object lock and tracking behaviour before commitment.
+3. **Retention window:** 30 days, equal to the object-lock retention. Backups older than 30 days are deleted, and the privacy notice publishes the window. The erase-on-restore list stays required: a restore brings back testimonies withdrawn after the backup was taken ([deletion lifecycle](../specs/deletion-lifecycle.md), section 6).
+4. **Key custody:** the age private key is kept offline by the custodian and as a paper copy stored apart from the custodian's computer; the succession envelope (#33) says where. No second person is required.
+5. **Recovery point:** daily dumps only, no WAL archiving. Up to a day of submissions can be lost in a disaster.
+6. **No standby mail provider for now.** If Scaleway TEM is unavailable, sign-in and notices are delayed until it returns.
+7. **Verification first:** test accounts are created at Hetzner and Scaleway to prove object lock and the absence of tracking before production use.
 
 ## Consequences
 

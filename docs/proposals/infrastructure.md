@@ -1,6 +1,6 @@
 # Infrastructure proposal: VPS, backups and transactional email
 
-Status: Partly decided. VPS: OVHcloud VPS-1, provisionally ([ADR 0014](../decisions/0014-provisional-vps-ovhcloud.md), 2026-11-19). Backup target and email: Hetzner Object Storage and Scaleway TEM ([ADR 0015](../decisions/0015-backups-and-transactional-email.md), 2026-11-19). Retention window, key custody, WAL archiving, mail standby and test accounts: awaiting owner decision.
+Status: Partly decided. VPS: OVHcloud VPS-1, provisionally ([ADR 0014](../decisions/0014-provisional-vps-ovhcloud.md), 2026-11-19). Backup target and email: Hetzner Object Storage and Scaleway TEM ([ADR 0015](../decisions/0015-backups-and-transactional-email.md), 2026-11-19). Retention window (30 days), paper key copy, daily dumps without WAL, no mail standby, and test accounts first: also in ADR 0015. The proposal is concluded.
 
 Issues: #9, #10, #31
 

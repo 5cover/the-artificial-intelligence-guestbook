@@ -236,7 +236,7 @@ Nothing else is listed: no text, identity or reason ([deletion lifecycle](deleti
 `data/LICENSE.txt` states, in plain language:
 
 - testimonies and their public metadata are licensed CC BY 4.0 by their contributors, with the attribution in each record (ADR 0009);
-- the licence of the compilation, the context material and the project's translations (decided in #43; CC BY 4.0 proposed);
+- the licence of the compilation, the context material and the project's translations (CC BY 4.0, ADR 0016);
 - that the project's name and logo are not licensed;
 - that withdrawn testimonies are listed in `withdrawals.json`, and that mirror operators are asked to apply that list.
 

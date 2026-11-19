@@ -1,6 +1,6 @@
 # Licences for the project's own material and for editions
 
-Status: Proposal - awaiting owner decision (2026-11-15)
+Status: Concluded by [ADR 0016](../decisions/0016-project-licensing.md) (2026-11-19)
 
 Issue: #43
 

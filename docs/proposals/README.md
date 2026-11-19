@@ -10,7 +10,7 @@ Proposals present options for an owner decision. Once decided, a proposal stays 
 | --- | --- | --- |
 | [Stack RFP](stack-rfp.md) | #6, #7 | Concluded: [ADR 0010](../decisions/0010-stack-django-postgresql.md) |
 | [Legal bases, retention duty and minors](legal-bases-and-minors.md) | #12, #17, #18 | Concluded: [ADR 0013](../decisions/0013-legal-bases-and-minors.md) |
-| [Licences for the project's own material and for editions](project-licensing.md) | #43 | Awaiting decision: L1 to L5 |
+| [Licences for the project's own material and for editions](project-licensing.md) | #43 | Concluded: [ADR 0016](../decisions/0016-project-licensing.md) |
 | [Infrastructure](infrastructure.md) | #9, #10, #31 | Concluded: [ADR 0014](../decisions/0014-provisional-vps-ovhcloud.md), [ADR 0015](../decisions/0015-backups-and-transactional-email.md) |
 | [Context pages](context-pages.md) | #36 | Awaiting review: editorial rules and first set |
 | [Reference shelf](reference-shelf.md) | #37 | Awaiting review: record format, selection criteria, 22 verified records |
@@ -21,9 +21,8 @@ Decisions waiting for the owner, grouped by the work they unblock. The recommend
 
 ### Unblocks the archive format and the first edition (#13, #38)
 
-1. Licences for the documentation, context material, project translations and editions ([project licensing](project-licensing.md)).
-2. Package serialization and signature scheme ([archive format](../specs/archive-format.md), section 12).
-3. PDF/A or XML renditions, embargo option, DOI, number of copies and deposit institution ([archive format](../specs/archive-format.md), section 12; #42).
+1. Package serialization and signature scheme ([archive format](../specs/archive-format.md), section 12).
+2. PDF/A or XML renditions, embargo option, DOI, number of copies and deposit institution ([archive format](../specs/archive-format.md), section 12; #42).
 
 ### Unblocks the data model and the interface (#14, #23, #27)
 

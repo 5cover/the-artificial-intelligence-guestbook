@@ -160,6 +160,7 @@ The body is CommonMark 0.31.2 source text, of type `markdown(50000)` (owner deci
 5. Rendering uses a maintained CommonMark library, for example markdown-it-py (4.3.0 on PyPI on 2026-11-19), and the HTML output is passed through an allow-list sanitizer, for example nh3 (0.3.8), as a second barrier. The Content-Security-Policy of the threat model still applies.
 6. The editor offers "Write" and "Preview" tabs. Editing opens on "Write"; reading a testimony shows the rendered text. The rendered form looks like the markup, which keeps the interpretability burden close to plain text's.
 7. The search vector is built from the rendered text, not from the markup.
+8. Headings are rebased when rendered, so that a testimony never repeats the page's `h1`. A heading of level `n` in the source is rendered at level `n + b`, where `b` is the base level configured for the context (for example the testimony page, a listing or an edition's HTML). A level above 6 is rendered as a `div` with `role="heading"` and `aria-level` set to the computed level. The source text is not changed. Styling is decided in the frontend phase.
 
 In editions, the source text is the canonical body. It is valid UTF-8 plain text and readable as such; the HTML rendering is derived (archive format, section 3).
 

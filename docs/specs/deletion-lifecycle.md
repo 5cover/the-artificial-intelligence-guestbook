@@ -14,7 +14,8 @@ The goal is that deletion is a procedure, not an investigation (deletion philoso
 | --- | --- | --- |
 | Withdraw a testimony | The contributor | The testimony, its versions, identity, disclosure, structured fields, translations and consent record |
 | Withdraw one identity field | The contributor | One public-identity field (for example the display name). Produces a new public version and a privacy revision of editions containing the old value. |
-| Close the account | The contributor | All testimonies of the account (each withdrawn as above), then the account |
+| Remove superseded text from editions | The contributor | Text that an edit removed but that hosted editions still contain (data model, section 2.5, rule 5). Produces a privacy revision of those editions with the current text. |
+| Close the account | The contributor | The account's testimony (withdrawn as above), then the account |
 | Removal after a notice or a later finding | The moderator | As a testimony withdrawal; the cause is recorded privately (data model, section 2.13) |
 | Erasure of data collected from a minor | The contributor, as a minor or later as an adult | As a testimony withdrawal, handled "dans les meilleurs délais" (Loi I&L art. 51 II, legal research section 4). No adult's approval is needed. |
 | Other data-subject rights | Anyone | Access, rectification and objection follow the request procedure in `docs/legal/` (#19) |
@@ -68,7 +69,7 @@ The deletion job runs these steps in order, in one transaction where the steps t
 
 Field-level withdrawal follows steps 4 to 7, 10 and 11, with a new public version in place of steps 1 and 2.
 
-Account closure withdraws every testimony of the account, then deletes the account. If decree 2021-1362 applies, the account email is retained for one year in a restricted store and used for nothing else (legal research, section 6). This is an open legal question in #12.
+Account closure withdraws the account's testimony, then deletes the account. If decree 2021-1362 applies, the account email is retained for one year in a restricted store and used for nothing else (legal research, section 6). This is an open legal question in #12.
 
 ## 4. Privacy revisions of editions
 

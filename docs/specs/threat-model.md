@@ -50,7 +50,7 @@ Stack-independent. Controls marked **(required)** are launch requirements; the r
 
 ### 3.3 Content
 
-- **Stored XSS through testimonies.** Testimonies are stored and rendered as plain text, escaped on output. Only URLs are auto-linked. No user-supplied HTML or Markdown at MVP **(required)**. A strict Content-Security-Policy with no inline scripts **(required)**.
+- **Stored XSS through testimonies.** Testimonies are CommonMark source, rendered with raw HTML disabled, no images, links limited to `http` and `https`, and the output passed through an allow-list sanitizer ([data model](data-model.md), section 2.3.1) **(required)**. No user-supplied HTML is ever rendered **(required)**. A strict Content-Security-Policy with no inline scripts **(required)**.
 - **Link abuse and SEO spam.** Outbound links carry `rel="ugc nofollow noopener"` **(required)**. A per-testimony link count limit is enforced or flagged for moderation.
 - **Unicode abuse.** Text is normalized to NFC. Bidirectional override characters and excessive combining marks are flagged for moderation, not silently stripped, because legitimate right-to-left text must survive.
 - **Secrets and credentials in testimonies.** Submissions are scanned against known credential patterns before review, and hits are flagged to the moderator (plan section 25).

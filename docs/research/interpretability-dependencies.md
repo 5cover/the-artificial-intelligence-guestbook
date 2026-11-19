@@ -18,6 +18,7 @@ Assessments are inference unless a source is given. "Carried in the edition" mea
 | 2 | Package | `tar` and `gzip` (proposed) | Opening the package | Decades of use, simple, many independent implementations | No; the README of an unpacked copy cannot explain how to unpack itself |
 | 3 | Characters | Unicode, UTF-8 and NFC normalization | Every text file | UTF-8 dominates text interchange; its encoding rules are short | No |
 | 4 | Text layout | Line feed as line end, blank line as paragraph separator | Reading bodies | Trivial to infer from the content | Partly: `schema/README.txt` |
+| 4a | Light markup | CommonMark 0.31.2, declared in each record (`body_format`) | Reading emphasis, headings, lists and links in bodies | Readable as plain text even if the convention is forgotten, because the marks resemble their meaning; the specification is licensed CC BY-SA 4.0 and could be included | Variant declared; specification not yet included (see section 2) |
 | 5 | Language | English and French, as written in the 2020s | READMEs, labels, testimonies | Long-lived and heavily documented, but drifts over centuries | The testimonies themselves are in many languages, by nature |
 | 6 | Package structure | BagIt (RFC 8493) | Knowing which files belong and verifying them | A small, stable IETF specification used by libraries and archives | No (see section 2, item 1) |
 | 7 | Integrity | SHA-512 and SHA-256 | Verifying files | Standardized and widely implemented; collision resistance may weaken over a long horizon, verification by recomputation stays possible | No |
@@ -36,7 +37,7 @@ Assessments are inference unless a source is given. "Carried in the edition" mea
 
 These are candidates, not decisions. Each would be decided in the archive format (#13).
 
-1. **Include short, freely licensed specifications as plain text** in `data/schema/standards/`: RFC 8493 (BagIt), RFC 8259 (JSON) and RFC 4180 (CSV). IETF documents may be reproduced in full without modification under the IETF Trust Legal Provisions (recollection, to verify before adoption). Their combined size is small. ISO standards (ISO 8601, ISO 3166) cannot be redistributed, so they are summarized in prose instead.
+1. **Include short, freely licensed specifications as plain text** in `data/schema/standards/`: RFC 8493 (BagIt), RFC 8259 (JSON), RFC 4180 (CSV) and the CommonMark 0.31.2 specification (CC BY-SA 4.0, per spec.commonmark.org; licence to confirm before inclusion). IETF documents may be reproduced in full without modification under the IETF Trust Legal Provisions (recollection, to verify before adoption). Their combined size is small. ISO standards (ISO 8601, ISO 3166) cannot be redistributed, so they are summarized in prose instead.
 2. **Describe the record format in prose** independently of JSON Schema, which the archive format already requires through the independent reader.
 3. **Include the CC BY 4.0 legal code** as a plain-text file, as the repository now does in `LICENSE-docs`, instead of only linking to it.
 4. **Include a code table** for every language and country code used in the edition, with English and French names, so that later code changes do not orphan old values.

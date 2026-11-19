@@ -97,7 +97,7 @@ Bag rules ([archive-failures research](../research/archive-failures.md), section
 
 - payload and tag manifests are written in both SHA-512 and SHA-256, so that either common validator can check the bag;
 - there is no `fetch.txt`: the bag is complete, and every payload file appears in every manifest;
-- canonical content is UTF-8 plain text, JSON, CSV and HTML. Markdown is never canonical, because it is not in the Library of Congress Recommended Formats Statement and has no single standard; it ships only as a derived copy. No database dump or application-specific serialization is canonical.
+- canonical content is UTF-8 plain text, JSON, CSV and HTML. Testimony bodies are CommonMark 0.31.2 source text ([data model](data-model.md), section 2.3.1): they are canonical as plain text, readable without any rendering, and the variant is declared in every record (`body_format`), which answers the concern that Markdown has no single standard (archive-failures research, section 3.19). The HTML rendering is derived. No database dump or application-specific serialization is canonical.
 
 ### 2.2 README coverage statement
 
@@ -117,7 +117,7 @@ A collection that does not say what it holds cannot be trusted later (archive-fa
 
 ## 3. Testimony record
 
-One JSON object per testimony, `data/testimonies/<public-id>.json`. Field names and values are the `public` fields of the [data model](data-model.md). Absent optional fields are omitted, never written as `null`, so that "not given" is unambiguous. There is no separate attribution field: attribution is `identity.mode` plus, for named and pseudonymous testimonies, `identity.display_name`. The `citation` string renders an anonymous testimony as "Anonymous".
+One JSON object per testimony, `data/testimonies/<public-id>.json`. Field names and values are the `public` fields of the [data model](data-model.md). Absent optional fields are omitted, never written as `null`, so that "not given" is unambiguous. `revisions` is the public timeline (data model, section 2.5): dates, sources and summaries only, never superseded text. `body` is the revision current at build time. There is no separate attribution field: attribution is `identity.mode` plus, for named and pseudonymous testimonies, `identity.display_name`. The `citation` string renders an anonymous testimony as "Anonymous".
 
 ```json
 {
@@ -131,7 +131,12 @@ One JSON object per testimony, `data/testimonies/<public-id>.json`. Field names 
   "licence": "CC-BY-4.0",
   "citation": "Anonymous, testimony 7q4km2xd, The Artificial Intelligence Guestbook, 2027-03-14. https://theaiguestbook.org/testimonies/7q4km2xd",
   "redacted": false,
+  "body_format": "commonmark-0.31.2",
   "body": "Texte du témoignage...\n\nDeuxième paragraphe.",
+  "revisions": [
+    { "revision_number": 1, "published_on": "2027-03-14", "source": "contributor" },
+    { "revision_number": 2, "published_on": "2027-05-02", "source": "contributor", "summary": "Corrected a date" }
+  ],
   "identity": {
     "mode": "anonymous",
     "age_range": "35-44",
@@ -151,7 +156,7 @@ One JSON object per testimony, `data/testimonies/<public-id>.json`. Field names 
       "translation_id": "t1",
       "language": "en",
       "body": "...",
-      "source_version": 1,
+      "source_revision": 2,
       "producer_kind": "machine",
       "producer_name": "<system name and version>",
       "created_on": "2027-03-20",
@@ -174,6 +179,7 @@ Testimony 7q4km2xd
 https://theaiguestbook.org/testimonies/7q4km2xd
 
 Published: 2027-03-14
+Revised: 2027-05-02 (Corrected a date)
 Language: fr
 By: Anonymous
 Age range: 35-44

@@ -40,6 +40,7 @@ Stack-independent. Controls marked **(required)** are launch requirements; the r
 - **Email security scanners consuming links.** Corporate mail filters often prefetch links, which would burn single-use tokens or log in the scanner. Opening the link shows a confirmation page, and login happens only on an explicit POST from that page **(required)**. Offering a short one-time code as an alternative to the link is recommended.
 - **Account enumeration.** The sign-in form responds identically whether or not an account exists **(required)**.
 - **Session hijacking.** Secure, HttpOnly, SameSite cookies; session rotation at login; CSRF protection on every state-changing request; HTTPS only with HSTS **(required)**.
+- **Mass reporting.** Reports never hide, edit or remove a testimony by themselves, counts decide nothing, and the only automatic hiding is capped per reporter and per day ([reports](reports.md)).
 - **Disposable and mass accounts.** See ADR 0003: disposable-domain blocklist, MX check, proof-of-work, rate limits, pending caps.
 
 ### 3.2 Administration

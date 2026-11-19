@@ -369,6 +369,10 @@ A third-party notice about published content (DSA art. 16, LCEN; #41).
 | --- | --- | --- | --- |
 | `received_at` | `instant` | operational | |
 | `channel` | `enum(form, email, post, authority)` | operational | |
+| `reason` | `enum(csam, threat, doxxing, about-me, impersonation, secrets, other-illegal, harassment, spam, other)` | operational | The reason chosen on the form ([reports](reports.md), section 1) |
+| `priority` | `enum(urgent, high, normal, low)` | operational | Derived from the reason, lowered for repeatedly unfounded reporters |
+| `confirmed_at` | `instant?` | operational | When the reporter confirmed their email; absent for anonymous reports of child sexual abuse material |
+| `auto_hidden` | `bool` | operational | Whether this notice triggered the capped automatic hiding ([reports](reports.md), section 3, item 4) |
 | `testimony_public_id` | `public_id` | operational | |
 | `notifier_contact` | `text(1000)?` | operational | Only what the notifier gives and the procedure needs |
 | `grounds` | `text(5000)` | operational | |

@@ -12,6 +12,8 @@ The draft below is the public text, written to be read by contributors.
 
 Any first-person testimony about living with AI, from anyone, in any language, of any length within the limit, and with any opinion, including mistaken, unpopular or critical ones. That includes criticism of the Guestbook itself. You may use AI to write your testimony, as long as you say how in the authorship question.
 
+Names are not verified. A display name is what the contributor chose to give, and the Guestbook says so wherever it shows one.
+
 ## What we do not publish
 
 | Code | Rule | Usual action |
@@ -24,7 +26,7 @@ Any first-person testimony about living with AI, from anyone, in any language, o
 | `spam` | Automated, repeated or bulk submissions, or the same text posted again | Not published; repeated cases restrict the account |
 | `advertising` | Submissions whose main purpose is to promote a product, service, site or person, or to place links for search engines | Not published, or we ask you to remove the links |
 | `not-testimony` | Content that is not a testimony at all, for example random text, a test, or a document pasted without any account of the author's own experience | We ask you to change it, or it is not published |
-| `impersonation` | Publishing under the real name of someone else without their agreement | Not published |
+| `impersonation` | Publishing under the real name of someone else without their agreement | We ask you to use a pseudonym or to publish anonymously |
 | `false-disclosure` | Deliberately false answers to the AI-authorship question, as part of automated or bulk submission | Treated as `spam` |
 
 We do not reject a testimony because we disagree with it, find it badly written, think its prediction is foolish, or believe it is wrong about AI.
@@ -48,14 +50,14 @@ You can ask for a review of any decision within 30 days, by replying to the deci
 
 ## Reporting a published testimony
 
-Anyone can report a published testimony they believe is illegal, or that exposes them or someone else. Use the report link on the testimony page, or write to the project address. Tell us:
+Anyone can report a published testimony they believe is illegal, or that exposes them or someone else. Use the report link on the testimony page, or write to the project address. A report asks us to look; it does not hide the testimony by itself, and the number of reports does not matter. Tell us:
 
 - which testimony (its address or code);
 - why you believe it is illegal or harmful;
 - your name and email, so we can answer (not required for reports of child sexual abuse material);
 - that you make the report in good faith.
 
-We acknowledge every report that includes contact details, decide promptly, and tell you the outcome (DSA art. 16). Knowingly false reports are an offence under French law (LCEN art. 6 VII, to confirm).
+We acknowledge every report that includes contact details, decide promptly, and tell you the outcome (DSA art. 16). How reports are handled, including deadlines and limits, is described in [reports](../specs/reports.md). Knowingly false reports are an offence under French law (LCEN art. 6 VII, to confirm).
 
 ## Repeated violations
 

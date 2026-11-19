@@ -130,6 +130,7 @@ Bag rules ([archive-failures research](../research/archive-failures.md), section
 - what it excludes: unmoderated, rejected and withdrawn testimonies, and all private data;
 - its licences;
 - that every date is a Gregorian calendar date in UTC ([data model](data-model.md), section 1.3);
+- that display names are given by contributors and not verified ([reports](reports.md), section 5);
 - the two downloads, and that they unpack to the same files (section 1.1);
 - how to verify the package (section 6), and how to cite the edition and a testimony;
 - its relation to earlier revisions;

@@ -72,6 +72,7 @@ Open decisions are gathered in the [decision queue](proposals/README.md).
 - [Archive format and edition packaging](specs/archive-format.md) (#13), with its JSON Schemas in [archive/schema/](../archive/schema/)
 - [Retention schedule](specs/retention.md) (#18)
 - [Browsing, search and filters](specs/browsing-and-filters.md) (#27)
+- [Reports](specs/reports.md): how reports of published testimonies are received, prioritized, limited and decided, and how impersonation is handled.
 
 ## Operations
 

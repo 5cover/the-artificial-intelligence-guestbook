@@ -51,7 +51,7 @@ Visitors choose what to look for: chronological browsing, full-text search and f
 
 ### 3.2 Thresholds
 
-1. Proposal: N = 10. A filter value is offered only when at least N published testimonies match it (R27.1).
+1. N = 10 (owner decision, 2026-11-19). A filter value is offered only when at least N published testimonies match it (R27.1).
 2. A combination of filters, or of filters and a search query, whose result has fewer than N testimonies is not shown. The page says "too few testimonies match these criteria to show them", without revealing how many (R27.2).
 3. Counts are not displayed. A value is either offered or not. This avoids differencing attacks, where comparing two counts before and after a withdrawal reveals the removed testimony (R27.3).
 4. Thresholds are computed on the published set only, and recomputed on each publication or withdrawal.

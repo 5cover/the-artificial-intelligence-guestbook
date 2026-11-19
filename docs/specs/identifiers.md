@@ -95,7 +95,7 @@ Rules:
 
 | State | Response at the testimony URL |
 | --- | --- |
-| Never existed, draft, in review, returned (including a returned testimony that was once published) | `404 Not Found`, identical in every case, so that state cannot be probed |
+| Never existed, draft, submitted and not yet published, quarantined | `404 Not Found`, identical in every case, so that state cannot be probed. Quarantine answers 404, not 410, because it can be lifted. |
 | Published | `200 OK` |
 | Withdrawn | `410 Gone`, with a content-free tombstone page: the ID, the fact of withdrawal, and nothing that identifies the contributor or the content |
 

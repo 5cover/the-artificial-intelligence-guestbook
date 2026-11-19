@@ -170,12 +170,23 @@
             "undisclosed"
           ]
         },
-        "model_or_product": { "type": "string", "minLength": 1 },
-        "model_version": { "type": "string", "minLength": 1 },
-        "mode_or_setting": { "type": "string", "minLength": 1 },
-        "workflow": { "type": "string", "minLength": 1 },
-        "changes_after": { "type": "string", "minLength": 1 },
-        "comment": { "type": "string", "minLength": 1 }
+        "provider": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "product": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "model": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "model_version": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "mode_or_setting": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "inputs": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "workflow": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "changes_after": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "comment": { "type": "string", "minLength": 1, "maxLength": 1000 }
       }
     },
     "structured": {

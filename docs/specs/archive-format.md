@@ -164,7 +164,8 @@ One JSON object per testimony, `data/testimonies/<public-id>.json`. Field names 
   },
   "authorship": {
     "category": "assisted-language",
-    "model_or_product": "..."
+    "provider": "...",
+    "product": "..."
   },
   "structured": {
     "ai_use_frequency": "weekly",

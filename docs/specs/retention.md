@@ -40,9 +40,9 @@ The reverse proxy and the application are configured to log no raw IP address. A
 | 6 | Accounts with nothing submitted | Proposal: deleted after 12 months without sign-in, after a notice email 30 days before | Last sign-in | Scheduled job | Storage limitation |
 | 7 | Drafts never submitted | Proposal: 90 days | Last edit | Scheduled job, after a reminder email at 60 days | Storage limitation |
 | 8 | Submitted, unmoderated testimonies | Until a decision | Submission | Moderation | Consent |
-| 9 | Rejected testimonies and their versions | Proposal: 6 months | Rejection | Scheduled job | Handling disputes about the decision |
+| 9 | Submitted testimonies never published, whose latest revision was returned, and their revisions | Proposal: 6 months without an edit | Return | Scheduled job | Giving the contributor time to edit, and handling disputes about the decision |
 | 10 | Published testimony, identity, disclosure, structured fields, translations | Until withdrawal or removal | Publication | Deletion lifecycle | Consent (6(1)(a), 9(2)(a)) |
-| 11 | Text awaiting review (baseline and revisions of an open review group) | Until the review group closes | Review | Review completion | Informed review (data model, section 2.5, rule 3) |
+| 11 | Revision bodies other than the public, archived, pending and latest returned revisions | Deleted as soon as a revision is none of these | Review or edit | Review and edit handling | Informed review, and genuine removal by the contributor (data model, section 2.5, rule 7) |
 | 12 | Consent and age evidence | While the testimony is published, then a minimal record (public ID, dates, text versions accepted, consent path) for 5 years | Withdrawal | Scheduled job | Showing lawful processing; 5 years matches the general limitation period of French civil law (Code civil art. 2224, to confirm) |
 | 13 | Parental verification data (parent email, confirmation link) | Until the consent is recorded | Request | Deleted at once | CNIL Recommendation 7 |
 | 14 | Moderation records (ordinary) | Proposal: 12 months | Decision | Scheduled job | Accountability |
@@ -62,6 +62,7 @@ The reverse proxy and the application are configured to log no raw IP address. A
 | 28 | Erase-on-restore list (internal IDs only) | The backup window plus 7 days | Withdrawal | Scheduled job | Deletion lifecycle |
 | 29 | Hosted editions | As published; superseded revisions deleted when a privacy revision is published | | Privacy revision | Consent; archival model |
 | 30 | Mirror-operator contacts | While they ask to be notified | Registration | On request | Legitimate interest |
+| 31 | Published testimonies quarantined awaiting an edit | Proposal: indefinitely, hidden, until the contributor's edit is approved or the testimony is withdrawn (data model, section 2.5, rule 6) | Quarantine | Deletion lifecycle on withdrawal | Consent (6(1)(a)); the contributor can still edit or withdraw |
 
 ## 3. Scheduled jobs
 

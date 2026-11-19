@@ -148,9 +148,12 @@ The primary object. **One testimony per account** (owner decision, 2026-11-19). 
 | `internal_id` | `id` | private | Assigned at draft creation; stable for the object's whole life ([identifiers](identifiers.md), section 1) |
 | `public_id` | `public_id?` | public | Assigned at first publication; never reused ([identifiers](identifiers.md), section 1.1). Unique. |
 | `account` | `ref(Account)?` | private | Never public, never exported. Unique: one testimony per account. Cleared at withdrawal. |
-| `state` | `enum(draft, in_review, published, returned, withdrawn, quarantined)` | operational | See section 3 |
+| `state` | `enum(draft, submitted, published, quarantined, withdrawn)` | operational | See section 3 |
+| `quarantine_reason` | `enum(awaiting-edit, legal-hold)?` | operational | Section 2.5, rule 6, and the [illegal-content protocol](../operations/illegal-content.md) |
+| `public_revision` | `ref(Revision)?` | public | The revision shown on the site and at the data URL (section 2.5, rule 4) |
+| `archived_revision` | `ref(Revision)?` | public | The last approved revision, which editions export (section 2.5, rule 8) |
 | `language` | `lang?` | public | Of the original text, declared by the contributor. Required from submission. |
-| `body` | derived | public | The body of the current revision (section 2.5); not stored on the testimony |
+| `body` | derived | public | The body of `public_revision`; not stored on the testimony |
 | `received_at` | `instant?` | private | First submission. Decides the edition period (section 5). |
 | `published_at` | `instant?` | public as a date | First publication. Published and exported as its UTC date only, to limit correlation with events (threat model, section 3.3). |
 | `withdrawn_at` | `instant?` | private | Kept privately to schedule privacy revisions and prune the erase-on-restore list. Never public. |
@@ -168,10 +171,12 @@ Constraints:
 5. `state <> 'draft'` implies `received_at IS NOT NULL`, `language IS NOT NULL` and `edition_period IS NOT NULL`.
 6. `edition_period` equals the UTC year of `received_at` (section 5).
 7. `state = 'withdrawn'` implies `account IS NULL`.
+8. `(state = 'quarantined') = (quarantine_reason IS NOT NULL)`.
+9. `state = 'published'` implies `public_revision IS NOT NULL` and `archived_revision IS NOT NULL`.
 
 #### 2.3.1 Text format
 
-The body is CommonMark 0.31.2 source text, of type `markdown(50000)` (owner decision, 2026-11-19). Proposal: the maximum of 50,000 characters stops abuse without constraining a long essay, and is reviewed if real testimonies approach it. The body has at least one non-whitespace character.
+The body is CommonMark 0.31.2 source text, of type `markdown(50000)` (owner decision, 2026-11-19). Proposal: the maximum of 50,000 characters stops abuse without constraining a long essay, and is reviewed if real testimonies approach it. The body is trimmed and has at least one non-whitespace character.
 
 1. Only CommonMark is accepted, with no extensions (no tables, footnotes or task lists).
 2. Raw HTML is never rendered: the renderer runs with HTML disabled, so any HTML in the source shows as literal text.
@@ -215,60 +220,46 @@ Constraints:
 
 Public values: `18-24`, `25-34`, `35-44`, `45-54`, `55-64`, `65-74`, `75-plus`. A minor's testimony shows no age and no age range at all. An "under-18" label would itself mark the contributor as a minor, which makes them a target ([privacy research](../research/privacy-failures.md), R17.2; legal research, section 4). A minor who wants to say they are young can say so in the text. The declared age band used for consent (section 2.8) is a separate field, and is never derived from or into the public value.
 
-### 2.5 Revisions, review groups and the public timeline
+### 2.5 Revisions, review and the public timeline
 
-A testimony can be edited freely, anywhere in the text: a typo, a sentence in the middle, or a new chapter (owner decision, 2026-11-19). Edits are not limited to addenda. Every edit is just an edit: there is no separate "request changes" step, and any edit opens or joins a review. The public history stays visible as a timeline of dated revisions, but superseded text is not kept once its review is complete, so that a contributor can genuinely remove something, such as personal data added by mistake.
-
-#### Revision
+A testimony can be edited freely, anywhere in the text: a typo, a sentence in the middle, or a new chapter (owner decision, 2026-11-19). Edits are not limited to addenda. Every edit is just an edit: there is no separate "request changes" step. The revision, which holds the content, is the unit of review (owner decision, 2026-11-19). The public history stays visible as a timeline of dated revisions, but superseded text is not kept once it has been reviewed, so that a contributor can genuinely remove something, such as personal data added by mistake.
 
 | Field | Type | Class | Notes |
 | --- | --- | --- | --- |
 | `testimony` | `ref(Testimony)` | operational | |
 | `sequence` | `pos` | operational | Order of saving, per testimony |
 | `revision_number` | `pos?` | public | Assigned when the revision first becomes public, in order; never reused, because citations name it (identifiers, section 6) |
-| `review` | `ref(Review)?` | operational | The review group it belongs to while that group is open |
-| `body` | `markdown(50000)?` | public while current, private otherwise | Kept while it is current, or while its review group is open; deleted otherwise (rule 3) |
+| `review_state` | `enum(pending, approved, returned)` | operational | |
+| `body` | `markdown(50000)?` | public while shown, private otherwise | Kept only while needed (rule 7) |
 | `summary` | `line(200)?` | public | Optional "what changed" line written by the contributor |
 | `submitted_at` | `instant` | private | |
 | `live_at` | `instant?` | public as a date | When the revision became public, if it did |
-| `is_current` | `bool` | operational | The revision shown publicly, or the latest text of an unpublished testimony |
+| `reviewed_at` | `instant?` | operational | |
+| `review_record` | `ref(ModerationRecord)?` | operational | For a returned revision: the record with rule, reason and guidance |
 
 Constraints:
 
 1. `(testimony, sequence)` and `(testimony, revision_number)` are unique.
-2. At most one revision per testimony has `is_current`, by a partial unique index.
-3. `(revision_number IS NULL) = (live_at IS NULL)`.
-4. `is_current` implies `body IS NOT NULL`.
-5. Domain layer: a `body` is present only on the current revision, on revisions of an open review group, and on the baseline of an open group (rule 3).
-
-#### Review
-
-The unit of moderation is the review group: everything that happened to one testimony since its last completed review, reviewed at once. The moderator never approves micro-edits one by one.
-
-| Field | Type | Class | Notes |
-| --- | --- | --- | --- |
-| `testimony` | `ref(Testimony)` | operational | |
-| `opened_at` | `instant` | operational | At the first submission or first edit after the last completed review |
-| `baseline` | `ref(Revision)?` | operational | The last approved revision, kept until the group closes; absent for a first submission |
-| `closed_at` | `instant?` | operational | |
-| `outcome` | `enum(approved, returned)?` | operational | |
-
-Constraints: at most one open review per testimony, by a partial unique index; `(closed_at IS NULL) = (outcome IS NULL)`.
+2. `(revision_number IS NULL) = (live_at IS NULL)`.
+3. `(review_state = 'pending') = (reviewed_at IS NULL)`.
+4. `review_state = 'returned'` implies `review_record IS NOT NULL`.
+5. Domain layer: the testimony's `public_revision` and `archived_revision` have a body, and `archived_revision` is `approved`.
 
 Rules:
 
-1. Submitting a testimony opens a review group. Edits made before the moderator decides join the same group, so "submit, then fix a typo a minute later" is one review.
-2. An edit to a published testimony goes live at once and opens or joins a review group, reviewed afterwards (owner decision, 2026-11-19). Reports are the safety net, and under the DSA a host acts once it knows (illegal-content protocol, section 2). Exception: edits to the testimony of a contributor under 16 are held until reviewed, because the publication restrictions need a moderator; until then the previous revision stays public. There is no edit size limit.
-3. While a group is open, the baseline and every revision in the group keep their text. The review interface shows them as a timeline with exact times, and offers both the whole diff from the baseline to the latest revision and the diff between any two consecutive items. Diffs highlight individual changed words, not only lines, in the manner of an editor's side-by-side diff view (exact design in the frontend phase); Python's standard `difflib` computes them. When the group closes, every body in it except the resulting current revision is deleted.
-4. Approving a group makes its latest revision current and public. On first approval the testimony gets its `public_id`; each revision that becomes public gets the next `revision_number`.
-5. Returning a group sends the testimony back to its contributor with the rule, the reason and guidance on what to change. The latest text stays available to the contributor, who edits it, which opens a new group.
-   - For a testimony never published, the testimony becomes `returned` and stays private.
-   - For a published testimony whose group contains live edits, the baseline text becomes current again, as a new revision with the next number and the summary "Earlier text restored", so that no revision number is reused. The testimony stays published.
-   - For a published testimony whose approved text itself must not stay public, for example personal data reported after approval, the testimony becomes `returned` and is hidden until the contributor edits it.
-6. There is no moderator redaction: the moderator never changes a contributor's text. Returning with guidance replaces it, so the public record never carries a permanent "redacted" mark. Returned is an ordinary outcome, and its wording must not suggest a sanction: most returns are about accidents, such as a colleague's name or a phone number, made in good faith.
-7. The public page shows a short timeline, folded by default: one line per day, with the date and the summaries of that day's revisions, ordered by `live_at`.
-8. An edition keeps the revision that was current at build time. Earlier editions keep the text they captured. A contributor who wants removed text taken out of hosted editions too asks for it, and a privacy revision follows (deletion lifecycle, section 1).
-9. Identity and structured fields are edited with the same flow and appear in the timeline as "details updated", without their old values.
+1. **What is reviewed.** A testimony's pending revisions, those saved since its last reviewed revision, are reviewed together, and the moderator decides on the latest. "Submit, then fix a typo a minute later" is one review. The review interface shows the pending revisions as a timeline with exact times, with the whole diff from the last approved revision to the latest and the diff between any two consecutive revisions. Diffs highlight individual changed words, not only lines, in the manner of an editor's side-by-side diff view (exact design in the frontend phase); Python's standard `difflib` computes them.
+2. **Approving** marks the pending revisions `approved`. The latest becomes both `public_revision` and `archived_revision`. On first approval the testimony becomes `published` and gets its `public_id`; each revision that becomes public gets the next `revision_number`.
+3. **Edits to a published testimony go live at once,** as pending revisions shown publicly, and are reviewed afterwards (owner decision, 2026-11-19). Reports are the safety net, and under the DSA a host acts once it knows (illegal-content protocol, section 2). Exception: edits to the testimony of a contributor under 16 stay private until approved, because the publication restrictions need a moderator. There is no edit size limit.
+4. **`public_revision`** is the latest live revision that has not been returned. **`archived_revision`** is the latest approved revision. They differ only while live edits await review.
+5. **Returning** marks the pending revisions `returned`, with the rule, the reason and guidance on what to change, sent to the contributor in one email. The latest returned text stays available to the contributor, who edits it; the edit is a new pending revision. Returned revisions are never public. Returning is an ordinary outcome, and its wording must not suggest a sanction: most returns are about accidents made in good faith, such as a colleague's name or a phone number.
+6. **Returning on a published testimony** leaves the moderator two options:
+   1. keep the previous version: `public_revision` goes back to `archived_revision`, and the testimony stays published. The returned revisions leave the public timeline, and their numbers are not reused;
+   2. quarantine: when the previously approved text itself must not stay public, for example personal data reported after approval, the testimony becomes `quarantined` with reason `awaiting-edit`, and is hidden until its contributor submits an edit and that edit is approved. It stays hidden indefinitely if no edit comes, so that the project does not have to choose a deletion policy for it (owner decision, 2026-11-19). Quarantine for suspected illegal content uses reason `legal-hold` and follows the illegal-content protocol.
+7. **Bodies kept.** A revision keeps its body while it is the `public_revision`, the `archived_revision`, pending, or the latest returned revision of its testimony. Its body is deleted as soon as it is none of these, so reviewed and superseded text does not accumulate.
+8. **Editions export `archived_revision`,** never unreviewed text. An edition keeps the revision it captured; a contributor who wants text removed from hosted editions asks for it, and a privacy revision follows (deletion lifecycle, section 1).
+9. **There is no moderator redaction.** The moderator never changes a contributor's text, so the public record never carries a "redacted" mark.
+10. **The public page** shows a short timeline, folded by default: one line per day, with the date and the summaries of that day's public revisions, ordered by `live_at`.
+11. Identity and structured fields are edited with the same flow and appear in the timeline as "details updated", without their old values.
 
 ### 2.6 Authorship disclosure (`public`)
 
@@ -277,14 +268,17 @@ As defined in [authorship disclosure](../constitution/authorship-disclosure.md).
 | Field | Type | Class | Notes |
 | --- | --- | --- | --- |
 | `category` | `enum(AuthorshipCategory)` | public | Required |
-| `model_or_product` | `line(200)?` | public | |
-| `model_version` | `line(100)?` | public | |
-| `mode_or_setting` | `line(200)?` | public | |
-| `workflow` | `text(5000)?` | public | Prompts or workflow description |
-| `changes_after` | `text(5000)?` | public | What the person changed afterwards |
-| `comment` | `text(2000)?` | public | |
+| `provider` | `line(100)?` | public | For example OpenAI, Anthropic |
+| `product` | `line(100)?` | public | For example ChatGPT, Claude Code |
+| `model` | `line(100)?` | public | For example GPT, Claude |
+| `model_version` | `line(100)?` | public | Version, or a representative date where there is none |
+| `mode_or_setting` | `line(200)?` | public | For example effort level, temperature |
+| `inputs` | `markdown(1000)?` | public | What information the AI system received or had access to |
+| `workflow` | `markdown(1000)?` | public | Prompts or workflow description |
+| `changes_after` | `markdown(1000)?` | public | What the person changed afterwards |
+| `comment` | `markdown(1000)?` | public | |
 
-Constraint: `category IN ('none', 'undisclosed')` implies that `model_or_product`, `model_version`, `mode_or_setting` and `workflow` are absent.
+Constraint: `category IN ('none', 'undisclosed')` implies that `provider`, `product`, `model`, `model_version`, `mode_or_setting`, `inputs` and `workflow` are absent.
 
 ### 2.7 Structured testimony fields (`public`, optional)
 
@@ -353,16 +347,16 @@ Only published testimonies may be machine-translated, and only through an EU pro
 | Field | Type | Class | Notes |
 | --- | --- | --- | --- |
 | `testimony` | `ref(Testimony)?` | operational | Cleared at withdrawal unless a legal hold applies (deletion lifecycle, section 3) |
-| `review` | `ref(Review)?` | operational | The review group decided (section 2.5) |
-| `decision` | `enum(approve, return, remove, quarantine, restrict-account)` | operational | `return` sends the testimony back to its contributor with guidance (section 2.5, rule 5) |
-| `guidance` | `text(2000)?` | operational | For `return`: what to change, written for the contributor and sent with the statement of reasons |
+| `revision` | `ref(Revision)?` | operational | The latest revision of the review decided (section 2.5, rule 1) |
+| `decision` | `enum(approve, return, return-and-quarantine, remove, quarantine, restrict-account)` | operational | `return` keeps the previous version public; `return-and-quarantine` hides the testimony until an edit is approved (section 2.5, rules 5 and 6); `quarantine` is the legal hold |
+| `guidance` | `text(2000)?` | operational | For returns: what to change, written for the contributor and sent with the statement of reasons |
 | `rule` | `line(50)?` | operational | Identifier of the publishing rule applied (moderation principles, "Practice" 1) |
 | `note` | `text(5000)?` | operational | Private moderator note. Must not copy the offending content (#41). |
 | `decided_by` | `line(100)` | operational | |
 | `decided_at` | `instant` | operational | |
 | `statement_sent_at` | `instant?` | operational | Statement of reasons to the contributor (DSA art. 17, legal research section 5) |
 
-Constraints: `decision IN ('return', 'remove', 'restrict-account')` implies `rule IS NOT NULL`; `decision = 'return'` implies `guidance IS NOT NULL`.
+Constraints: `decision IN ('return', 'return-and-quarantine', 'remove', 'restrict-account')` implies `rule IS NOT NULL`; `decision IN ('return', 'return-and-quarantine')` implies `guidance IS NOT NULL`.
 
 ### 2.11 Notice (`operational`)
 
@@ -438,54 +432,50 @@ Constraint: the UTC date of `built_at` is later than `cutoff`.
 
 ## 3. Testimony states
 
+The testimony's state describes its place in the archive. Review happens on revisions (section 2.5), so a returned edit does not change the state of a published testimony.
+
 ```mermaid
 stateDiagram-v2
     [*] --> draft: create
-    draft --> in_review: submit
     draft --> [*]: discard, or abandoned
-    in_review --> in_review: edit (joins the review group)
-    in_review --> published: approve
-    in_review --> returned: return with guidance
-    returned --> in_review: edit
-    returned --> [*]: deleted after the retention period, if never published
-    published --> published: edit (live at once, reviewed afterwards)
-    published --> returned: return, when the approved text must not stay public
-    published --> withdrawn: withdrawal or removal
-    in_review --> quarantined: suspected illegal content
-    published --> quarantined: suspected illegal content
-    returned --> quarantined: suspected illegal content
+    draft --> submitted: submit
+    submitted --> submitted: edit, or revision returned
+    submitted --> published: revision approved
+    submitted --> [*]: deleted after the retention period, if the latest revision was returned and never edited
+    published --> published: edit, approval, or return keeping the previous version
+    published --> quarantined: awaiting edit, or legal hold
+    submitted --> quarantined: legal hold
+    quarantined --> published: edit approved, or hold lifted
     quarantined --> withdrawn: as the protocol allows
-    quarantined --> returned: as the protocol allows
     quarantined --> [*]: deleted, as the protocol allows
+    published --> withdrawn: withdrawal or removal
     withdrawn --> [*]
 ```
 
-Withdrawn is final apart from its tombstone, which is permanent (section 2.13).
+A withdrawn testimony's tombstone is permanent (section 2.13).
 
 | From | To | Who | Effect |
 | --- | --- | --- | --- |
 | none | `draft` | contributor | `internal_id` assigned |
-| `draft` | `in_review` | contributor | Consent record written. `received_at` and `edition_period` are set on first submission only. A review group opens (section 2.5, rule 1). |
-| `in_review` | `in_review` | contributor | The edit joins the open review group |
-| `in_review` | `published` | moderator | The group is approved. `public_id` and `published_at` set on first publication, the latest revision becomes public, search index and static renderings updated |
-| `in_review` | `returned` | moderator | The group is returned with rule, reason and guidance (section 2.5, rule 5). Statement of reasons sent. |
-| `returned` | `in_review` | contributor | Any edit opens a new review group |
-| `published` | `published` | contributor | An edit goes live at once and opens or joins a review group (section 2.5, rule 2) |
-| `published` | `published` | moderator | A group with live edits is returned: the baseline text is restored as a new revision (section 2.5, rule 5) |
-| `published` | `returned` | moderator | The approved text must not stay public. The testimony is hidden until edited. |
+| `draft` | `submitted` | contributor | Consent record written. `received_at` and `edition_period` set. The first revision is pending. |
+| `submitted` | `submitted` | contributor or moderator | An edit adds a pending revision; a review that returns the revisions leaves the testimony unpublished |
+| `submitted` | `published` | moderator | A revision is approved (section 2.5, rule 2). `public_id` and `published_at` set, search index and static renderings updated. |
+| `published` | `published` | contributor or moderator | An edit goes live as a pending revision; approval confirms it; a return restores the previous version (section 2.5, rules 3 to 6) |
+| `published` | `quarantined` | moderator | Reason `awaiting-edit` (section 2.5, rule 6) or `legal-hold` (illegal-content protocol). Hidden everywhere, excluded from exports, search and caches. Under `legal-hold`, the moderation interface shows metadata only, never the text, unless the custodian deliberately opens it. |
+| `submitted` | `quarantined` | moderator | Reason `legal-hold` only |
+| `quarantined` | `published` | moderator | `awaiting-edit`: an edit by the contributor is approved. `legal-hold`: the hold ends and the content is lawful. |
+| `quarantined` | `withdrawn` or deleted | moderator | Only as the protocol and the authorities' instructions allow, recorded in the moderation record |
 | `published` | `withdrawn` | contributor | Withdrawal request verified. Deletion lifecycle runs and a tombstone remains. |
 | `published` | `withdrawn` | moderator | Removal after a notice or a later finding, for content that editing cannot fix. Same public effect, cause recorded privately. |
-| `in_review`, `published`, `returned` | `quarantined` | moderator | Suspected illegal content or a threat, per the [illegal-content protocol](../operations/illegal-content.md). The testimony is hidden everywhere, excluded from exports, search and caches. It is not deleted, and the moderation interface shows its metadata only, never its text, unless the custodian deliberately opens it. A published testimony's URL answers 410, like a withdrawal. |
-| `quarantined` | `withdrawn`, `returned` or deleted | moderator | Only as the protocol and the authorities' instructions allow, recorded in the moderation record |
-| `draft` | deleted | contributor or system | Discarded by the contributor, or abandoned after the inactivity period. No public ID ever existed. |
-| `returned` | deleted | system | Only if never published, after the retention period without an edit |
+| `draft` | deleted | contributor or system | Discarded, or abandoned after the inactivity period. No public ID ever existed. |
+| `submitted` | deleted | system | Only if the latest revision was returned and the contributor did not edit it within the retention period ([retention schedule](retention.md)) |
 
 Invariants (the constraints of section 2.3 enforce the first and third in the database):
 
 1. A testimony has a `public_id` if and only if it has been published at least once.
-2. Only `published` testimonies are rendered at their URL. Every other state, including deleted and a returned testimony that was once published, answers the same 404, except withdrawn and quarantined-after-publication, which answer 410 ([identifiers](identifiers.md), section 3).
+2. Only `published` testimonies are rendered at their URL. Every other state, including deleted and quarantined, answers the same 404, except withdrawn, which answers 410 with the tombstone ([identifiers](identifiers.md), section 3). A quarantined testimony answers 404 rather than 410 because quarantine can be lifted, and 410 means gone for good.
 3. No path leads from `withdrawn` back to `published`. A contributor who changes their mind submits a new testimony, which gets a new `public_id`; the withdrawn one no longer counts against the one-testimony rule because its account link is cleared.
-4. A withdrawal request on a `quarantined` testimony is recorded and answered within the deadline, but executed only once the legal hold ends. Erasure can be limited where the data is needed for legal claims or a legal obligation (GDPR art. 17(3); to be confirmed in #41's open items).
+4. A withdrawal request on a testimony quarantined for `legal-hold` is recorded and answered within the deadline, but executed only once the hold ends; under `awaiting-edit` it is executed normally. Erasure can be limited where the data is needed for legal claims or a legal obligation (GDPR art. 17(3); to be confirmed in #41's open items).
 5. The consent record of the submission that led to publication is kept while the testimony is published.
 
 ## 4. Relationships and linkability
@@ -509,7 +499,7 @@ Retention periods are specified in the [retention schedule](retention.md). This 
 | Object | Clock starts at |
 | --- | --- |
 | Abandoned draft | Last edit |
-| Returned testimony that was never published | Return, if the contributor does not edit it |
+| Submitted testimony never published, whose latest revision was returned | Return, if the contributor does not edit it |
 | Moderation records | Decision |
 | Sign-in tokens | Creation |
 | Rate-limit counters | Window start |
@@ -524,9 +514,9 @@ Full-text search uses PostgreSQL per-language configurations: `french` and `engl
 ## 8. Open questions
 
 1. [x] Vocabulary structure: named enumerations with `other` and free text for open vocabularies (section 1.5, 2026-11-19). Still to do in #27: wording and translation review of the labels, the `Field` list, and filter thresholds.
-2. [x] Contributors edit their pending submission freely; there is no "request changes" step, and edits join the open review group (section 2.5, 2026-11-19).
-3. [x] Moot: there are no moderator redactions (section 2.5, rule 6).
-4. [ ] The maximum lengths in section 2 and the structured-field set (section 2.7) are proposals.
-5. [x] Moot: there are no redaction notes (section 2.5, rule 6).
-6. [ ] Filter thresholds and the allowed filters belong to #27, to be designed later (privacy research, R27.1 to R27.10). For example: no value shown below 10 matches, no age or sensitive-category filters, country-level geography only.
-7. [ ] What happens to a once-published testimony that stays `returned` because its contributor never edits it: kept hidden indefinitely, or withdrawn after a period with notice.
+2. [x] Contributors edit their pending submission freely; there is no "request changes" step, and pending revisions are reviewed together (section 2.5, 2026-11-19).
+3. [x] Moot: there are no moderator redactions (section 2.5, rule 9).
+4. [x] The maximum lengths in section 2 are accepted, and the authorship fields were extended by the owner (sections 2.6 and 2.7, 2026-11-19).
+5. [x] Moot: there are no redaction notes (section 2.5, rule 9).
+6. [x] Moved: filters belong to the [browsing and filters](browsing-and-filters.md) spec, where N = 10 is now decided (2026-11-19).
+7. [x] A published testimony quarantined `awaiting-edit` stays hidden, with one email to the contributor carrying the moderator's message (section 2.5, rule 6, 2026-11-19). Its retention, and that of never-published returned submissions, is in the [retention schedule](retention.md), rows 9 and 31, for review with the rest of the schedule.

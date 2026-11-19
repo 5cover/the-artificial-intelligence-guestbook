@@ -23,8 +23,7 @@ Decisions waiting for the owner, grouped by the work they unblock. The recommend
 
 1. The review window, and who reviews while the custodian moderates alone ([publishing rules](../legal/publishing-rules.md)).
 2. A separate code for defamation ([publishing rules](../legal/publishing-rules.md)).
-3. Automatic hiding for urgent reports and its caps, report rate limits, and target deadlines ([reports](../specs/reports.md), section 6).
-4. The outside contact for wellbeing and qualification ([illegal-content protocol](../operations/illegal-content.md), section 8).
+3. The outside contact for wellbeing and qualification ([illegal-content protocol](../operations/illegal-content.md), section 8).
 
 ### Context (#36)
 

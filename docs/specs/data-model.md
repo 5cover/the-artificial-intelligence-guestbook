@@ -201,7 +201,7 @@ A published testimony can be edited freely, anywhere in the text: a typo, a sent
 | `revision_number` | `pos` | public | 1 is the first published text |
 | `state` | `enum(pending, current, superseded, rejected)` | operational | `pending` only for edits held for prior review (rule 1) |
 | `reviewed` | `bool` | operational | Whether a moderator has reviewed this revision or a later batch including it |
-| `body` | `markdown(50000)?` | public while current, private otherwise | Present while `pending` or `current`, and for the last reviewed revision until the batch after it is reviewed (rule 4) |
+| `body` | `markdown(50000)?` | public while current, private otherwise | Present while `pending` or `current`, and for the last reviewed revision until the batch after it is reviewed (rule 3) |
 | `summary` | `line(200)?` | public | Optional "what changed" line written by the contributor, moderated with the edit |
 | `source` | `enum(contributor, moderator)` | public | `contributor` for the first text and every edit, `moderator` for a redaction |
 | `reason` | `line(500)?` | operational | For redactions: the publishing rule cited |
@@ -219,14 +219,13 @@ Constraints:
 
 Rules:
 
-1. An edit to a published testimony goes live at once, and is reviewed afterwards (owner decision, 2026-11-19). This follows common practice for an author's own edits to approved content; reports are the safety net, and under the DSA a host acts once it knows (illegal-content protocol, section 2). Exceptions, reviewed before they go live: edits to the testimony of a contributor under 16, whose publication restrictions need a moderator, and edits over the daily edit budget (rule 2).
-2. Each testimony has a daily edit budget, measured as the number of words inserted plus words deleted, by the same word diff the reviewer sees (rule 3). Keystrokes are not used because they are measured in the browser and are easy to fake; character-level Levenshtein distance is costly on long texts and no more meaningful. Proposal: 500 changed words per UTC day. An edit over the budget is not refused: it is held for review before it goes live, like a first submission.
-3. Unreviewed edits are batched per testimony. The review interface shows one word-level diff, in the style of `git diff --word-diff`, from the last reviewed revision to the current one, next to the metadata: revision numbers, dates, summaries and the identity fields changed. Python's standard `difflib` is sufficient to compute it. Approving the batch marks the current revision as reviewed. Rejecting it restores the last reviewed revision, with a statement of reasons.
-4. When an edit goes live it becomes `current`. The revision it replaces becomes `superseded`, and its number, date, summary and source remain as a timeline entry. Its body is deleted once it is no longer needed: immediately for intermediate revisions of an unreviewed batch, and at the end of review for the last reviewed revision, which is kept only so that a rejected batch can be undone. A rejected edit held for prior review is deleted except for its moderation record.
-5. The public page shows a short timeline, folded by default: one line per day, with the date and the summaries of that day's revisions. Revisions are ordered by `published_at`, and grouped by day because only dates are public.
-6. A moderator redaction is a revision with `source = 'moderator'` and no summary; its timeline entry says that part of the text was redacted, not what. Proposal: the pre-redaction text is kept privately for the dispute period of the retention schedule, then deleted (moderation principles, "Practice" 3).
-7. An edition keeps the revision that was current at build time. Earlier editions keep the text they captured. A contributor who wants removed text taken out of hosted editions too asks for it, and a privacy revision follows (deletion lifecycle, section 1).
-8. Identity and structured fields are edited with the same flow and appear in the timeline as "details updated", without their old values.
+1. An edit to a published testimony goes live at once, and is reviewed afterwards (owner decision, 2026-11-19). This follows common practice for an author's own edits to approved content; reports are the safety net, and under the DSA a host acts once it knows (illegal-content protocol, section 2). Exceptions, reviewed before they go live: edits to the testimony of a contributor under 16, whose publication restrictions need a moderator. There is no edit size limit: an in-depth new section is a legitimate edit, and batching makes many small edits cost no more to review than one.
+2. Unreviewed edits are batched per testimony. The review interface shows one diff from the last reviewed revision to the current one, highlighting individual changed words and not only changed lines, in the manner of a side-by-side editor diff view (exact design in the frontend phase), next to the metadata: revision numbers, dates, summaries and the identity fields changed. Python's standard `difflib` is sufficient to compute it. Approving the batch marks the current revision as reviewed. Rejecting it restores the last reviewed revision, with a statement of reasons.
+3. When an edit goes live it becomes `current`. The revision it replaces becomes `superseded`, and its number, date, summary and source remain as a timeline entry. Its body is deleted once it is no longer needed: immediately for intermediate revisions of an unreviewed batch, and at the end of review for the last reviewed revision, which is kept only so that a rejected batch can be undone. A rejected edit held for prior review is deleted except for its moderation record.
+4. The public page shows a short timeline, folded by default: one line per day, with the date and the summaries of that day's revisions. Revisions are ordered by `published_at`, and grouped by day because only dates are public.
+5. A moderator redaction is a revision with `source = 'moderator'` and no summary; its timeline entry says that part of the text was redacted, not what. Proposal: the pre-redaction text is kept privately for the dispute period of the retention schedule, then deleted (moderation principles, "Practice" 3).
+6. An edition keeps the revision that was current at build time. Earlier editions keep the text they captured. A contributor who wants removed text taken out of hosted editions too asks for it, and a privacy revision follows (deletion lifecycle, section 1).
+7. Identity and structured fields are edited with the same flow and appear in the timeline as "details updated", without their old values.
 
 ### 2.6 Authorship disclosure (`public`)
 
@@ -339,7 +338,7 @@ Constraint: `(outcome IS NULL) = (outcome_at IS NULL)`.
 
 | Field | Type | Class | Notes |
 | --- | --- | --- | --- |
-| `scope` | `enum(testimony, field, earlier-text, account)` | operational | The testimony; one public-identity field; superseded text still present in hosted editions (section 2.5, rule 5); or the testimony and the account |
+| `scope` | `enum(testimony, field, earlier-text, account)` | operational | The testimony; one public-identity field; superseded text still present in hosted editions (section 2.5, rule 6); or the testimony and the account |
 | `field_name` | `enum(display_name, age_range, country, region, languages, profession, field, organization, organization_type, relationship_to_ai, link)?` | operational | For `scope = 'field'` only |
 | `testimony` | `ref(Testimony)?` | operational | Cleared when the request completes |
 | `requested_at` | `instant` | operational | |
@@ -410,7 +409,7 @@ draft or submitted --discard, or abandon after inactivity--> deleted
 | `under_review` | `draft` | moderator | Changes requested with a message (moderation principles, "Practice" 2) |
 | `under_review` | `rejected` | moderator | Statement of reasons sent |
 | `published` | `published` | contributor | An edit goes live at once and joins the review queue, unless it is held for prior review (section 2.5, rule 1) |
-| `published` | `published` | moderator | Rejection of an unreviewed batch: the last reviewed revision is restored (section 2.5, rule 3) |
+| `published` | `published` | moderator | Rejection of an unreviewed batch: the last reviewed revision is restored (section 2.5, rule 2) |
 | `published` | `published` | moderator | Redaction, as a new revision |
 | `published` | `withdrawn` | contributor | Withdrawal request verified. Deletion lifecycle runs and a tombstone remains. |
 | `published` | `withdrawn` | moderator | Removal after a notice or a later finding. Same public effect, cause recorded privately. |
@@ -465,7 +464,7 @@ Full-text search uses PostgreSQL per-language configurations: `french` and `engl
 
 - The controlled vocabularies (`field`, `relationship_to_ai`, `attitude` and others) need wording and translation review, and filter thresholds (#27).
 - Whether contributors may edit their own pending submission after submitting, or only through "request changes".
-- Whether edits are moderated before they become public (section 2.5, rule 1, proposed) and how long pre-redaction text is kept (rule 6).
+- How long pre-redaction text is kept (section 2.5, rule 5).
 - The maximum lengths in section 2 and the structured-field set (section 2.7) are proposals.
 - Whether a redacted testimony shows a visible "part of this text was redacted" note, on the site and in editions. The note serves transparency, but the Hurbain v. Belgium court found such notes can perpetuate stigma ([privacy research](../research/privacy-failures.md), R16.8, question 8).
 - Filter thresholds and the allowed filters belong to #27 (privacy research, R27.1 to R27.10). For example: no value shown below 10 matches, no age or sensitive-category filters, country-level geography only.

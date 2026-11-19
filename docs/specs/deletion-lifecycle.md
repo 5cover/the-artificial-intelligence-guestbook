@@ -14,7 +14,7 @@ The goal is that deletion is a procedure, not an investigation (deletion philoso
 | --- | --- | --- |
 | Withdraw a testimony | The contributor | The testimony, its versions, identity, disclosure, structured fields, translations and consent record |
 | Withdraw one identity field | The contributor | One public-identity field (for example the display name). Produces a new public version and a privacy revision of editions containing the old value. |
-| Remove superseded text from editions | The contributor | Text that an edit removed but that hosted editions still contain (data model, section 2.5, rule 5). Produces a privacy revision of those editions with the current text. |
+| Remove superseded text from editions | The contributor | Text that an edit removed but that hosted editions still contain (data model, section 2.5, rule 6). Produces a privacy revision of those editions with the current text. |
 | Close the account | The contributor | The account's testimony (withdrawn as above), then the account |
 | Removal after a notice or a later finding | The moderator | As a testimony withdrawal; the cause is recorded privately (data model, section 2.13) |
 | Erasure of data collected from a minor | The contributor, as a minor or later as an adult | As a testimony withdrawal, handled "dans les meilleurs délais" (Loi I&L art. 51 II, legal research section 4). No adult's approval is needed. |

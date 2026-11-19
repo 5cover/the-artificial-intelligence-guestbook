@@ -6,7 +6,7 @@ Issue: #27
 
 Basis: plan section 13; [editorial principles](../constitution/editorial-principles.md), "Presentation"; [privacy assumptions](../constitution/privacy-assumptions.md) 7; [data model](data-model.md); [privacy research](../research/privacy-failures.md), sections 3 and 4.5 (R27.1 to R27.10).
 
-Visitors choose what to look for: chronological browsing, full-text search and filters. There is no ranking, recommendation, "related testimonies" or personalized feed (editorial principles, "Presentation" 1). The privacy risk is that filters and counts narrow a set until a person stands out. Anonymity fails through combinations of ordinary attributes (privacy research, lessons 1 and 2).
+Visitors choose what to look for: chronological browsing, full-text search and filters. There is no ranking, recommendation, "related testimonies" or personalized feed (editorial principles, "Presentation" 1). Anonymity fails through combinations of ordinary attributes (privacy research, lessons 1 and 2). Because every public field is published in the index, that risk is handled by what is published, not by the filters (sections 3 and 4).
 
 ## 1. Browsing
 
@@ -30,53 +30,39 @@ Visitors choose what to look for: chronological browsing, full-text search and f
 
 ## 3. Filters
 
-### 3.1 Allowed and excluded filters
+Filters are a convenience, not a privacy control (owner decision, 2026-11-19). Every public field is already shown on its testimony page and listed in the public index (`/data/testimonies.json` and each edition's `index.json`), so anyone can filter the full set offline. Hiding rare values or counts in the interface would not protect an author, and would leave the guestbook unsearchable in its first months. Privacy is decided earlier, by which fields are public at all and by the contribution form (section 4).
 
-| Filter | Allowed | Notes |
-| --- | --- | --- |
-| Original language | Yes | |
-| Translation available in language | Yes | |
-| Country | Yes | Country level only (R27.5) |
-| Region | No (owner decision, 2026-11-19) | Reconsidered after launch, if enough testimonies give a region (proposals README, deferred decisions) |
-| Field (controlled list) | Yes | Not combined with country (R27.4) |
-| Relationship to AI | Yes | |
-| Frequency of AI use | Yes | |
-| Self-described attitude | Yes | |
-| AI-authorship category | Yes | |
-| Edition period (year) | Yes | |
-| Age range | No | R27.4. Also, minors have no public age at all (data model, section 2.4.1). |
-| Organization, organization type | No | Too identifying in small sets (R27.4) |
-| Profession (free text) | No | Free text is searchable through full-text search only |
-| Any special-category inference | No | Never derived, never filtered (legal research, section 3) |
+### 3.1 Filters offered
 
-### 3.2 Thresholds
+Every public field with a controlled vocabulary is a filter: original language, translation language, country, field, relationship to AI, organization type, age range, frequency of AI use, self-described attitude, AI-authorship category, and edition period. Free-text fields (profession, organization, region, and the `_note` fields) are reached through full-text search, not filters.
 
-1. N = 10 (owner decision, 2026-11-19). A filter value is offered only when at least N published testimonies match it (R27.1).
-2. A combination of filters, or of filters and a search query, whose result has fewer than N testimonies is not shown. The page says "too few testimonies match these criteria to show them", without revealing how many (R27.2).
-3. Counts are not displayed. A value is either offered or not. This avoids differencing attacks, where comparing two counts before and after a withdrawal reveals the removed testimony (R27.3).
-4. Thresholds are computed on the published set only, and recomputed on each publication or withdrawal.
+1. A filter value with no matching testimony is not offered. There is no other threshold.
+2. Filters combine freely with each other and with a search query.
+3. Counts may be shown.
+4. Nothing is ever derived or filtered that the contributor did not state, in particular no inferred special-category data (legal research, section 3).
+5. A region filter is a deferred decision, to reconsider once enough testimonies give a region ([proposals README](../proposals/README.md), deferred decisions).
 
-### 3.3 Search engines and archiving
+### 3.2 Search engines and archiving
 
-1. Filter and search result pages carry `noindex`, so combinations are not crawled or archived. Testimony pages and the plain chronological listing are indexable.
+1. Filter and search result pages carry `noindex`, so that combinations are not crawled or archived as pages of their own. Testimony pages and the plain chronological listing are indexable.
 2. Filter URLs use stable, readable parameters, but are not permanent URLs ([identifiers](identifiers.md)).
 
-## 4. What thresholds cannot do
+## 4. Where privacy is decided
 
-Thresholds protect the browsing interface, not the testimony page. A testimony page shows what its contributor chose to publish, however rare that combination is. In the first months every combination is rare. The protection for an individual therefore comes from the contribution form:
+The interface cannot protect a combination of fields that the archive publishes. Protection comes from what is published and how the contributor is asked:
 
 - every identity field is optional, and empty by default;
 - the consent text explains that each detail makes identification easier (privacy research, section 5);
-- region is never a filter.
+- minors' testimonies publish no age, link, organization or region ([data model](data-model.md), section 2.4);
+- a field too identifying to publish should not be public at all; hiding it from filters would not help.
 
 ## 5. Editions
 
-1. Editions contain each testimony's public fields as published (archive format). The filter thresholds do not alter records.
-2. `index.csv` and `index.json` list testimonies, not aggregates. Any aggregate statistics added to an edition (for example counts per country) apply the same threshold, with values below N suppressed (R27.10).
-3. A test cross-tabulates the exported fields used by aggregates against the threshold.
+1. Editions contain each testimony's public fields as published (archive format).
+2. `index.csv` and `index.json` list testimonies with their public fields. Aggregate statistics, if added, are computed from the same public data.
 
 ## 6. Open questions
 
-- The value of N, and whether rarely populated filters should exist at all (privacy research, question 1).
+- Resolved (2026-11-19): no threshold, no excluded filters (section 3).
 - Resolved (2026-11-19): no region filter; a region filter is a deferred decision.
 - Resolved (2026-11-19): dates to the day on listings and testimony pages.

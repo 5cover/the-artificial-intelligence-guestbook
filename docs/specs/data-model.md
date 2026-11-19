@@ -513,10 +513,10 @@ Full-text search uses PostgreSQL per-language configurations: `french` and `engl
 
 ## 8. Open questions
 
-1. [x] Vocabulary structure: named enumerations with `other` and free text for open vocabularies (section 1.5, 2026-11-19). Still to do in #27: wording and translation review of the labels, the `Field` list, and filter thresholds.
+1. [x] Vocabulary structure: named enumerations with `other` and free text for open vocabularies (section 1.5, 2026-11-19). Still to do in #27: wording and translation review of the labels, and the `Field` list.
 2. [x] Contributors edit their pending submission freely; there is no "request changes" step, and pending revisions are reviewed together (section 2.5, 2026-11-19).
 3. [x] Moot: there are no moderator redactions (section 2.5, rule 9).
 4. [x] The maximum lengths in section 2 are accepted, and the authorship fields were extended by the owner (sections 2.6 and 2.7, 2026-11-19).
 5. [x] Moot: there are no redaction notes (section 2.5, rule 9).
-6. [x] Moved: filters belong to the [browsing and filters](browsing-and-filters.md) spec, where N = 10 is now decided (2026-11-19).
+6. [x] Moved: filters belong to the [browsing and filters](browsing-and-filters.md) spec, which has no threshold (2026-11-19).
 7. [x] A published testimony quarantined `awaiting-edit` stays hidden, with one email to the contributor carrying the moderator's message (section 2.5, rule 6, 2026-11-19). Its retention, and that of never-published returned submissions, is in the [retention schedule](retention.md), rows 9 and 31, for review with the rest of the schedule.

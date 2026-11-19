@@ -13,7 +13,7 @@ Status: Draft, awaiting owner ratification
 ## Presentation
 
 1. There is no recommendation algorithm, personalized feed, engagement ranking or "people like you also liked". Visitors choose what to look for: chronological browsing, search and filters.
-2. Filters must not combine into granular slices that make anonymous contributors identifiable. A filter appears only when it is populated enough to be useful and safe.
+2. Anonymous contributors must not become identifiable through what the archive publishes. Since every public field is published, this is decided by which fields are public and how the contributor is asked, not by restricting filters, which only offer what is already public.
 3. Each published testimony has a permanent address and a citation that respects the contributor's chosen public identity.
 4. No comments, replies, likes, followers, messaging, reputation or public argument threads. A testimony may respond to another intellectually; the platform does not build a conversation graph around it.
 

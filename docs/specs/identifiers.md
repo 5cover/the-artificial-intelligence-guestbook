@@ -65,6 +65,8 @@ Every public resource has a machine-readable form at a URL separate from the int
 | Editions registry | `https://theaiguestbook.org/data/time-capsules.json` | Every edition revision ever published, with its state and digests (archive format, section 6) |
 | Edition packages | `https://theaiguestbook.org/data/time-capsules/<edition-id>/<file>` | The serialized packages and their signature (archive format, section 1.1) |
 | Signing key | `https://theaiguestbook.org/data/signing-key.asc` | The OpenPGP public key that signs editions, ASCII-armoured, standalone (section 7) |
+| Context document | `https://theaiguestbook.org/data/context/<slug>.<language>.json` | The document and its metadata, as in editions |
+| Reference record | `https://theaiguestbook.org/data/references/<slug>.json` | As the edition's reference records |
 | Schemas | `https://theaiguestbook.org/data/schema/<format-version>/<name>.schema.json` | The JSON Schemas, also the `$id` of each schema |
 | Markdown views | The interface URL with `.md` appended, for example `https://theaiguestbook.org/context/<slug>.md` and `https://theaiguestbook.org/testimonies/<public-id>.md` | The source text of documentation, context pages and testimonies, following the llms.txt companion-page convention |
 
@@ -93,9 +95,8 @@ Rules:
 
 | State | Response at the testimony URL |
 | --- | --- |
-| Never existed, draft, submitted, under review, rejected | `404 Not Found`, identical in every case, so that state cannot be probed |
+| Never existed, draft, in review, returned (including a returned testimony that was once published) | `404 Not Found`, identical in every case, so that state cannot be probed |
 | Published | `200 OK` |
-| Published with moderation redaction | `200 OK`, with a visible note that part of the testimony was redacted, without revealing what |
 | Withdrawn | `410 Gone`, with a content-free tombstone page: the ID, the fact of withdrawal, and nothing that identifies the contributor or the content |
 
 Private views of a contributor's own unpublished testimonies are reachable only when authenticated, at URLs that use neither the internal ID nor a public ID.
@@ -178,4 +179,4 @@ Rules:
 
 1. Resolved (2026-11-19): translations are addressed by `translation_id`, several per language (section 2.3, item 3).
 2. Resolved (2026-11-19): paragraph anchors, stable per revision, plus text fragments (section 2.3).
-3. Whether to add `/data/` endpoints for context documents and reference records as JSON, beyond their Markdown views.
+3. Resolved (2026-11-19): context documents and reference records get JSON data URLs too, `/data/context/<slug>.<language>.json` and `/data/references/<slug>.json`, since editions already export them. What generates them and when is decided with the implementation.

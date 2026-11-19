@@ -42,7 +42,7 @@ The reverse proxy and the application are configured to log no raw IP address. A
 | 8 | Submitted, unmoderated testimonies | Until a decision | Submission | Moderation | Consent |
 | 9 | Rejected testimonies and their versions | Proposal: 6 months | Rejection | Scheduled job | Handling disputes about the decision |
 | 10 | Published testimony, identity, disclosure, structured fields, translations | Until withdrawal or removal | Publication | Deletion lifecycle | Consent (6(1)(a), 9(2)(a)) |
-| 11 | Private text versions (originals under redaction) | While the testimony is published | | Deletion lifecycle | Integrity of the record (moderation principles) |
+| 11 | Text awaiting review (baseline and revisions of an open review group) | Until the review group closes | Review | Review completion | Informed review (data model, section 2.5, rule 3) |
 | 12 | Consent and age evidence | While the testimony is published, then a minimal record (public ID, dates, text versions accepted, consent path) for 5 years | Withdrawal | Scheduled job | Showing lawful processing; 5 years matches the general limitation period of French civil law (Code civil art. 2224, to confirm) |
 | 13 | Parental verification data (parent email, confirmation link) | Until the consent is recorded | Request | Deleted at once | CNIL Recommendation 7 |
 | 14 | Moderation records (ordinary) | Proposal: 12 months | Decision | Scheduled job | Accountability |

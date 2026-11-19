@@ -13,5 +13,5 @@ An archive wants to keep things. A person has the right to take back what they s
 5. **Editions are revised, not frozen.** Hosted editions containing withdrawn material are superseded by a privacy revision. Future editions exclude it.
 6. **Honesty about copies.** Contributors are told before submitting that editions may be downloaded and kept by others, and that the project cannot recall independent copies. The project informs mirrors through a machine-readable withdrawal list and asks them to honour it.
 7. **Minimal records of the request.** The project keeps only what it needs to show that a request was received and handled, for as long as the law requires, without retaining the deleted content.
-8. **Redaction is not deletion.** Moderation redaction alters the public representation of a testimony while preserving the original privately. Withdrawal removes both.
+8. **Editing is not hiding.** Moderators do not redact; a passage that cannot be published is changed by its contributor, and the replaced text is deleted once reviewed. Withdrawal removes the testimony entirely.
 9. **Deletion is tested.** The deletion procedure is verified end to end before launch and periodically afterwards, like backup restores.

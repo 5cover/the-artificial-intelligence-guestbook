@@ -23,10 +23,10 @@ Moderation is not editorial or ideological gatekeeping. A testimony is not rejec
 ## Practice
 
 1. The publishing rules are public, short and written in plain language in French and English. Moderation decisions cite them.
-2. Prefer the least intrusive action: redact a third party's name or a leaked credential rather than reject the testimony, and ask the contributor when practical.
-3. The original submission and any moderated public representation are stored separately. Redactions are recorded with their reason. The public page indicates that a redaction occurred, without revealing what was removed.
+2. Prefer the least intrusive action. The moderator never alters a contributor's text: when a passage cannot be published, for example a third party's name or a leaked credential, the testimony is returned to its contributor with the reason and guidance on what to change, and is published once edited. Returning is an ordinary outcome, not a sanction; most returns concern accidents made in good faith.
+3. Every published text is the contributor's own words. There are no moderator redactions and no redaction notes, so no testimony carries a permanent mark of moderation. Text that a contributor replaces is kept only until its review is complete.
 4. Every decision records who decided, when and why, in a private moderation record.
-5. The contributor is told the outcome and, for rejections, the rule applied.
+5. The contributor is told the outcome and, when a testimony is returned or removed, the rule applied.
 6. Moderation applies the same rules regardless of the contributor's views or identity, including when a testimony criticizes the project or its operator.
 7. The moderator's attention is a resource to protect. Tooling and anti-abuse measures should make spam cheap to clear so that real testimonies get careful review.
 

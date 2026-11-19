@@ -9,7 +9,7 @@ The Digital Services Act duties in arts. 16 to 18 are assumed to apply to the ar
 ## 1. Principles
 
 1. Report, do not investigate. The custodian stops publication, keeps what the authorities need without copying it, and reports [inference](../research/moderation-failures.md).
-2. Use the least intrusive action first: redact a third party's identifier rather than reject, unless the whole testimony is unlawful ([moderation principles](../constitution/moderation-principles.md), practice 2).
+2. Use the least intrusive action first: return the testimony to its contributor to remove a third party's identifier rather than remove the testimony, unless the whole testimony is unlawful ([moderation principles](../constitution/moderation-principles.md), practice 2). Returning hides a published testimony at once until it is edited ([data model](../specs/data-model.md), section 2.5, rule 5).
 3. View the minimum. Decide suspected child sexual abuse material from text and metadata; never open a file that may be such material ([inference](../research/moderation-failures.md), section 2.4).
 4. Do not delete suspected illegal material as a first step; quarantine it. The hotline's guide for hosts says the same ([fetched](https://www.pointdecontact.net/wp-content/uploads/2023/10/2014-04-guide_pedopornographie.pdf), section "Le traitement"). Deletion may also fall under Code pénal art. 434-4 ([search](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006418608/2021-08-26)).
 5. Never let one person carry a suspected child abuse case alone (section 8).
@@ -55,7 +55,7 @@ The Digital Services Act duties in arts. 16 to 18 are assumed to apply to the ar
 2. Hate speech: provoking discrimination, hatred or violence against a person or group because of origin, ethnicity, nation, race or religion carries one year's imprisonment and/or EUR 45,000 under the seventh alinea of article 24 of the Loi du 29 juillet 1881 ([fetched, summarised](https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000043982456)). Other grounds sit in other alineas, which were not read.
 3. Apology of terrorism is listed in LCEN art. 6 IV A, which cites Code pénal art. 421-2-5 ([fetched, summarised](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000049577522)). The text of art. 421-2-5 was not read.
 4. If the case is not clear, consult a lawyer or Point de Contact, which offers orientation in doubt ([fetched](https://www.pointdecontact.net/wp-content/uploads/2023/10/2014-04-guide_pedopornographie.pdf), section "Le signalement"). Keep the item in quarantine meanwhile.
-5. If the content is manifestly illegal, reject it. If only one passage is unlawful, redact that passage and record the redaction and its reason ([moderation principles](../constitution/moderation-principles.md), practices 2 and 3).
+5. If the content is manifestly illegal, remove it. If only one passage is unlawful, return the testimony with the rule and guidance, which hides it until the contributor edits it, and record the decision and its reason ([moderation principles](../constitution/moderation-principles.md), practice 2).
 6. Report to PHAROS, whose categories include incitement to hatred and terrorism ([fetched](https://www.police-nationale.interieur.gouv.fr/actualite/contenus-illicites-sur-internet-comment-fonctionne-portail-officiel-pharos)), or to Point de Contact, which accepts hate speech and terrorist content ([fetched](https://www.pointdecontact.net/)). Give the item identifier and the passage concerned, not the whole text.
 7. Send the contributor the statement of reasons described in section 7.
 8. For a repeated violation, suspend the account under the published rules ([moderation principles](../constitution/moderation-principles.md), practice 1).
@@ -65,10 +65,10 @@ The Digital Services Act duties in arts. 16 to 18 are assumed to apply to the ar
 
 1. Identify the third-party data: a name with an address, workplace, telephone number, email address, photograph, account or other detail that identifies or locates a person ([threat model](../specs/threat-model.md), section 3.3).
 2. If the disclosure is meant to expose the person, or their family, to a direct risk of harm, it may be an offence under Code pénal art. 223-1-1 ([fetched, summarised](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000043974282)). If there is an immediate threat, follow section 3.2. If not, report to PHAROS, which lists "endangering people" and threats among its categories ([fetched](https://www.police-nationale.interieur.gouv.fr/actualite/contenus-illicites-sur-internet-comment-fonctionne-portail-officiel-pharos)).
-3. Where there is no direct risk, redact the identifiers and keep the rest, as the least intrusive action. Record the redaction and its reason, without revealing what was removed ([moderation principles](../constitution/moderation-principles.md), practice 3).
+3. Where there is no direct risk, return the testimony with guidance to remove the identifiers, as the least intrusive action. A published testimony is hidden until edited. Record the decision and its reason, without copying the identifiers ([moderation principles](../constitution/moderation-principles.md), practice 2).
 4. A private dispute between individuals, such as insults or harassment, goes to the local police station or gendarmerie rather than to PHAROS ([search](https://www.police-nationale.interieur.gouv.fr/actualite/contenus-illicites-sur-internet-comment-fonctionne-portail-officiel-pharos)).
 5. Do not inform the third party by default. If they contact the custodian, handle the message as a notice under section 3.5.
-6. Do not disclose the contributor's identity or the redacted text to anyone.
+6. Do not disclose the contributor's identity or the removed text to anyone.
 
 ### 3.5 Notice received from a third party
 
@@ -87,7 +87,7 @@ The Digital Services Act duties in arts. 16 to 18 are assumed to apply to the ar
 What to record, in the private moderation record ([moderation principles](../constitution/moderation-principles.md), practice 4):
 
 - the item identifier, the time of receipt in UTC, and the scenario;
-- the rule number or legal basis relied on, the decider, the decision time, and the action taken (quarantine, redaction, rejection, account suspension);
+- the rule number or legal basis relied on, the decider, the decision time, and the action taken (quarantine, return, removal, account suspension);
 - for a notice: the notifier type (anonymous or named), the notice identifier, the acknowledgement date and the decision date;
 - for a report: the recipient, the date, the reference number and the name of any contact;
 - for the contributor: whether they were informed, when, with which template, or why the message was withheld (section 7);

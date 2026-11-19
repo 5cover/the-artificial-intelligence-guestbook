@@ -821,22 +821,17 @@ Components:
 
 Sketch:
 
-```text
-visitors
-   |
-reverse proxy (TLS, static files, page cache, coarse rate limits)
-   |
-app process (public site, contribution flow, magic links, admin on a restricted path)
-   |                         |
-PostgreSQL 18               job runner (systemd timers -> management commands)
-   |                         |
-   +-- backups (encrypted, other provider) --- restore drills
-   |
-   +-- archive exporter (CLI, reads via domain layer)
-            |
-            v
-     edition package (spec-defined, independent of app)
-     + withdrawal index + checksums + schema docs
+```mermaid
+flowchart TD
+    visitors[Visitors] --> proxy["Reverse proxy<br/>TLS, static files, page cache, coarse rate limits"]
+    proxy --> app["App process<br/>public site, contribution flow, magic links, admin on a restricted path"]
+    app --> db[(PostgreSQL 18)]
+    app --> jobs["Job runner<br/>systemd timers running management commands"]
+    jobs --> db
+    db --> backups["Backups<br/>encrypted, other provider"]
+    backups --> drills[Restore drills]
+    db --> exporter["Archive exporter<br/>CLI, reads via the domain layer"]
+    exporter --> edition["Edition package<br/>spec-defined, independent of the app,<br/>with withdrawal index, checksums and schema docs"]
 ```
 
 ## 9. Operational and privacy notes that apply to all candidates

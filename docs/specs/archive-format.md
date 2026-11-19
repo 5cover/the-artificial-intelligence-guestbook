@@ -137,7 +137,7 @@ A collection that does not say what it holds cannot be trusted later (archive-fa
 
 ## 3. Testimony record
 
-One JSON object per testimony, `data/testimonies/<public-id>.json`. Field names and values are the `public` fields of the [data model](data-model.md). Absent optional fields are omitted, never written as `null`, so that "not given" is unambiguous. `revisions` is the public timeline (data model, section 2.5): dates, sources and summaries only, never superseded text. `body` is the revision current at build time. `edition_id` is required in editions; the live data URL serves the same record without it ([identifiers](identifiers.md), section 2.1). There is no separate attribution field: attribution is `identity.mode` plus, for named and pseudonymous testimonies, `identity.display_name`. The `citation` string renders an anonymous testimony as "Anonymous".
+One JSON object per testimony, `data/testimonies/<public-id>.json`. Field names and values are the `public` fields of the [data model](data-model.md). Absent optional fields are omitted, never written as `null`, so that "not given" is unambiguous. `revisions` is the public timeline (data model, section 2.5): revision numbers, dates and summaries only, never superseded text. `body` is the revision current at build time. `edition_id` is required in editions; the live data URL serves the same record without it ([identifiers](identifiers.md), section 2.1). There is no separate attribution field: attribution is `identity.mode` plus, for named and pseudonymous testimonies, `identity.display_name`. The `citation` string renders an anonymous testimony as "Anonymous".
 
 ```json
 {
@@ -150,12 +150,11 @@ One JSON object per testimony, `data/testimonies/<public-id>.json`. Field names 
   "edition_period": 2027,
   "licence": "CC-BY-4.0",
   "citation": "Anonymous, testimony 7q4km2xd, revision 2, The Artificial Intelligence Guestbook, 2027-05-02. https://theaiguestbook.org/testimonies/7q4km2xd Time capsule 2027.0.",
-  "redacted": false,
   "body_format": "commonmark-0.31.2",
   "body": "Texte du témoignage...\n\nDeuxième paragraphe.",
   "revisions": [
-    { "revision_number": 1, "published_on": "2027-03-14", "source": "contributor" },
-    { "revision_number": 2, "published_on": "2027-05-02", "source": "contributor", "summary": "Corrected a date" }
+    { "revision_number": 1, "live_on": "2027-03-14" },
+    { "revision_number": 2, "live_on": "2027-05-02", "summary": "Corrected a date" }
   ],
   "identity": {
     "mode": "anonymous",
@@ -313,8 +312,8 @@ Resolved questions stay in the list, marked as such, so that their numbers remai
 1. Resolved (2026-11-19): `tar.gz` and an OpenPGP signature (sections 1.1 and 6). A second `tar.xz` serialization is proposed in section 1.1, item 4.
 2. Resolved (2026-11-19): editions include `all-testimonies.txt` (section 4). Its size effect is in section 1.2.
 3. Resolved (2026-11-19): the live withdrawal list and the editions registry are at `/data/withdrawals.json` and `/data/time-capsules.json` ([identifiers](identifiers.md), section 2.1).
-4. Whether canonical testimony bodies are also rendered as PDF/A or an XML format, which the Library of Congress lists as preferred, while plain text is only in its acceptable tier (archive-failures research, question 4). If PDF/A is adopted, one file for the whole edition, embedding fonts once, rather than one per testimony (section 1.2, item 3).
-5. Whether contributors may choose an embargo, publication after a dated delay, as oral-history archives offer. If so, each record needs an access field, and the consent text must say that an embargo may not hold against a court order (archive-failures research, section 4.4, the Belfast Project case).
+4. Resolved (2026-11-19): one PDF/A file for the whole edition, embedding fonts once; no XML rendering. The PDF/A part (for example PDF/A-2u, for searchable Unicode text) is chosen with the build tooling. Original question: whether canonical testimony bodies are also rendered as PDF/A or an XML format, which the Library of Congress lists as preferred, while plain text is only in its acceptable tier (archive-failures research, question 4). If PDF/A is adopted, one file for the whole edition, embedding fonts once, rather than one per testimony (section 1.2, item 3).
+5. Resolved (2026-11-19): no embargo. Original question: whether contributors may choose an embargo, publication after a dated delay, as oral-history archives offer. If so, each record needs an access field, and the consent text must say that an embargo may not hold against a court order (archive-failures research, section 4.4, the Belfast Project case).
 6. Partly resolved (2026-11-19): three copies at three sites (section 6.1). Still open: the institution for deposit (#42) and the fixity interval (yearly proposed). The [institutional-custodians research](../research/institutional-custodians.md) finds that repositories which keep DOIs, records or captures after withdrawal (Zenodo, Nakala, Software Heritage, the Internet Archive) do not suit editions containing personal data; Zenodo fits documentation and schemas only. The realistic institutional custody is a public archive service (the Archives nationales or a departmental service), under a signed agreement that makes privacy revisions and the removal of superseded packages binding. A revocable deposit is preferable to a gift, which would transfer ownership.
-7. Whether editions receive a DOI (domain research, section 3.3: DOI records survive deletion).
+7. Resolved (2026-11-19): no DOI for editions (domain research, section 3.3: DOI records survive deletion).
 8. Whether the `tar.xz` serialization is published alongside `tar.gz` (section 1.1, item 4).

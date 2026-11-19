@@ -14,7 +14,7 @@ Stack-independent. Controls marked **(required)** are launch requirements; the r
 | --- | --- | --- |
 | Unpublished testimonies | Potentially sensitive self-disclosure not yet consented to publication; may contain third-party data or secrets awaiting moderation | Database, backups |
 | Account emails | The only link between a person and their testimonies; enables withdrawal and could de-anonymize anonymous testimonies | Database, backups, email provider logs |
-| Moderation records, redacted originals | Contain exactly what was judged unfit to publish | Database, backups |
+| Moderation records, text awaiting review | Contain exactly what was judged unfit to publish | Database, backups |
 | Privacy and withdrawal requests | Reveal who asked for what | Database, mailbox, backups |
 | Admin access | Full control over all of the above | App, VPS |
 | Custodian accounts | Email, registrar, VPS provider, backup provider, GitHub, DNS. Each one can take over the project | External providers |

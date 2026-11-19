@@ -4,7 +4,7 @@ Status: Draft (2026-11-15). Public text to be finalized in English and French, a
 
 Basis: [moderation principles](../constitution/moderation-principles.md); [editorial principles](../constitution/editorial-principles.md); [authorship disclosure](../constitution/authorship-disclosure.md); [illegal-content protocol](../operations/illegal-content.md); [moderation-failures research](../research/moderation-failures.md); DSA arts. 14, 16 and 17 as summarized in the [legal research](../research/legal-landscape.md), section 5.
 
-These rules are the only grounds for not publishing a testimony, for redacting part of it, or for removing it later. Each rule has a stable code, which moderation records and statements of reasons cite (data model, section 2.10). The rules are short on purpose: the Guestbook publishes disagreement, error, enthusiasm and hostility alike, and it never rejects a testimony for its opinions.
+These rules are the only grounds for not publishing a testimony, for returning it to its author for changes, or for removing it later. Each rule has a stable code, which moderation records and statements of reasons cite (data model, section 2.10). The rules are short on purpose: the Guestbook publishes disagreement, error, enthusiasm and hostility alike, and it never rejects a testimony for its opinions.
 
 The draft below is the public text, written to be read by contributors.
 
@@ -19,10 +19,10 @@ Any first-person testimony about living with AI, from anyone, in any language, o
 | `illegal` | Content that is illegal under French or EU law, for example child sexual abuse material, incitement to hatred or violence, apology of terrorism, or defamation of an identifiable person | Not published, and reported to the authorities where the law requires it |
 | `threat` | Threats against a person or group | Not published; reported if there is a danger to life or safety |
 | `harassment` | Content whose purpose is to harass, demean or intimidate an identifiable person | Not published |
-| `third-party-privacy` | Private or sensitive information about another identifiable person: their health, address, contact details, workplace, or anything that could locate or expose them | The passage is redacted, or we ask you to change it |
-| `secrets` | Passwords, keys, access tokens, personal identification numbers or similar secrets, yours or anyone else's | The secret is redacted |
+| `third-party-privacy` | Private or sensitive information about another identifiable person: their health, address, contact details, workplace, or anything that could locate or expose them | We ask you to change the passage |
+| `secrets` | Passwords, keys, access tokens, personal identification numbers or similar secrets, yours or anyone else's | We ask you to remove the secret, and hide the testimony until you do |
 | `spam` | Automated, repeated or bulk submissions, or the same text posted again | Not published; repeated cases restrict the account |
-| `advertising` | Submissions whose main purpose is to promote a product, service, site or person, or to place links for search engines | Not published, or the links are removed |
+| `advertising` | Submissions whose main purpose is to promote a product, service, site or person, or to place links for search engines | Not published, or we ask you to remove the links |
 | `not-testimony` | Content that is not a testimony at all, for example random text, a test, or a document pasted without any account of the author's own experience | We ask you to change it, or it is not published |
 | `impersonation` | Publishing under the real name of someone else without their agreement | Not published |
 | `false-disclosure` | Deliberately false answers to the AI-authorship question, as part of automated or bulk submission | Treated as `spam` |
@@ -31,14 +31,13 @@ We do not reject a testimony because we disagree with it, find it badly written,
 
 ## How publication works
 
-1. Every testimony is read before it is published. Nothing is published automatically.
+1. Every testimony is read before it is first published. Nothing is published automatically. Once published, you can edit your testimony at any time; edits appear at once and are read afterwards.
 2. Possible outcomes:
    - it is published;
-   - we ask you to change something, for example to remove a colleague's name;
-   - we redact a passage and publish the rest, with a note that part of the text was redacted;
+   - we ask you to change something, for example to remove a colleague's name or a phone number. This is common and usually accidental; it is not a sanction. Your text stays available to you, and we read it again as soon as you edit it;
    - it is not published.
-3. Except in the cases listed below, you receive the outcome by email. If anything is not published or is redacted, the email gives the rule code, the reason, and how to ask for a review.
-4. We prefer the smallest change: we would rather redact one name than refuse a whole testimony.
+3. Except in the cases listed below, you receive the outcome by email. If we ask for a change or do not publish, the email gives the rule code, the reason, what to change, and how to ask for a review.
+4. We prefer the smallest change: we would rather ask you to change one name than refuse a whole testimony. We never change your words ourselves.
 5. Testimonies from contributors under 18 are read with particular care for personal details.
 
 The exception: when the law or an authority requires discretion, for example during a criminal report, the message can be delayed or kept general.

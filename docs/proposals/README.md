@@ -21,13 +21,13 @@ Decisions waiting for the owner, grouped by the work they unblock. The recommend
 
 ### Unblocks the archive format and the first edition (#13, #38)
 
-1. Package serialization and signature scheme ([archive format](../specs/archive-format.md), section 12).
-2. PDF/A or XML renditions, embargo option, DOI, number of copies and deposit institution ([archive format](../specs/archive-format.md), section 12; #42).
+1. Whether a `tar.xz` serialization is published alongside `tar.gz` ([archive format](../specs/archive-format.md), section 12, question 8).
+2. The deposit institution and the fixity interval ([archive format](../specs/archive-format.md), section 12, question 6; #42).
 
 ### Unblocks the data model and the interface (#14, #23, #27)
 
 1. Proposed field set, text length limits and edition-period rule ([data model](../specs/data-model.md), sections 2.3, 2.7 and 5).
-2. Visible redaction notes on the site and in editions ([data model](../specs/data-model.md), section 8).
+2. What happens to a once-published testimony left `returned` ([data model](../specs/data-model.md), section 8, question 7).
 3. Filter threshold N, whether region is ever shown, and date precision on listings ([browsing and filters](../specs/browsing-and-filters.md), section 6).
 4. Whether a contributor may delete their account while keeping a testimony published, which would make later withdrawal impossible ([retention schedule](../specs/retention.md), section 4).
 

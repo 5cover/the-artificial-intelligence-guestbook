@@ -63,6 +63,7 @@ The reverse proxy and the application are configured to log no raw IP address. A
 | 29 | Hosted editions | As published; superseded revisions deleted when a privacy revision is published | | Privacy revision | Consent; archival model |
 | 30 | Mirror-operator contacts | While they ask to be notified | Registration | On request | Legitimate interest |
 | 31 | Published testimonies quarantined awaiting an edit | Indefinitely, hidden, until the contributor's edit is approved or the testimony is withdrawn (data model, section 2.5, rule 6) | Quarantine | Deletion lifecycle on withdrawal | Consent (6(1)(a)); the contributor can still edit or withdraw |
+| 32 | Withdrawal code hash and former-email HMAC of a detached testimony | While the testimony is published | Account closure | Deletion lifecycle on withdrawal | Enabling withdrawal (GDPR art. 17) |
 
 ## 3. Scheduled jobs
 
@@ -71,22 +72,22 @@ One daily job applies rows 1, 5, 6, 7, 9, 12, 14, 16, 18, 19, 23 and 28. It repo
 ## 4. Open questions
 
 1. [x] Row 5 is kept as written: the account email is held for one year after closure (owner decision, 2026-11-19, following ADR 0013, D2).
-2. [ ] Whether a contributor may close their account and keep their testimony published, detached from any account (section 5).
+2. [x] A contributor may close their account and keep their testimony published, detached, with a withdrawal code (section 5; owner decision, 2026-11-19).
 3. [x] The 5-year periods in rows 12 and 18 rest on Code civil art. 2224, checked on Légifrance on 2026-11-19: "Les actions personnelles ou mobilières se prescrivent par cinq ans à compter du jour où le titulaire d'un droit a connu ou aurait dû connaître les faits lui permettant de l'exercer." Accepted by the owner.
 4. [x] All proposed periods are accepted (owner decision, 2026-11-19).
 
-## 5. Closing an account while keeping the testimony (proposal)
+## 5. Closing an account while keeping the testimony
 
 Forums often keep posts after account deletion and show them as written by a "deleted user". The same is possible here, but it is detaching, not anonymizing [inference, from GDPR recital 26 and art. 4(1)]:
 
 1. Removing the account link does not make the testimony anonymous data. The text, and any display name, can still identify its author, so it stays personal data. Its publication still rests on the consent given at submission (ADR 0013, D1), which remains valid until withdrawn. Detaching is therefore lawful, but GDPR keeps applying.
-2. The author keeps the right to withdraw. Without an account email, the request is verified the other way the deletion lifecycle already allows: describing the testimony from a new address, confirmed by the custodian ([deletion lifecycle](deletion-lifecycle.md), section 1). This is weaker: an impostor could try it, and a genuine author may fail to prove authorship.
+2. The author keeps the right to withdraw. Without an account, authorship is proved by a withdrawal code issued at closure, or by control of the original mailbox, checked against a keyed HMAC kept with the testimony. If neither is available, the request cannot be verified, and the custodian does not try to judge it ([deletion lifecycle](deletion-lifecycle.md), section 1).
 3. Detaching never removes the identity the author chose. A contributor who wants their name gone as well asks for the identity fields to be withdrawn, which changes the testimony to anonymous and triggers a privacy revision of the editions that contain the name.
 4. The account email still goes to the restricted store for one year (row 5).
 
-Proposal: at account closure, the contributor chooses, with neither option preselected:
+At account closure, the contributor chooses, with neither option preselected (owner decision, 2026-11-19):
 
 - withdraw the testimony and close the account; or
-- keep the testimony published without an account, optionally made anonymous at the same time, after a plain warning that later withdrawal will require proving authorship without the account.
+- keep the testimony published without an account, optionally made anonymous at the same time. The contributor receives the withdrawal code, and a plain warning that without the code or the original mailbox, a later withdrawal cannot be verified.
 
 The consent record (row 12) and the tombstone rules are unchanged.

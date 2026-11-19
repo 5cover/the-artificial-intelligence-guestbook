@@ -20,7 +20,15 @@ The goal is that deletion is a procedure, not an investigation (deletion philoso
 | Erasure of data collected from a minor | The contributor, as a minor or later as an adult | As a testimony withdrawal, handled "dans les meilleurs délais" (Loi I&L art. 51 II, legal research section 4). No adult's approval is needed. |
 | Other data-subject rights | Anyone | Access, rectification and objection follow the request procedure in `docs/legal/` (#19) |
 
-Verification: the request is confirmed through a magic link sent to the account email. Someone who has lost access to that address may prove control of the testimony in another proportionate way, for example by describing it and answering from a new address that the custodian then confirms. The custodian must not ask for identity documents unless no proportionate alternative exists (legal research, section 4, on CNIL Recommendation 7).
+Verification of authorship, in this order (owner decision, 2026-11-19):
+
+1. With an account: a magic link sent to the account email.
+2. Without an account, after closure (retention schedule, section 5):
+   1. the withdrawal code: at closure, the contributor receives a random code, shown once and sent by email. Only a keyed hash of it is stored with the testimony. Presenting the code proves authorship, whoever holds it, so the contributor is told to keep it like a password;
+   2. control of the original mailbox: the requester gives the address they used, and the service sends a magic link to it only if its keyed HMAC matches the one stored with the testimony at closure. Knowing the address is not enough; clicking the link proves control of it.
+3. Neither is available: the request cannot be verified, because the testimony holds no other information that only its author could know. The contributor is told so in writing within one month, with the reason, the kind of information that would allow verification, and their right to complain to the CNIL and to seek a judicial remedy (GDPR art. 12(4)). GDPR allows the refusal when the controller demonstrates that it cannot identify the data subject, and does not require it to collect more data for that purpose (art. 11(2) and 12(2); EDPB Guidelines 01/2022 on the right of access, checked through search summaries on 2026-11-19). The custodian does not judge whether a request "sounds genuine", and never asks for identity documents (legal research, section 4, on CNIL Recommendation 7). The warning at closure says this plainly.
+
+Facts that are public, or that an impostor could reconstruct, such as the text, the display name or the publication date, never count as proof. The exact submission time is not used either: contributors do not remember it, and it would only reward whoever guesses.
 
 Deadline: without undue delay and within one month of receipt (GDPR art. 12(3), to be confirmed in the request procedure). Target for the automated steps of section 3: immediate.
 

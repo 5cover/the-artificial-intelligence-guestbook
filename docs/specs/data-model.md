@@ -159,6 +159,8 @@ The primary object. **One testimony per account** (owner decision, 2026-11-19). 
 | `withdrawn_at` | `instant?` | private | Kept privately to schedule privacy revisions and prune the erase-on-restore list. Never public. |
 | `edition_period` | `year?` | public | The cutoff year of the period the testimony belongs to (section 5) |
 | `licence` | `enum(CC-BY-4.0)` | public | Stored per testimony so a future change does not rewrite history (ADR 0009) |
+| `withdrawal_code_hash` | `hash?` | private | Keyed hash of the withdrawal code issued when the account is closed and the testimony kept ([deletion lifecycle](deletion-lifecycle.md), section 1) |
+| `closed_account_email_hmac` | `hash?` | private | Keyed HMAC of the former account email, to verify control of that mailbox; never reversible into the address (section 2.16) |
 
 Attribution is not a stored string. It is derived from the public identity (section 2.4): `identity_mode` and, for named and pseudonymous testimonies, `display_name`. An anonymous testimony has no attribution value at all, and interfaces and citations render it with the localized label "Anonymous" or "Anonyme". A pseudonymous contributor who calls themselves "Anonymous" therefore stays distinguishable from an anonymous testimony in the data. The rendered attribution string of ADR 0009 is produced from these fields at display and export time.
 
@@ -173,6 +175,7 @@ Constraints:
 7. `state = 'withdrawn'` implies `account IS NULL`.
 8. `(state = 'quarantined') = (quarantine_reason IS NOT NULL)`.
 9. `state = 'published'` implies `public_revision IS NOT NULL` and `archived_revision IS NOT NULL`.
+10. `withdrawal_code_hash` and `closed_account_email_hmac` are present only when `account IS NULL`, and are deleted at withdrawal.
 
 #### 2.3.1 Text format
 

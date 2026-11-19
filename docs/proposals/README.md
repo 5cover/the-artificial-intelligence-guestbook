@@ -19,10 +19,6 @@ Proposals present options for an owner decision. Once decided, a proposal stays 
 
 Decisions waiting for the owner, grouped by the work they unblock. The recommendation, where there is one, is in the linked section. Decisions that block nothing before launch are listed separately at the end, so that they are neither forgotten nor mistaken for blockers.
 
-### Unblocks the data model and the interface (#14, #23, #27)
-
-1. Whether a contributor may delete their account while keeping a testimony published, which would make later withdrawal impossible ([retention schedule](../specs/retention.md), section 4).
-
 ### Moderation (#41)
 
 1. The review window, and who reviews while the custodian moderates alone ([publishing rules](../legal/publishing-rules.md)).

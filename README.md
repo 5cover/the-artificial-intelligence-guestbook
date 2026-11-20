@@ -1,5 +1,43 @@
 # The Artificial Intelligence Guestbook
 
+A human time capsule of the AI era. The archive is the primary deliverable; the web application is a replaceable front end ([ADR 0006](docs/decisions/0006-archive-first-replaceable-application.md)). Start with the [documentation index](docs/README.md).
+
+## Running it locally
+
+You need Python 3.12 or later, [uv](https://docs.astral.sh/uv/) and PostgreSQL 18. How this was installed without administrator rights is recorded in [local development](docs/operations/local-development.md).
+
+Set the database password and a secret key in the environment. Variables may also be kept in a `.env` file, which is ignored by Git, and loaded with `uv run --env-file .env`.
+
+```text
+GUESTBOOK_DB_PASSWORD      password of the PostgreSQL user (required)
+GUESTBOOK_DB_USER          default guestbook_admin
+GUESTBOOK_DB_NAME          default guestbook
+GUESTBOOK_DB_HOST          default 127.0.0.1
+GUESTBOOK_DB_PORT          default 5432
+GUESTBOOK_SECRET_KEY       required unless GUESTBOOK_DEBUG=1
+GUESTBOOK_DEBUG            1 for local development only
+GUESTBOOK_MODERATOR_EMAILS comma-separated addresses that see the moderation queue
+```
+
+Then, from the repository root:
+
+```text
+uv run python app/manage.py migrate
+uv run python app/manage.py runserver
+```
+
+Outgoing email is printed to the console unless `GUESTBOOK_EMAIL_BACKEND` names another backend.
+
+## Tests and linting
+
+```text
+pnpm test          # uv run pytest, against PostgreSQL
+pnpm lint:py       # ruff check and ruff format --check
+pnpm fix:py        # ruff fixes and formatting
+pnpm lint:md       # markdownlint
+pnpm lint:json     # prettier --check on JSON
+```
+
 ## Licences
 
 - Application code, templates and CSS: MIT ([LICENSE](LICENSE)).

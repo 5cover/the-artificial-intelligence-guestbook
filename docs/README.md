@@ -79,6 +79,7 @@ Open decisions are gathered in the [decision queue](proposals/README.md).
 ## Operations
 
 - [Domain](operations/domain.md): non-secret record of the domain's registration and configuration.
+- [Local development environment](operations/local-development.md): how the development machine runs PostgreSQL 18 and uv without administrator rights.
 - [Illegal content, threats and third-party notices](operations/illegal-content.md): draft custodian protocol (#41).
 - [Recurring duties](operations/recurring-duties.md): the custodial obligation as a calendar, from daily checks to yearly drills (#33).
 

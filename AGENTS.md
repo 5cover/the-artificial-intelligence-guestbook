@@ -14,12 +14,19 @@ Operator and publisher: Raphaël Bardini, a private individual in France. GDPR a
 
 ## Current state
 
-Pre-implementation. Phase A is complete: the constitution was ratified on 2026-11-20. Phase B (data and privacy design) is nearly complete.
+Local MVP under implementation, following [the MVP plan](docs/plans/mvp-implementation.md). Nothing is deployed. Phase A is complete: the constitution was ratified on 2026-11-20. Phase B (data and privacy design) is nearly complete.
 
 - Stack: Django 5.2 LTS on PostgreSQL 18 ([ADR 0010](docs/decisions/0010-stack-django-postgresql.md)). The archive specification (#13) comes before the application scaffold (#21), as the RFP recommends.
 - Domain: `theaiguestbook.org`, registered at OVHcloud on 2026-11-15, with DNSSEC, and the project mailbox `contact@theaiguestbook.org` (SPF, DKIM, DMARC in monitoring mode) ([ADR 0008](docs/decisions/0008-canonical-domain.md), [ADR 0012](docs/decisions/0012-project-mailbox.md), [docs/operations/domain.md](docs/operations/domain.md)).
 - Server: OVHcloud VPS-1, provisionally, backups at Hetzner Object Storage, email through Scaleway TEM ([ADR 0014](docs/decisions/0014-provisional-vps-ovhcloud.md), [ADR 0015](docs/decisions/0015-backups-and-transactional-email.md)). Nothing ordered yet.
 - Legal positions: [ADR 0013](docs/decisions/0013-legal-bases-and-minors.md) (legal bases, decree 2021-1362, DSA, a single age threshold of 16, parental path).
+
+## Development
+
+- The Django project is in `app/` (settings in `app/guestbook/`, one Django app per domain area). Tests sit beside each app in `app/<app>/tests/` and run against PostgreSQL 18 only.
+- Commands: `pnpm test` (pytest), `pnpm lint:py` (ruff check and format check), `pnpm fix:py`, `pnpm lint:md`, `pnpm lint:json`. Run `pnpm lint:py` and `pnpm test` before each Python commit.
+- Every Django model field carries a classification and a conceptual type in its `db_comment`, for example `public | markdown(50000)?`. A test fails for any field without one (data model, section 1.1, rule 2).
+- Setup on the development machine, and the environment variables, are in the [README](README.md) and [local development](docs/operations/local-development.md).
 
 ## Knowledge lives in the repository
 

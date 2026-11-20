@@ -1,0 +1,35 @@
+[project]
+name = "the-artificial-intelligence-guestbook"
+version = "0.1.0"
+description = "A human time capsule of the AI era: first-person testimonies, archived as editions."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "bagit>=1.9.0",
+    "django~=5.2",
+    "dnspython>=2.9.2",
+    "jsonschema>=4.26.0",
+    "markdown-it-py>=4.3.0",
+    "nh3>=0.3.8",
+    "psycopg[binary]>=3.3.9",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "pytest-django>=4.14.0",
+    "ruff>=0.17.6",
+]
+
+[tool.ruff]
+target-version = "py312"
+src = ["app"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "DJ"]
+
+[tool.pytest.ini_options]
+pythonpath = ["app"]
+DJANGO_SETTINGS_MODULE = "guestbook.settings_test"
+testpaths = ["app"]
+addopts = "--strict-markers -ra"

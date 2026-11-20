@@ -6,7 +6,10 @@
     "lint:md": "markdownlint-cli2",
     "fix:md": "markdownlint-cli2 --fix",
     "fmt:json": "prettier --write \"**/*.json\"",
-    "lint:json": "prettier --check \"**/*.json\""
+    "lint:json": "prettier --check \"**/*.json\"",
+    "test": "uv run pytest",
+    "lint:py": "uv run ruff check app && uv run ruff format --check app",
+    "fix:py": "uv run ruff check --fix app && uv run ruff format app"
   },
   "devDependencies": {
     "markdownlint-cli2": "^0.24.1",

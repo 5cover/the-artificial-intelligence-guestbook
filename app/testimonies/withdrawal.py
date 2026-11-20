@@ -9,7 +9,7 @@ from django.utils import timezone
 from accounts import hashing, magic_links
 from accounts.models import Account, MagicLink
 from moderation.models import ModerationRecord
-from testimonies.emails import send_withdrawal_confirmation
+from testimonies.emails import send_withdrawal_code, send_withdrawal_confirmation
 from testimonies.models import ConsentRecord, Revision, Testimony, WithdrawalRequest
 from testimonies.revisions import release_superseded_text
 from testimonies.vocabularies import IdentityMode, WithdrawalScope
@@ -260,4 +260,5 @@ def confirm_closure(token):
     account.status = Account.Status.CLOSED
     account.closed_at = now
     account.save(update_fields=["status", "closed_at"])
+    send_withdrawal_code(account.email, code)
     return code

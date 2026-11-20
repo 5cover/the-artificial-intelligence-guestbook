@@ -117,6 +117,8 @@ def test_closing_the_account_keeps_the_testimony_with_a_code_shown_once(
 
     assert response.status_code == 200
     code = re.search(r"<code>([\w-]+)</code>", response.content.decode()).group(1)
+    assert code in mail.outbox[-1].body
+    assert mail.outbox[-1].to == [contributor.email]
     testimony.refresh_from_db()
     assert testimony.account is None
     assert testimony.withdrawal_code_hash is not None

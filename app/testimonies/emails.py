@@ -30,6 +30,20 @@ def send_withdrawal_confirmation(email):
     )
 
 
+def send_withdrawal_code(email, code):
+    send_mail(
+        subject=_("Your withdrawal code"),
+        message=_(
+            "Your testimony stays published without an account. This withdrawal code lets "
+            "you withdraw it later. Keep it like a password: it is the only way to withdraw "
+            "without the account email.\n\n%(code)s"
+        )
+        % {"code": code},
+        from_email=None,
+        recipient_list=[email],
+    )
+
+
 def send_action_link(email, url, subject):
     send_mail(
         subject=subject,

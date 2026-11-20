@@ -42,6 +42,7 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 - [0015. Backups at Hetzner Object Storage, transactional email through Scaleway TEM](decisions/0015-backups-and-transactional-email.md)
 - [0016. Licences for the project's own material and for editions](decisions/0016-project-licensing.md)
 - [0017. Development environment, and an unstyled MVP with minimal JavaScript](decisions/0017-development-environment-and-unstyled-mvp.md)
+- [0018. Implementation choices of the local MVP (draft, awaiting acceptance)](decisions/0018-implementation-choices-of-the-mvp.md)
 
 ## Proposals
 

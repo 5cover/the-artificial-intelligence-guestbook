@@ -206,6 +206,20 @@ class ContributionForm(forms.Form):
         label=_("Year the prediction is for"),
     )
 
+    def __init__(self, *args, edit=False, **kwargs):
+        super().__init__(*args, **kwargs)
+        if edit:
+            self.fields["summary"] = TextField(
+                max_length=200,
+                required=False,
+                label=_("What changed"),
+                help_text=_("A short line for the timeline, such as Corrected a date."),
+            )
+            self.fields["publication_statement"] = forms.BooleanField(
+                required=True,
+                label=PUBLICATION_STATEMENT,
+            )
+
     def clean_languages(self):
         return _tag_list(self.cleaned_data["languages"], _("language tags"))
 
@@ -286,6 +300,11 @@ def _tag_list(value, label):
     return tags
 
 
+PUBLICATION_STATEMENT = _(
+    "Publish my testimony in the guestbook, including anything personal it reveals about me."
+)
+
+
 class SubmissionForm(forms.Form):
     declared_age_band = forms.ChoiceField(
         choices=vocab.DeclaredAgeBand.choices,
@@ -295,9 +314,7 @@ class SubmissionForm(forms.Form):
     )
     publication_statement = forms.BooleanField(
         required=True,
-        label=_(
-            "Publish my testimony in the guestbook, including anything personal it reveals about me."
-        ),
+        label=PUBLICATION_STATEMENT,
     )
 
 

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Review" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Review" %}</h1>
+<p><a href="{% url 'moderation:queue' %}">{% translate "Back to the queue" %}</a></p>
+{% if waiting_for_parent %}
+  <p>{% translate "The parent or guardian has not confirmed yet, so this testimony cannot be approved." %}</p>
+{% endif %}
+
+<h2>{% translate "Timeline" %}</h2>
+<ol>
+  {% for revision in revisions %}
+    <li>
+      {% translate "Revision" %} {{ revision.sequence }}: {{ revision.get_review_state_display }}.
+      {% translate "Saved" %} {{ revision.submitted_at|date:"Y-m-d H:i:s" }} UTC.
+      {% if revision.live_at %}{% translate "Live since" %} {{ revision.live_at|date:"Y-m-d H:i:s" }} UTC.{% endif %}
+      {% if revision.summary %}{% translate "Summary" %}: {{ revision.summary }}{% endif %}
+    </li>
+  {% endfor %}
+</ol>
+
+<h2>{% translate "Changes waiting for review" %}</h2>
+{% if pending %}
+  <section>{{ changes|safe }}</section>
+{% else %}
+  <p>{% translate "Nothing is waiting for review." %}</p>
+{% endif %}
+
+{% if steps %}
+  <h2>{% translate "Between consecutive revisions" %}</h2>
+  {% for step in steps %}
+    <h3>{% translate "Revision" %} {{ step.earlier }} {% translate "to" %} {{ step.later }}</h3>
+    <section>{{ step.diff|safe }}</section>
+  {% endfor %}
+{% endif %}
+
+<h2>{% translate "Decision" %}</h2>
+<form method="post" action="{% url 'moderation:decide' token %}">
+  {% csrf_token %}
+  {{ form }}
+  <p>
+    <button type="submit" name="action" value="approve">{% translate "Approve" %}</button>
+    <button type="submit" name="action" value="return">{% translate "Return to the contributor" %}</button>
+    <button type="submit" name="action" value="return-and-quarantine">{% translate "Return and quarantine" %}</button>
+    <button type="submit" name="action" value="quarantine">{% translate "Hold for legal reasons" %}</button>
+    <button type="submit" name="action" value="restrict-account">{% translate "Restrict the account" %}</button>
+  </p>
+</form>
+{% endblock %}

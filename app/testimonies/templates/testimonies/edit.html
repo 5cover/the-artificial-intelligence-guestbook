@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Your testimony" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Your testimony" %}</h1>
+{% if testimony.state == "published" %}
+  {% if under_16 %}
+    <p>{% translate "Your testimony is published. Changes you send stay private until a moderator approves them." %}</p>
+  {% else %}
+    <p>{% translate "Your testimony is published. Changes you send go live at once and are reviewed afterwards." %}</p>
+  {% endif %}
+{% else %}
+  <p>{% translate "Your testimony is awaiting review. Changes you send are added to the review." %}</p>
+  {% if awaiting_parental %}
+    <p>{% translate "A parent or legal guardian must confirm it before it can be reviewed." %}</p>
+    <p><a href="{% url 'testimonies:parental-request' %}">{% translate "Ask a parent or guardian to confirm" %}</a></p>
+  {% endif %}
+{% endif %}
+{% if preview_html %}
+  <section>
+    <h2>{% translate "Preview" %}</h2>
+    {{ preview_html|safe }}
+  </section>
+{% endif %}
+<form method="post" action="{% url 'testimonies:my-testimony' %}">
+  {% csrf_token %}
+  {{ form }}
+  <p>
+    <button type="submit" name="action" value="preview">{% translate "Preview" %}</button>
+    <button type="submit" name="action" value="send">{% translate "Send changes" %}</button>
+  </p>
+</form>
+{% endblock %}

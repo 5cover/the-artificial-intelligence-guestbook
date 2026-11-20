@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Moderation queue" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Moderation queue" %}</h1>
+<p>{% translate "Testimonies with changes waiting for review. Earlier edition periods come first." %}</p>
+{% if items %}
+  <ol>
+    {% for item in items %}
+      <li>
+        <a href="{% url 'moderation:review' item.token %}">{% translate "Review" %}</a>:
+        {{ item.testimony.get_state_display }};
+        {% translate "edition period" %} {{ item.testimony.edition_period }};
+        {% translate "received" %} {{ item.testimony.received_at|date:"Y-m-d H:i:s" }} UTC
+        {% if item.waiting_for_parent %}; {% translate "waiting for a parent or guardian" %}{% endif %}
+      </li>
+    {% endfor %}
+  </ol>
+{% else %}
+  <p>{% translate "Nothing is waiting for review." %}</p>
+{% endif %}
+{% endblock %}

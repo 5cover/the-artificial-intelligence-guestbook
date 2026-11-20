@@ -9,7 +9,7 @@ from accounts import hashing, limits, magic_links
 from accounts.decorators import signed_in_required
 from accounts.models import Account, MagicLink
 from accounts.session import current_account
-from testimonies import services
+from testimonies import revisions, services
 from testimonies.emails import send_parental_link
 from testimonies.forms import (
     ContributionForm,
@@ -19,8 +19,8 @@ from testimonies.forms import (
 )
 from testimonies.models import Testimony
 from testimonies.rendering import render as render_markdown
-from testimonies.services import SubmissionError
-from testimonies.vocabularies import ConsentPath
+from testimonies.revisions import SubmissionError
+from testimonies.vocabularies import ConsentPath, DeclaredAgeBand
 
 PARENTAL_REQUESTS_PER_ADDRESS = 3
 
@@ -28,10 +28,10 @@ PARENTAL_REQUESTS_PER_ADDRESS = 3
 def _initial(testimony):
     if testimony is None:
         return {}
-    revision = services.current_revision(testimony)
+    revision = revisions.current_revision(testimony)
     initial = {"language": testimony.language or ""}
     for name in ContributionForm.base_fields:
-        if name != "language":
+        if name not in ("language", "publication_statement"):
             initial[name] = getattr(revision, name) or ""
     initial["languages"] = ", ".join(revision.languages or [])
     initial["tools_used"] = "\n".join(revision.tools_used or [])
@@ -39,20 +39,34 @@ def _initial(testimony):
     return initial
 
 
+def _is_editable(testimony):
+    if testimony.state in (Testimony.State.SUBMITTED, Testimony.State.PUBLISHED):
+        return True
+    return (
+        testimony.state == Testimony.State.QUARANTINED
+        and testimony.quarantine_reason == Testimony.QuarantineReason.AWAITING_EDIT
+    )
+
+
 @signed_in_required
 def my_testimony(request):
     account = current_account(request)
     testimony = services.testimony_of(account)
-    if testimony is not None and testimony.state != Testimony.State.DRAFT:
-        return render(
-            request,
-            "testimonies/status.html",
-            {
-                "testimony": testimony,
-                "awaiting_parental": services.awaiting_parental_consent(testimony),
-            },
-        )
+    if testimony is None or testimony.state == Testimony.State.DRAFT:
+        return _draft(request, account, testimony)
+    if _is_editable(testimony):
+        return _edit(request, testimony)
+    return render(
+        request,
+        "testimonies/status.html",
+        {
+            "testimony": testimony,
+            "awaiting_parental": services.awaiting_parental_consent(testimony),
+        },
+    )
 
+
+def _draft(request, account, testimony):
     preview_html = None
     if request.method == "POST":
         form = ContributionForm(request.POST)
@@ -72,6 +86,38 @@ def my_testimony(request):
         request,
         "testimonies/draft.html",
         {"form": form, "preview_html": preview_html},
+    )
+
+
+def _edit(request, testimony):
+    preview_html = None
+    if request.method == "POST":
+        form = ContributionForm(request.POST, edit=True)
+        if form.is_valid():
+            action = request.POST.get("action")
+            if action == "preview":
+                preview_html = render_markdown(form.cleaned_data["body"])
+            elif action == "send":
+                try:
+                    revisions.submit_edit(testimony, form.cleaned_data)
+                except SubmissionError as error:
+                    form.add_error(None, str(error))
+                else:
+                    messages.info(request, _("Your changes are sent."))
+                    return redirect("testimonies:my-testimony")
+    else:
+        form = ContributionForm(initial=_initial(testimony), edit=True)
+    consent = testimony.consent_records.order_by("-publication_consent_at").first()
+    return render(
+        request,
+        "testimonies/edit.html",
+        {
+            "form": form,
+            "testimony": testimony,
+            "preview_html": preview_html,
+            "under_16": consent.declared_age_band == DeclaredAgeBand.UNDER_16,
+            "awaiting_parental": services.awaiting_parental_consent(testimony),
+        },
     )
 
 
@@ -158,7 +204,7 @@ def parental_confirm(request, token):
     link = magic_links.peek(MagicLink.Purpose.PARENTAL, token)
     if link is None:
         return render(request, "testimonies/link_invalid.html", status=404)
-    revision = services.current_revision(link.testimony)
+    revision = revisions.current_revision(link.testimony)
     return render(
         request,
         "testimonies/parental_confirm.html",

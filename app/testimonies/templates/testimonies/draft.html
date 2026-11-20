@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Your testimony" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Your testimony" %}</h1>
+<p>{% translate "Write in your own words. Nothing is published until you submit it and it has been reviewed." %}</p>
+{% if preview_html %}
+<section>
+  <h2>{% translate "Preview" %}</h2>
+  {{ preview_html|safe }}
+</section>
+{% endif %}
+<form method="post" action="{% url 'testimonies:my-testimony' %}">
+  {% csrf_token %}
+  {{ form }}
+  <p>
+    <button type="submit" name="action" value="save">{% translate "Save draft" %}</button>
+    <button type="submit" name="action" value="preview">{% translate "Preview" %}</button>
+    <button type="submit" name="action" value="continue">{% translate "Continue to submission" %}</button>
+  </p>
+</form>
+{% endblock %}

@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
-from guestbook.constraints import iff, not_earlier_than
+from guestbook.constraints import iff, implies, not_earlier_than
 
 
 class Account(models.Model):
@@ -82,12 +82,23 @@ class MagicLink(models.Model):
     created_at = models.DateTimeField(db_comment="operational | instant")
     expires_at = models.DateTimeField(db_comment="operational | instant")
     used_at = models.DateTimeField(null=True, db_comment="operational | instant?")
+    testimony = models.ForeignKey(
+        "testimonies.Testimony",
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="magic_links",
+        db_comment="operational | ref(Testimony)?",
+    )
 
     class Meta:
         constraints = [
             models.CheckConstraint(
                 name="magic_link_expires_after_creation",
                 condition=Q(expires_at__gt=models.F("created_at")),
+            ),
+            models.CheckConstraint(
+                name="magic_link_parental_has_testimony",
+                condition=implies(Q(purpose="parental"), Q(testimony__isnull=False)),
             ),
             models.CheckConstraint(
                 name="magic_link_used_within_validity",

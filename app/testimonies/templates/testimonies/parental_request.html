@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Confirmation from a parent or guardian" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Confirmation from a parent or guardian" %}</h1>
+<p>{% translate "Because you are under 16, your testimony is published only if a parent or legal guardian confirms it. We send them a link. They can read your testimony before they confirm. The link works once and expires in 15 minutes." %}</p>
+<form method="post" action="{% url 'testimonies:parental-request' %}">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">{% translate "Send the link" %}</button>
+</form>
+{% endblock %}

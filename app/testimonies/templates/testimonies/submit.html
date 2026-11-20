@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Submit your testimony" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Submit your testimony" %}</h1>
+<p>{% translate "Before you submit, read what happens to a testimony." %}</p>
+<ul>
+  <li>{% translate "It is published for anyone to read, and kept for the long term in editions of the archive." %}</li>
+  <li>{% translate "Editions can be downloaded and copied by others. The project cannot recall copies it does not control." %}</li>
+  <li>{% translate "Withdrawing removes the testimony from everything the project controls, within the periods the privacy notice gives." %}</li>
+  <li>{% translate "A display name is what you chose; it is not verified. Anonymous and pseudonymous testimonies hide your identity from the public, not from the law: the account email can be disclosed to a judicial authority." %}</li>
+  <li>{% translate "Writing style can sometimes identify an author, even when no name is given." %}</li>
+  <li>{% translate "The testimony is licensed under CC BY 4.0, and you grant the project the permissions the terms describe." %}</li>
+</ul>
+<form method="post" action="{% url 'testimonies:submit' %}">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">{% translate "Submit testimony" %}</button>
+</form>
+{% endblock %}

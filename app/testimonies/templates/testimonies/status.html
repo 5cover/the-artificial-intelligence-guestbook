@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Your testimony" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Your testimony" %}</h1>
+{% if testimony.state == "submitted" %}
+  <p>{% translate "Your testimony has been submitted and is awaiting review." %}</p>
+  {% if awaiting_parental %}
+    <p>{% translate "A parent or legal guardian must confirm it before it can be reviewed." %}</p>
+    <p><a href="{% url 'testimonies:parental-request' %}">{% translate "Ask a parent or guardian to confirm" %}</a></p>
+  {% endif %}
+{% elif testimony.state == "withdrawn" %}
+  <p>{% translate "This testimony was withdrawn." %}</p>
+{% else %}
+  <p>{% translate "Status" %}: {{ testimony.get_state_display }}</p>
+{% endif %}
+{% endblock %}

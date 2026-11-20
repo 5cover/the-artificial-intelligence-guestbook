@@ -25,6 +25,9 @@ dev = [
 target-version = "py312"
 src = ["app"]
 
+[tool.ruff.format]
+line-ending = "lf"
+
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "DJ"]
 # Line length is left to ruff format (AGENTS.md: no column limit).
@@ -37,3 +40,5 @@ pythonpath = ["app"]
 DJANGO_SETTINGS_MODULE = "guestbook.settings_test"
 testpaths = ["app"]
 addopts = "--strict-markers -ra"
+# Testimony is a model, not a test class: only *Tests classes are collected.
+python_classes = ["*Tests"]

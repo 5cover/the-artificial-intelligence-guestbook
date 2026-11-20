@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Link not valid" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "This link is not valid" %}</h1>
+<p>{% translate "It has already been used, has expired, or was never issued." %}</p>
+{% endblock %}

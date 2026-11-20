@@ -1,6 +1,6 @@
 # Identifiers and permanent URLs
 
-Status: Draft
+Status: Accepted (2026-11-20)
 
 Issue: #15
 
@@ -83,7 +83,7 @@ Rules:
 
 1. `/robots.txt` allows crawling of interface and data URLs, except private and authenticated paths.
 2. `/llms.txt` follows the llms.txt proposal (Jeremy Howard, 2024, an informal community convention, not a standard): an `h1`, a summary blockquote, and lists of links to the Markdown views of the public documentation and to the data URLs of section 2.1. It contains nothing that a human reader cannot find in the same documentation: it is an index, not separate documentation for machines.
-3. Proposal: the methodology page documents the data URLs for people too, with examples, so that the human and machine descriptions are the same text.
+3. The methodology page documents the data URLs for people too, with examples, so that the human and machine descriptions are the same text.
 
 ### 2.3 Deep links
 
@@ -168,7 +168,7 @@ Editions are signed with one OpenPGP key ([archive format](archive-format.md), s
 | The repository documentation on editions | The fingerprint | |
 | Each edition's `README.txt` and `README.fr.txt` | The fingerprint, and where to get the key | Inside the signed package, so it confirms the key but cannot establish it alone |
 | The editions registry (`/data/time-capsules.json`) | The fingerprint of the key that signed each revision | Keeps old revisions verifiable after a key change |
-| Proposal: the keys.openpgp.org keyserver and a Web Key Directory for `contact@theaiguestbook.org` | The public key | Standard discovery for OpenPGP tools. The Web Key Directory is specified by the IETF Internet-Draft `draft-koch-openpgp-webkey-service`, not an RFC, and serves static files under `/.well-known/openpgpkey/`, a well-known URI path in the sense of RFC 8615. |
+| The keys.openpgp.org keyserver and a Web Key Directory for `contact@theaiguestbook.org` | The public key | Standard discovery for OpenPGP tools. The Web Key Directory is specified by the IETF Internet-Draft `draft-koch-openpgp-webkey-service`, not an RFC, and serves static files under `/.well-known/openpgpkey/`, a well-known URI path in the sense of RFC 8615. |
 
 Rules:
 

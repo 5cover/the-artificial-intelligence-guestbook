@@ -1,6 +1,6 @@
 # Threat model
 
-Status: Draft
+Status: Accepted (2026-11-20)
 
 Issue: #20
 

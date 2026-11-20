@@ -1,6 +1,6 @@
 # Browsing, search and filters
 
-Status: Draft (2026-11-15). Items marked "Proposal" need owner review.
+Status: Accepted (2026-11-20)
 
 Issue: #27
 

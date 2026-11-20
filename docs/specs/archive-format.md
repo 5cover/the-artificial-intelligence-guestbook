@@ -1,6 +1,6 @@
 # Archive format and edition packaging (v0)
 
-Status: Draft (2026-11-15). Items marked "Proposal" need owner review. Format version: 0, unstable until the rehearsal edition (#38).
+Status: Accepted (2026-11-20). Format version: 0, unstable until the rehearsal edition (#38).
 
 Issue: #13
 
@@ -75,7 +75,7 @@ Encoding rules for every file the project writes:
 ### 1.1 Serialization for download
 
 1. The bag is serialized as a POSIX `tar` archive (pax format) compressed with gzip (RFC 1952), named `the-ai-guestbook-2027.0.tar.gz` (owner decision, 2026-11-19). Both are readable by standard tools on every common system.
-2. Editions are built rarely and downloaded often, so compression favours size over time. Compression uses the strongest gzip-compatible encoder available. Proposal: Zopfli, an encoder that writes standard gzip, typically a few percent smaller than `gzip -9`, at a much higher compression time; otherwise `gzip -9`. Any gzip decoder reads either.
+2. Editions are built rarely and downloaded often, so compression favours size over time. Compression uses the strongest gzip-compatible encoder available. Zopfli, an encoder that writes standard gzip, typically a few percent smaller than `gzip -9`, at a much higher compression time; otherwise `gzip -9`. Any gzip decoder reads either.
 3. gzip cannot be given a larger dictionary: DEFLATE looks back at most 32 KiB (RFC 1951). Repeated content further apart than that is not deduplicated, so each rendering of a testimony costs roughly its own compressed size. To let gzip find repetitions where it can, tar members are ordered by testimony (the JSON record, plain text and HTML of one testimony are adjacent), not by directory.
 4. A second serialization of the same bag, `the-ai-guestbook-2027.0.tar.xz`, compressed with `xz -9e` (LZMA2 with a 64 MiB dictionary), which does deduplicate across renderings. It is offered next to the gzip file, not instead of it (owner decision, 2026-11-19). Both are listed in the editions registry with their digests (section 6), and both unpack to the same bag.
 5. The download page, the editions registry and each edition's README explain the difference in plain words: the `.tar.gz` file opens with the most tools; the `.tar.xz` file is smaller but needs a tool that reads xz; both give the same files.

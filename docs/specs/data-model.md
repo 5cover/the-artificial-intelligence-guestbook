@@ -1,6 +1,6 @@
 # Data model and testimony lifecycle
 
-Status: Draft (2026-11-15, types, time and constraints added 2026-11-19). Items marked "Proposal" need owner review.
+Status: Accepted (2026-11-20)
 
 Issue: #14
 
@@ -179,7 +179,7 @@ Constraints:
 
 #### 2.3.1 Text format
 
-The body is CommonMark 0.31.2 source text, of type `markdown(50000)` (owner decision, 2026-11-19). Proposal: the maximum of 50,000 characters stops abuse without constraining a long essay, and is reviewed if real testimonies approach it. The body is trimmed and has at least one non-whitespace character.
+The body is CommonMark 0.31.2 source text, of type `markdown(50000)` (owner decision, 2026-11-19). The maximum of 50,000 characters stops abuse without constraining a long essay, and is reviewed if real testimonies approach it. The body is trimmed and has at least one non-whitespace character.
 
 1. Only CommonMark is accepted, with no extensions (no tables, footnotes or task lists).
 2. Raw HTML is never rendered: the renderer runs with HTML disabled, so any HTML in the source shows as literal text.
@@ -285,7 +285,7 @@ Constraint: `category IN ('none', 'undisclosed')` implies that `provider`, `prod
 
 ### 2.7 Structured testimony fields (`public`, optional)
 
-Proposal: a deliberately short set, to keep the form from feeling like a survey (editorial principles, "Testimonies" 3). The free text remains the testimony.
+A deliberately short set, to keep the form from feeling like a survey (editorial principles, "Testimonies" 3). The free text remains the testimony.
 
 | Field | Type |
 | --- | --- |

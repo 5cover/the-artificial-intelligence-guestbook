@@ -1,6 +1,6 @@
 # Withdrawal and deletion lifecycle
 
-Status: Draft (2026-11-15). Items marked "Proposal" need owner review.
+Status: Accepted (2026-11-20)
 
 Issue: #16
 
@@ -45,7 +45,7 @@ Deadline: without undue delay and within one month of receipt (GDPR art. 12(3), 
 | 3 | Search vectors | Derived text | Yes | Derived in the database, so deleted with the row | Immediate |
 | 4 | Reverse-proxy page cache | Rendered HTML of the testimony page and listings | Yes | Purge by URL in the deletion job; short cache lifetimes as a backstop | Immediate, at most the cache lifetime |
 | 5 | Static renderings | Pre-rendered testimony pages and listings (ADR 0006), and the static data files and Markdown views ([identifiers](identifiers.md), section 2.1) | Yes | Regenerated without the testimony; the testimony page becomes the tombstone | Immediate |
-| 6 | Hosted editions | Edition packages served for download | Yes | Privacy revision (section 4) | Proposal: within 30 days of verification |
+| 6 | Hosted editions | Edition packages served for download | Yes | Privacy revision (section 4) | Within 30 days of verification |
 | 7 | Withdrawal list | Public IDs of withdrawn testimonies | Yes | Not removed: it is the mechanism (section 5) | Updated immediately |
 | 8 | Backups | Database dumps and file backups, encrypted | Yes | Expiry by rotation, plus erase-on-restore (section 6) | At most 30 days (ADR 0015) |
 | 9 | Application and proxy logs | URLs with the public ID, timestamps, hashed or no IP addresses; never text or emails | Yes | Log rotation | Retention schedule (#18) |
@@ -82,7 +82,7 @@ Account closure withdraws the account's testimony, then deletes the account. If 
 ## 4. Privacy revisions of editions
 
 1. A privacy revision of edition `Y.n` is edition `Y.(n+1)`: the same content minus the withdrawn testimonies, with tombstones in their place and a changelog entry stating the number of withdrawals, not their identities ([archival model](../constitution/archival-model.md), principle 7).
-2. Proposal: privacy revisions are batched, at most one a month, and within 30 days of the oldest verified request they include. Batching keeps the custodial burden bounded and avoids publishing a revision that pinpoints a single withdrawal date.
+2. Privacy revisions are batched, at most one a month, and within 30 days of the oldest verified request they include. Batching keeps the custodial burden bounded and avoids publishing a revision that pinpoints a single withdrawal date.
 3. The superseded package is deleted from project hosting when the revision is published. Its checksums stay listed, so mirrors can recognize which version they hold.
 4. Packaging details (BagIt, OCFL purge procedure) belong to the archive format (#13).
 

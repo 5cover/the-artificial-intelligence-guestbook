@@ -1,6 +1,6 @@
 # Reports
 
-Status: Draft (2026-11-20; proposals accepted by the owner the same day).
+Status: Accepted (2026-11-20)
 
 Issue: #41
 

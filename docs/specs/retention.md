@@ -1,6 +1,6 @@
 # Retention schedule
 
-Status: Draft (2026-11-15; periods accepted by the owner 2026-11-19). Follows [ADR 0013](../decisions/0013-legal-bases-and-minors.md), in particular option C of D2.
+Status: Accepted (2026-11-20). Follows [ADR 0013](../decisions/0013-legal-bases-and-minors.md), in particular option C of D2.
 
 Issue: #18
 

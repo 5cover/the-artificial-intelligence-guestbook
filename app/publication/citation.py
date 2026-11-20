@@ -16,12 +16,15 @@ def _current(record):
     return record["revisions"][-1]
 
 
-def plain(record):
+def plain(record, edition_id=None):
     revision = _current(record)
-    return (
+    text = (
         f"{attribution(record)}, testimony {record['public_id']}, revision {revision['revision_number']}, "
         f"{PUBLISHER}, {revision['live_on']}. {record['url']}"
     )
+    if edition_id:
+        text += f" Time capsule {edition_id}."
+    return text
 
 
 def bibtex(record):

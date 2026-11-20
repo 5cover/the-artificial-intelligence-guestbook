@@ -21,6 +21,7 @@ GUESTBOOK_PUBLIC_BASE_URL  base of the links in emails and citations, default ht
 GUESTBOOK_ALLOWED_HOSTS    default localhost,127.0.0.1
 GUESTBOOK_FROM_EMAIL       default contact@theaiguestbook.org
 GUESTBOOK_EMAIL_BACKEND    default console
+GUESTBOOK_ERASE_ON_RESTORE_FILE  file listing withdrawn testimony IDs, kept outside database backups (empty by default)
 ```
 
 Then, from the repository root:
@@ -31,6 +32,20 @@ uv run python app/manage.py runserver
 ```
 
 Outgoing email is printed to the console unless `GUESTBOOK_EMAIL_BACKEND` names another backend.
+
+## Operations commands
+
+These run by hand for now. Scheduling them belongs to the deployment work.
+
+```text
+uv run python app/manage.py purge_expired
+uv run python app/manage.py erase_on_restore
+uv run python app/manage.py export_edition 2027.0 <directory>
+```
+
+- `purge_expired` deletes sign-in links and rate-limit counters older than 24 hours (retention schedule, rows 1 and 19).
+- `erase_on_restore` runs the deletion again for every testimony on the erase-on-restore list (deletion lifecycle, section 6).
+- `export_edition` writes an unsigned edition bag inside `<directory>`. It refuses to run before the cutoff of its period, and while a testimony of the period has a pending revision. Signing and compression happen on the custodian's machine (archive format, section 9).
 
 ## Tests and linting
 

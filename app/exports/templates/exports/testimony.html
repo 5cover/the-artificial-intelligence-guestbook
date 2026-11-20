@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="{{ record.language }}">
+  <head>
+    <meta charset="utf-8">
+    <title>Testimony {{ record.public_id }}</title>
+  </head>
+  <body>
+    <p><a href="../index.html">The Artificial Intelligence Guestbook</a></p>
+    <article lang="{{ record.language }}">
+      <h1>Testimony {{ record.public_id }}</h1>
+      <p>By {{ attribution }}. Published {{ record.published_on }} UTC. Licence: CC BY 4.0.</p>
+      <section>{{ body_html|safe }}</section>
+      <section>
+        <h2>About the contributor</h2>
+        <dl>
+          {% for label, value in identity_rows %}
+            <dt>{{ label }}</dt>
+            <dd>{{ value }}</dd>
+          {% endfor %}
+        </dl>
+      </section>
+      <section>
+        <h2>Use of AI</h2>
+        <dl>
+          {% for label, value in authorship_rows %}
+            <dt>{{ label }}</dt>
+            <dd>{{ value }}</dd>
+          {% endfor %}
+          {% for label, value in structured_rows %}
+            <dt>{{ label }}</dt>
+            <dd>{{ value }}</dd>
+          {% endfor %}
+        </dl>
+      </section>
+    </article>
+  </body>
+</html>

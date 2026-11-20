@@ -45,8 +45,9 @@ def _present(value):
     return value is not None and value != "" and value != []
 
 
-def public_record(testimony):
-    revision = testimony.public_revision
+def public_record(testimony, revision=None, edition_id=None):
+    """The public record of a testimony: its public revision, or the given revision (an edition's)."""
+    revision = revision or testimony.public_revision
     identity = {"mode": revision.identity_mode}
     identity.update(
         {
@@ -70,27 +71,35 @@ def public_record(testimony):
     }
     timeline = [
         _timeline_entry(entry)
-        for entry in testimony.revisions.filter(revision_number__isnull=False)
+        for entry in testimony.revisions.filter(
+            revision_number__isnull=False,
+            revision_number__lte=revision.revision_number,
+        )
         .exclude(review_state="returned")
         .order_by("revision_number")
     ]
-    record = {
-        "format_version": 0,
-        "public_id": testimony.public_id,
-        "url": f"{settings.PUBLIC_BASE_URL.rstrip('/')}/testimonies/{testimony.public_id}",
-        "language": testimony.language,
-        "published_on": testimony.published_at.date().isoformat(),
-        "edition_period": testimony.edition_period,
-        "licence": testimony.licence,
-        "body_format": "commonmark-0.31.2",
-        "body": revision.body,
-        "revisions": timeline,
-        "identity": identity,
-        "authorship": authorship,
-    }
+    record = {}
+    if edition_id:
+        record["edition_id"] = edition_id
+    record.update(
+        {
+            "format_version": 0,
+            "public_id": testimony.public_id,
+            "url": f"{settings.PUBLIC_BASE_URL.rstrip('/')}/testimonies/{testimony.public_id}",
+            "language": testimony.language,
+            "published_on": testimony.published_at.date().isoformat(),
+            "edition_period": testimony.edition_period,
+            "licence": testimony.licence,
+            "body_format": "commonmark-0.31.2",
+            "body": revision.body,
+            "revisions": timeline,
+            "identity": identity,
+            "authorship": authorship,
+        }
+    )
     if structured:
         record["structured"] = structured
-    record["citation"] = citation.plain(record)
+    record["citation"] = citation.plain(record, edition_id)
     return record
 
 

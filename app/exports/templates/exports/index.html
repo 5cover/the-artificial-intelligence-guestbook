@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>The Artificial Intelligence Guestbook, edition {{ edition_id }}</title>
+  </head>
+  <body>
+    <h1>The Artificial Intelligence Guestbook</h1>
+    <p>Edition {{ edition_id }}: {{ records|length }} testimonies.</p>
+    <ul>
+      {% for record in records %}
+        <li><a href="testimonies/{{ record.public_id }}.html">Testimony {{ record.public_id }}</a>, {{ record.published_on }} UTC, {{ record.language }}</li>
+      {% endfor %}
+      {% for testimony in withdrawn %}
+        <li><a href="testimonies/{{ testimony.public_id }}.html">Testimony {{ testimony.public_id }}</a>: withdrawn</li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

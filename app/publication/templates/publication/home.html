@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "A human time capsule of the AI era" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "The Artificial Intelligence Guestbook" %}</h1>
+<p>{% translate "A human time capsule of the AI era." %}</p>
+<p>{% translate "Anybody can leave a testimony about what living alongside AI is like for them." %}</p>
+<p><a href="{% url 'publication:listing' %}">{% translate "Read the guestbook" %}</a></p>
+<p><a href="{% url 'accounts:sign-in' %}">{% translate "Sign the guestbook" %}</a></p>
+{% endblock %}

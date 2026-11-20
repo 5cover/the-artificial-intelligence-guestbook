@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Testimony" %} {{ record.public_id }}{% endblock %}
+
+{% block head %}<link rel="canonical" href="{{ record.url }}">{% endblock %}
+
+{% block content %}
+<article lang="{{ record.language }}">
+  <h1>{% translate "Testimony" %} {{ record.public_id }}</h1>
+  <p>
+    {% translate "By" %} {{ attribution }}.
+    {% if record.identity.mode != "anonymous" %}
+      {% translate "The name is given by the contributor and is not verified." %}
+    {% endif %}
+  </p>
+  <p>
+    {% translate "Published on" %} <time datetime="{{ record.published_on }}">{{ record.published_on }}</time> UTC.
+    {% translate "Original language" %}: {{ record.language }}.
+    {% translate "Licence" %}: CC BY 4.0.
+  </p>
+
+  <section>
+    {{ body_html|safe }}
+  </section>
+
+  <section>
+    <h2>{% translate "About the contributor" %}</h2>
+    {% if identity_rows %}
+      <dl>
+        {% for label, value in identity_rows %}
+          <dt>{{ label }}</dt>
+          <dd>{{ value }}</dd>
+        {% endfor %}
+      </dl>
+    {% else %}
+      <p>{% translate "No details were published." %}</p>
+    {% endif %}
+  </section>
+
+  <section>
+    <h2>{% translate "Use of AI" %}</h2>
+    <dl>
+      {% for label, value in authorship_rows %}
+        <dt>{{ label }}</dt>
+        <dd>{{ value }}</dd>
+      {% endfor %}
+    </dl>
+    {% if structured_rows %}
+      <dl>
+        {% for label, value in structured_rows %}
+          <dt>{{ label }}</dt>
+          <dd>{{ value }}</dd>
+        {% endfor %}
+      </dl>
+    {% endif %}
+  </section>
+
+  {% if record.revisions|length > 1 %}
+    <details>
+      <summary>{% translate "Timeline" %}</summary>
+      <ol>
+        {% for entry in record.revisions %}
+          <li>
+            <time datetime="{{ entry.live_on }}">{{ entry.live_on }}</time> UTC:
+            {% translate "revision" %} {{ entry.revision_number }}{% if entry.summary %}, {{ entry.summary }}{% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+    </details>
+  {% endif %}
+
+  <details open>
+    <summary>{% translate "Cite this testimony" %}</summary>
+    <details open>
+      <summary>{% translate "Plain text" %}</summary>
+      <pre>{{ citations.plain }}</pre>
+    </details>
+    <details>
+      <summary>BibTeX</summary>
+      <pre>{{ citations.bibtex }}</pre>
+    </details>
+    <details>
+      <summary>Hayagriva</summary>
+      <pre>{{ citations.hayagriva }}</pre>
+    </details>
+  </details>
+</article>
+{% endblock %}

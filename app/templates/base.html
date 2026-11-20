@@ -3,12 +3,14 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block head %}{% endblock %}
     <title>{% block title %}{% endblock %} | {% translate "The Artificial Intelligence Guestbook" %}</title>
   </head>
   <body>
     <header>
-      <p><a href="/">{% translate "The Artificial Intelligence Guestbook" %}</a></p>
+      <p><a href="{% url 'publication:home' %}">{% translate "The Artificial Intelligence Guestbook" %}</a></p>
       <nav>
+        <a href="{% url 'publication:listing' %}">{% translate "Read the guestbook" %}</a>
         {% if account %}
           <a href="{% url 'accounts:account' %}">{% translate "Your account" %}</a>
           <form method="post" action="{% url 'accounts:sign-out' %}">

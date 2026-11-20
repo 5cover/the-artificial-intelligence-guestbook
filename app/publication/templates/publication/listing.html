@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Read the guestbook" %}{% endblock %}
+
+{% block head %}{% if noindex %}<meta name="robots" content="noindex">{% endif %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Read the guestbook" %}</h1>
+{% if too_many %}
+  <p>{% translate "Too many searches from this network. Try again later." %}</p>
+{% else %}
+  <form method="get" action="{% url 'publication:listing' %}">
+    <p>
+      <label for="search">{% translate "Search the testimonies" %}</label>
+      <input id="search" type="search" name="q" value="{{ query }}">
+    </p>
+    {% for name, option in options.items %}
+      <p>
+        <label for="filter-{{ name }}">{{ option.label }}</label>
+        <select id="filter-{{ name }}" name="{{ name }}">
+          <option value="">{% translate "Any" %}</option>
+          {% for value, label, is_selected in option.choices %}
+            <option value="{{ value }}"{% if is_selected %} selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </p>
+    {% endfor %}
+    <p><button type="submit">{% translate "Apply" %}</button></p>
+  </form>
+
+  {% if items %}
+    <ol>
+      {% for item in items %}
+        <li lang="{{ item.record.language }}">
+          <p>
+            <a href="{% url 'publication:testimony' item.record.public_id %}">{{ item.attribution }}</a>,
+            <time datetime="{{ item.record.published_on }}">{{ item.record.published_on }}</time> UTC,
+            {{ item.record.language }}
+          </p>
+          <p>{{ item.excerpt }}</p>
+        </li>
+      {% endfor %}
+    </ol>
+    <nav>
+      {% if page.has_previous %}
+        <a href="?{% if query_string %}{{ query_string }}&amp;{% endif %}page={{ page.previous_page_number }}">{% translate "Previous" %}</a>
+      {% endif %}
+      {% if page.has_next %}
+        <a href="?{% if query_string %}{{ query_string }}&amp;{% endif %}page={{ page.next_page_number }}">{% translate "Next" %}</a>
+      {% endif %}
+    </nav>
+  {% else %}
+    <p>{% translate "No testimonies match." %}</p>
+  {% endif %}
+{% endif %}
+{% endblock %}

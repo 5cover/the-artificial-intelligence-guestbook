@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Withdrawn" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "This testimony was withdrawn" %}</h1>
+<p>{% translate "Testimony" %} {{ public_id }}</p>
+{% endblock %}

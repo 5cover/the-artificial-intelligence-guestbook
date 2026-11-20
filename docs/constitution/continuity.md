@@ -1,6 +1,6 @@
 # Continuity
 
-Status: Draft, awaiting owner ratification
+Status: Ratified (2026-11-20)
 
 Launching the Guestbook means accepting responsibility for tending it. At the beginning, the custodian is the founder.
 

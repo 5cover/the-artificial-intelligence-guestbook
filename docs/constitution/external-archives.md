@@ -1,6 +1,6 @@
 # Relationship to external archives
 
-Status: Draft, awaiting owner ratification
+Status: Ratified (2026-11-20)
 
 1. **Do not duplicate specialist work.** Where another project preserves something well, such as models, benchmarks, papers, source code, technical artifacts, incidents or institutional reporting, the Guestbook explains why it matters and points to it rather than building a competing collection.
 2. **Do not delegate the social record.** The Guestbook remains willing to document social dimensions that are poorly preserved elsewhere when they help readers understand the testimonies: cultural discourse, labour conflict, education, creative controversies, enterprise adoption, public expectations, companionship, attitudes towards automation, changing language, media narratives, policy disputes, hype and backlash, scams and generated content, ordinary uses and regional differences.

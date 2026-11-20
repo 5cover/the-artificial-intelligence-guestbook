@@ -1,6 +1,6 @@
 # Archival model
 
-Status: Draft, awaiting owner ratification
+Status: Ratified (2026-11-20)
 
 > The guestbook stays open. At the end of each year, we preserve a time capsule of what people had written and of the world they were writing about.
 

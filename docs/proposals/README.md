@@ -28,10 +28,6 @@ Decisions waiting for the owner, grouped by the work they unblock. The recommend
 1. The record format, including the five added fields and naming against plan section 18 ([reference shelf](reference-shelf.md), section 7).
 2. Whether all-rights-reserved resources are listed as metadata only, and whether sources run by individuals are allowed ([reference shelf](reference-shelf.md), section 7).
 
-### Constitution (#2)
-
-1. Ratify the ten constitution documents, or ask for changes ([constitution](../constitution/README.md)).
-
 ## Deferred until after launch
 
 Open on purpose: nothing before launch depends on them. Each is revisited when its trigger occurs.

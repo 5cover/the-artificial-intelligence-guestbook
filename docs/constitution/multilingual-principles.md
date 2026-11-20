@@ -1,6 +1,6 @@
 # Multilingual principles
 
-Status: Draft, awaiting owner ratification
+Status: Ratified (2026-11-20)
 
 1. **First-class from the start.** The interface supports at least French and English for every contributor-facing flow: project explanation, contribution form, consent, moderation status, privacy controls, browsing, withdrawal requests, emails and notifications.
 2. **Any language may be used for testimonies.** Contributors write in the language they choose. The interface language and the testimony language are independent.

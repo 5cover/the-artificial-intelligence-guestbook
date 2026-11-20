@@ -1,6 +1,6 @@
 # Constitution
 
-Status: Draft, awaiting owner ratification
+Status: Ratified (2026-11-20)
 
 Issue: #2
 

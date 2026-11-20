@@ -1,6 +1,6 @@
 # Mission
 
-Status: Draft, awaiting owner ratification
+Status: Ratified (2026-11-20)
 
 The Artificial Intelligence Guestbook is a human time capsule of the AI era.
 

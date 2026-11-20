@@ -1,6 +1,6 @@
 # Deletion philosophy
 
-Status: Draft, awaiting owner ratification
+Status: Ratified (2026-11-20)
 
 An archive wants to keep things. A person has the right to take back what they shared. When the two conflict, the contributor's valid privacy rights win.
 

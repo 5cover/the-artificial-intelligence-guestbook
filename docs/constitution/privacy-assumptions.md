@@ -1,6 +1,6 @@
 # Privacy assumptions
 
-Status: Draft, awaiting owner ratification
+Status: Ratified (2026-11-20)
 
 These are design assumptions, not legal conclusions. Their legal grounding is being established in [the legal research](../research/legal-landscape.md) and must be validated before launch ([ADR 0007](../decisions/0007-privacy-review-path.md)).
 

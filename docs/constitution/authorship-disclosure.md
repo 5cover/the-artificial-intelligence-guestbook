@@ -1,6 +1,6 @@
 # Authorship disclosure
 
-Status: Draft, awaiting owner ratification
+Status: Ratified (2026-11-20)
 
 The project is interested in how people communicate during the AI era, including their use of AI to communicate about AI. Testimonies do not have to be written without AI. Fully AI-generated testimonies are permitted when their provenance is disclosed.
 

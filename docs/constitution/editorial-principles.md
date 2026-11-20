@@ -5,7 +5,7 @@ Status: Draft, awaiting owner ratification
 ## Testimonies
 
 1. A testimony does not need to be insightful, representative, technically correct or important in the editors' view to have archival value.
-2. The contributor's own words are the testimony. Structured fields support browsing and research but never replace the free text.
+2. The contributor's own words form the gist of the testimony. Structured fields support browsing, research and programmatic intepretation. Contributours should avoid repeating them in the body; both appear together in all reading surfaces.
 3. Contributing should feel like signing a guestbook, not completing a questionnaire. Prompts are optional aids.
 4. Testimonies are presented as written. The project does not correct, summarize, score or rank them.
 5. The archive does not silently classify testimonies, including by guessing whether AI produced them. Metadata comes from contributors or is labelled with its origin.

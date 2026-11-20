@@ -3,7 +3,9 @@
 
 {% block title %}{% translate "Testimony" %} {{ record.public_id }}{% endblock %}
 
-{% block head %}<link rel="canonical" href="{{ record.url }}">{% endblock %}
+{% block head %}<link rel="canonical" href="{{ record.url }}">
+<link rel="alternate" type="application/json" href="/data/testimonies/{{ record.public_id }}.json">
+<link rel="alternate" type="text/markdown" href="/testimonies/{{ record.public_id }}.md">{% endblock %}
 
 {% block content %}
 <article lang="{{ record.language }}">

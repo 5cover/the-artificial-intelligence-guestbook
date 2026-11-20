@@ -5,6 +5,7 @@ Index of the project's documentation. Conventions for maintaining it are in [AGE
 ## Plan
 
 - [Founding plan](plans/main.md): what the MVP must accomplish and under which constraints.
+- [Local MVP implementation plan](plans/mvp-implementation.md): scoped instructions for the agent implementing the first local MVP.
 
 ## Constitution
 
@@ -40,6 +41,7 @@ Authoritative principles. See [constitution/README.md](constitution/README.md).
 - [0014. Provisional VPS: OVHcloud VPS-1](decisions/0014-provisional-vps-ovhcloud.md)
 - [0015. Backups at Hetzner Object Storage, transactional email through Scaleway TEM](decisions/0015-backups-and-transactional-email.md)
 - [0016. Licences for the project's own material and for editions](decisions/0016-project-licensing.md)
+- [0017. Development environment, and an unstyled MVP with minimal JavaScript](decisions/0017-development-environment-and-unstyled-mvp.md)
 
 ## Proposals
 

@@ -1,0 +1,15 @@
+# Starter list of disposable email domains (ADR 0003). A listed domain also
+# blocks its subdomains. To be replaced by a maintained list, refreshed monthly
+# (recurring duties, operations calendar).
+10minutemail.com
+getnada.com
+guerrillamail.com
+maildrop.cc
+mailinator.com
+mailnesia.com
+sharklasers.com
+temp-mail.org
+tempmail.com
+throwawaymail.com
+trashmail.com
+yopmail.com

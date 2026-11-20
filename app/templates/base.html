@@ -1,0 +1,31 @@
+{% load i18n static %}<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %} | {% translate "The Artificial Intelligence Guestbook" %}</title>
+  </head>
+  <body>
+    <header>
+      <p><a href="/">{% translate "The Artificial Intelligence Guestbook" %}</a></p>
+      <nav>
+        {% if account %}
+          <a href="{% url 'accounts:account' %}">{% translate "Your account" %}</a>
+          <form method="post" action="{% url 'accounts:sign-out' %}">
+            {% csrf_token %}
+            <button type="submit">{% translate "Sign out" %}</button>
+          </form>
+        {% else %}
+          <a href="{% url 'accounts:sign-in' %}">{% translate "Sign in" %}</a>
+        {% endif %}
+      </nav>
+    </header>
+    <main>
+      {% for message in messages %}
+        <p role="status">{{ message }}</p>
+      {% endfor %}
+      {% block content %}{% endblock %}
+    </main>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

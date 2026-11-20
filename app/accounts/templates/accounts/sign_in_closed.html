@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Account closed" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "This account is closed" %}</h1>
+<p>{% translate "A closed account cannot be signed in to. Its email address is kept for a limited period, as the retention schedule describes." %}</p>
+{% endblock %}

@@ -17,6 +17,10 @@ GUESTBOOK_DB_PORT          default 5432
 GUESTBOOK_SECRET_KEY       required unless GUESTBOOK_DEBUG=1
 GUESTBOOK_DEBUG            1 for local development only
 GUESTBOOK_MODERATOR_EMAILS comma-separated addresses that see the moderation queue
+GUESTBOOK_PUBLIC_BASE_URL  base of the links in emails and citations, default https://theaiguestbook.org; use http://127.0.0.1:8000 locally
+GUESTBOOK_ALLOWED_HOSTS    default localhost,127.0.0.1
+GUESTBOOK_FROM_EMAIL       default contact@theaiguestbook.org
+GUESTBOOK_EMAIL_BACKEND    default console
 ```
 
 Then, from the repository root:

@@ -62,12 +62,13 @@ ROOT_URLCONF = "guestbook.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
                 "django.contrib.messages.context_processors.messages",
+                "accounts.context_processors.account",
             ],
         },
     },
@@ -92,6 +93,10 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "static/"
+STATICFILES_DIRS = [BASE_DIR / "guestbook" / "static"]
+
+# Leading zero bits of SHA-256(challenge:nonce) that a proof-of-work solution must have.
+POW_DIFFICULTY_BITS = 16
 
 SESSION_COOKIE_AGE = 30 * 24 * 60 * 60
 SESSION_SAVE_EVERY_REQUEST = True

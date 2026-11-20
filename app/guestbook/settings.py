@@ -111,6 +111,9 @@ DEFAULT_FROM_EMAIL = env("GUESTBOOK_FROM_EMAIL", "contact@theaiguestbook.org")
 
 PUBLIC_BASE_URL = env("GUESTBOOK_PUBLIC_BASE_URL", "https://theaiguestbook.org")
 
+# Testimony internal IDs of withdrawn testimonies, re-erased after a restore.
+ERASE_ON_RESTORE_FILE = env("GUESTBOOK_ERASE_ON_RESTORE_FILE")
+
 # Until moderation has its own role model, the custodian is the moderator:
 # accounts signing in with one of these addresses see the moderation queue.
 MODERATOR_EMAILS = {

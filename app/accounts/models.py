@@ -70,6 +70,7 @@ class MagicLink(models.Model):
         WITHDRAWAL = "withdrawal", _("Withdrawal")
         PARENTAL = "parental", _("Parental consent")
         REPORT = "report", _("Report confirmation")
+        CLOSURE = "closure", _("Account closure")
 
     internal_id = models.BigAutoField(primary_key=True, db_comment="operational | id")
     purpose = models.CharField(

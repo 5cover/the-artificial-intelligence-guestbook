@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Your account is closed" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Your account is closed" %}</h1>
+{% if code %}
+  <p>{% translate "Your testimony stays published without an account. This withdrawal code is shown once, and it is also sent to your email address. Keep it like a password: it is the only way to withdraw the testimony without the account email." %}</p>
+  <p><code>{{ code }}</code></p>
+{% else %}
+  <p>{% translate "The account is closed." %}</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Withdrawn" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "The withdrawal is done" %}</h1>
+<p>{% translate "The testimony was removed from the pages, the search, the data and the editions the project controls. The request record keeps only the testimony identifier and the dates, without the content." %}</p>
+<p>{% translate "What the project cannot guarantee:" %}</p>
+<ul>
+  {% for text in steps %}
+    <li>{{ text }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

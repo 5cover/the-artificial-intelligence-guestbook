@@ -101,3 +101,33 @@ class ConsentLocale(TextChoices):
 
 class ParentalMethod(TextChoices):
     EMAIL_LINK = "email-link", _("Email link")
+
+
+class WithdrawalScope(TextChoices):
+    TESTIMONY = "testimony", _("The testimony")
+    FIELD = "field", _("One identity field")
+    EARLIER_TEXT = "earlier-text", _("Superseded text in hosted editions")
+    ACCOUNT = "account", _("The testimony and the account")
+
+
+class WithdrawableField(TextChoices):
+    DISPLAY_NAME = "display_name", _("Display name")
+    AGE_RANGE = "age_range", _("Age range")
+    COUNTRY = "country", _("Country")
+    REGION = "region", _("Region")
+    LANGUAGES = "languages", _("Languages lived in")
+    PROFESSION = "profession", _("Profession")
+    FIELD = "field", _("Field")
+    FIELD_NOTE = "field_note", _("Field, in words")
+    ORGANIZATION = "organization", _("Organization")
+    ORGANIZATION_TYPE = "organization_type", _("Type of organization")
+    ORGANIZATION_TYPE_NOTE = (
+        "organization_type_note",
+        _("Type of organization, in words"),
+    )
+    RELATIONSHIP_TO_AI = "relationship_to_ai", _("Relationship to AI")
+    RELATIONSHIP_TO_AI_NOTE = (
+        "relationship_to_ai_note",
+        _("Relationship to AI, in words"),
+    )
+    LINK = "link", _("Link")

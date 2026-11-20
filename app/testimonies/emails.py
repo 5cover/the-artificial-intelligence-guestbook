@@ -15,3 +15,29 @@ def send_parental_link(email, url):
         from_email=None,
         recipient_list=[email],
     )
+
+
+def send_withdrawal_confirmation(email):
+    send_mail(
+        subject=_("Your testimony was withdrawn"),
+        message=_(
+            "The testimony you asked us to withdraw has been removed from everything the "
+            "project controls. Copies that others made, such as downloads, mirrors, search "
+            "engines and web archives, may remain: the project cannot recall them."
+        ),
+        from_email=None,
+        recipient_list=[email],
+    )
+
+
+def send_action_link(email, url, subject):
+    send_mail(
+        subject=subject,
+        message=_(
+            "Open this link within 15 minutes to confirm. It works once.\n\n%(url)s\n\n"
+            "If you did not ask for this, ignore this message."
+        )
+        % {"url": url},
+        from_email=None,
+        recipient_list=[email],
+    )

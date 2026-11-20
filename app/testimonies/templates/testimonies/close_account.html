@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Close your account" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Close your account" %}</h1>
+<p>{% translate "Closing the account stops sign-in. Its email address is kept for one year, as the privacy notice describes." %}</p>
+{% if testimony and testimony.state == "published" %}
+  <p>{% translate "Your published testimony can be withdrawn with the account, or kept published without it. If you keep it, you receive a withdrawal code: keep it safe, because it is the only way to withdraw without the account email." %}</p>
+{% else %}
+  <p>{% translate "Your testimony, if you have one, is not published, so the account is closed without publication." %}</p>
+{% endif %}
+<form method="post" action="{% url 'testimonies:close' %}">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">{% translate "Send confirmation link" %}</button>
+</form>
+{% endblock %}

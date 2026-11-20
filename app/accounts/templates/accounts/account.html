@@ -8,4 +8,6 @@
 <p>{% translate "Signed in as" %} {{ account.email }}</p>
 <p>{% translate "Status" %}: {{ account.get_status_display }}</p>
 <p><a href="{% url 'testimonies:my-testimony' %}">{% translate "Your testimony" %}</a></p>
+<p><a href="{% url 'testimonies:withdraw' %}">{% translate "Withdraw a testimony" %}</a></p>
+<p><a href="{% url 'testimonies:close' %}">{% translate "Close your account" %}</a></p>
 {% endblock %}

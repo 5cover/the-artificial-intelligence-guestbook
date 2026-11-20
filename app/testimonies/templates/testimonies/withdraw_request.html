@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Withdraw a testimony" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Withdraw a testimony" %}</h1>
+<p>{% translate "We send a confirmation link to your account email. Nothing is removed until you open it and confirm." %}</p>
+<form method="post" action="{% url 'testimonies:withdraw' %}">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">{% translate "Send confirmation link" %}</button>
+</form>
+{% endblock %}

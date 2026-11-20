@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Withdraw a testimony" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Withdraw a testimony" %}</h1>
+<p>{% translate "Give the testimony identifier, and either the withdrawal code you received when your account was closed, or the email address used for the testimony. The code works at once. With the email address, we send a confirmation link only if it matches." %}</p>
+<form method="post" action="{% url 'testimonies:withdraw-public' %}">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">{% translate "Withdraw" %}</button>
+</form>
+{% endblock %}

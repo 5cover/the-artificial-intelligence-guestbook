@@ -500,3 +500,65 @@ class ConsentRecord(models.Model):
                 ),
             ),
         ]
+
+
+class WithdrawalRequest(models.Model):
+    internal_id = models.BigAutoField(primary_key=True, db_comment="operational | id")
+    scope = models.CharField(
+        max_length=12,
+        choices=vocab.WithdrawalScope,
+        db_comment="operational | enum(testimony, field, earlier-text, account)",
+    )
+    field_name = models.CharField(
+        max_length=30,
+        choices=vocab.WithdrawableField,
+        null=True,
+        db_comment="operational | enum(display_name, age_range, country, region, languages, profession, field, field_note, organization, organization_type, organization_type_note, relationship_to_ai, relationship_to_ai_note, link)?",
+    )
+    testimony = models.ForeignKey(
+        Testimony,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="withdrawal_requests",
+        db_comment="operational | ref(Testimony)?",
+    )
+    requested_at = models.DateTimeField(db_comment="operational | instant")
+    verified_at = models.DateTimeField(null=True, db_comment="operational | instant?")
+    steps = models.JSONField(default=list, db_comment="operational | list(line(60))")
+    public_id = models.CharField(
+        max_length=8, null=True, db_comment="evidence | public_id?"
+    )
+    completed_at = models.DateTimeField(null=True, db_comment="evidence | instant?")
+    minor_at_collection = models.BooleanField(
+        default=False, db_comment="evidence | bool"
+    )
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                name="withdrawal_field_iff_field_name",
+                condition=iff(Q(scope="field"), Q(field_name__isnull=False)),
+            ),
+            models.CheckConstraint(
+                name="withdrawal_verified_after_request",
+                condition=Q(verified_at__isnull=True)
+                | Q(verified_at__gte=F("requested_at")),
+            ),
+            models.CheckConstraint(
+                name="withdrawal_completed_after_verification",
+                condition=Q(completed_at__isnull=True)
+                | (
+                    Q(completed_at__gte=F("requested_at"))
+                    & (
+                        Q(verified_at__isnull=True)
+                        | Q(completed_at__gte=F("verified_at"))
+                    )
+                ),
+            ),
+            models.CheckConstraint(
+                name="withdrawal_completed_has_no_testimony",
+                condition=implies(
+                    Q(completed_at__isnull=False), Q(testimony__isnull=True)
+                ),
+            ),
+        ]

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Confirm the withdrawal" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Confirm the withdrawal" %}</h1>
+<p>{% translate "Opening the link does not withdraw anything. Confirm below to do so." %}</p>
+<form method="post" action="{% url 'testimonies:withdraw-confirm' token %}">
+  {% csrf_token %}
+  <button type="submit">{% translate "Withdraw" %}</button>
+</form>
+{% endblock %}

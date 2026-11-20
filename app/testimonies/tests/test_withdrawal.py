@@ -257,3 +257,16 @@ def test_a_withdrawal_request_refuses_inconsistent_states(contributor):
             completed_at=now,
             testimony=testimony,
         )
+
+
+@pytest.mark.django_db
+def test_a_withdrawal_cannot_complete_before_it_is_verified(contributor):
+    now = timezone.now()
+    with pytest.raises(IntegrityError) as error, transaction.atomic():
+        WithdrawalRequest.objects.create(
+            scope="account",
+            requested_at=now - timedelta(days=2),
+            verified_at=now - timedelta(days=1),
+            completed_at=now - timedelta(days=1, hours=1),
+        )
+    assert "withdrawal_completed_after_verification" in str(error.value)

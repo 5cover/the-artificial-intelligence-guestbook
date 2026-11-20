@@ -37,6 +37,22 @@
   {% endfor %}
 {% endif %}
 
+<h2>{% translate "Reports" %}</h2>
+{% if reports %}
+  <ol>
+    {% for notice in reports %}
+      <li>
+        {% translate "Received" %} {{ notice.received_at|date:"Y-m-d H:i:s" }} UTC;
+        {{ notice.get_priority_display }}; {{ notice.get_reason_display }}
+        {% if notice.auto_hidden %}; {% translate "the testimony was hidden automatically" %}{% endif %}
+        <p>{{ notice.grounds|linebreaksbr }}</p>
+      </li>
+    {% endfor %}
+  </ol>
+{% else %}
+  <p>{% translate "No open reports." %}</p>
+{% endif %}
+
 <h2>{% translate "Decision" %}</h2>
 <form method="post" action="{% url 'moderation:decide' token %}">
   {% csrf_token %}
@@ -47,6 +63,8 @@
     <button type="submit" name="action" value="return-and-quarantine">{% translate "Return and quarantine" %}</button>
     <button type="submit" name="action" value="quarantine">{% translate "Hold for legal reasons" %}</button>
     <button type="submit" name="action" value="restrict-account">{% translate "Restrict the account" %}</button>
+    <button type="submit" name="action" value="remove">{% translate "Remove the testimony" %}</button>
+    <button type="submit" name="action" value="dismiss-reports">{% translate "Dismiss the reports" %}</button>
   </p>
 </form>
 {% endblock %}

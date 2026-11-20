@@ -5,7 +5,10 @@ from django.utils.translation import gettext as _
 from accounts.models import Account
 from moderation.emails import send_statement
 from moderation.models import ModerationRecord
-from testimonies.models import Testimony
+from reports.models import Notice
+from reports.services import close_notices, lift_automatic_hiding
+from testimonies import withdrawal
+from testimonies.models import Testimony, WithdrawalRequest
 from testimonies.revisions import (
     current_revision,
     make_public,
@@ -14,9 +17,11 @@ from testimonies.revisions import (
     release_superseded_text,
 )
 from testimonies.services import awaiting_parental_consent
+from testimonies.vocabularies import WithdrawalScope
 
 Decision = ModerationRecord.Decision
 State = Testimony.State
+Outcome = Notice.Outcome
 
 
 class ReviewError(Exception):
@@ -43,15 +48,21 @@ def _notify(testimony, record, rule, guidance=None):
     record.save(update_fields=["statement_sent_at"])
 
 
+def _is_legal_hold(testimony):
+    return (
+        testimony.state == State.QUARANTINED
+        and testimony.quarantine_reason == Testimony.QuarantineReason.LEGAL_HOLD
+    )
+
+
 @transaction.atomic
 def approve(testimony, moderator):
+    lift_automatic_hiding(testimony)
+    testimony.refresh_from_db()
     pending = list(pending_revisions(testimony))
     if not pending:
         raise ReviewError(_("Nothing is waiting for review."))
-    if (
-        testimony.state == State.QUARANTINED
-        and testimony.quarantine_reason == Testimony.QuarantineReason.LEGAL_HOLD
-    ):
+    if _is_legal_hold(testimony):
         raise ReviewError(_("A legal hold must be lifted before approval."))
     if awaiting_parental_consent(testimony):
         raise ReviewError(_("The parent or guardian has not confirmed yet."))
@@ -73,6 +84,7 @@ def approve(testimony, moderator):
     testimony.quarantine_reason = None
     testimony.save()
     release_superseded_text(testimony)
+    close_notices(testimony.public_id, Outcome.NO_ACTION)
     return _record(testimony, latest, Decision.APPROVE, moderator, now)
 
 
@@ -112,6 +124,10 @@ def return_revisions(testimony, moderator, *, rule, guidance, quarantine=False):
     testimony.save()
     release_superseded_text(testimony)
     _notify(testimony, record, rule, guidance)
+    close_notices(
+        testimony.public_id,
+        Outcome.QUARANTINED if quarantine else Outcome.RETURNED,
+    )
     return record
 
 
@@ -126,7 +142,7 @@ def quarantine_for_legal_hold(testimony, moderator, note=None):
     if was_published:
         testimony.public_revision = None
     testimony.save()
-    return _record(
+    record = _record(
         testimony,
         current_revision(testimony),
         Decision.QUARANTINE,
@@ -134,6 +150,8 @@ def quarantine_for_legal_hold(testimony, moderator, note=None):
         now,
         note=note,
     )
+    close_notices(testimony.public_id, Outcome.QUARANTINED)
+    return record
 
 
 @transaction.atomic
@@ -155,4 +173,46 @@ def restrict_account(testimony, moderator, *, rule, guidance):
         guidance=guidance or None,
     )
     _notify(testimony, record, rule, guidance)
+    close_notices(testimony.public_id, Outcome.NO_ACTION)
     return record
+
+
+@transaction.atomic
+def remove_testimony(testimony, moderator, *, rule, guidance):
+    """Withdraw a testimony for the custodian. The cause stays in the moderation record (data model, section 2.13)."""
+    if testimony.public_id is None or testimony.state not in (
+        State.PUBLISHED,
+        State.QUARANTINED,
+    ):
+        raise ReviewError(_("Only a published testimony can be removed."))
+    if _is_legal_hold(testimony):
+        raise ReviewError(_("A legal hold must be lifted before removal."))
+    now = timezone.now()
+    record = _record(
+        testimony,
+        current_revision(testimony),
+        Decision.REMOVE,
+        moderator,
+        now,
+        rule=rule,
+        guidance=guidance or None,
+    )
+    _notify(testimony, record, rule, guidance)
+    public_id = testimony.public_id
+    request = WithdrawalRequest.objects.create(
+        scope=WithdrawalScope.TESTIMONY,
+        testimony=testimony,
+        requested_at=now,
+        verified_at=now,
+    )
+    withdrawal.execute(request, now, keep_moderation_records=True)
+    close_notices(public_id, Outcome.REMOVED)
+    return record
+
+
+@transaction.atomic
+def dismiss_reports(testimony, moderator):
+    """Find the reports unfounded: lift an automatic hiding, and record no action on the reports."""
+    lift_automatic_hiding(testimony)
+    close_notices(testimony.public_id, Outcome.NO_ACTION)
+    return moderator

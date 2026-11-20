@@ -90,6 +90,13 @@ class MagicLink(models.Model):
         related_name="magic_links",
         db_comment="operational | ref(Testimony)?",
     )
+    notice = models.ForeignKey(
+        "reports.Notice",
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="magic_links",
+        db_comment="operational | ref(Notice)?",
+    )
 
     class Meta:
         constraints = [

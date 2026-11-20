@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% translate "Report this testimony" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Report this testimony" %}</h1>
+<p>{% translate "A report asks the custodian to look. It does not hide the testimony by itself, and the number of reports does not decide anything." %}</p>
+<form method="post" action="{% url 'reports:report' testimony.public_id %}" data-proof-of-work data-difficulty="{{ pow_difficulty }}">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">{% translate "Send the report" %}</button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script type="module" src="{% static 'guestbook/proof-of-work.js' %}"></script>
+{% endblock %}

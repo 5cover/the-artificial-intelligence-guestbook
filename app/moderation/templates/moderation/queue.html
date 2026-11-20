@@ -14,6 +14,7 @@
         {{ item.testimony.get_state_display }};
         {% translate "edition period" %} {{ item.testimony.edition_period }};
         {% translate "received" %} {{ item.testimony.received_at|date:"Y-m-d H:i:s" }} UTC
+        {% if item.reports %}; {% translate "open reports" %}: {{ item.reports }}{% endif %}
         {% if item.waiting_for_parent %}; {% translate "waiting for a parent or guardian" %}{% endif %}
       </li>
     {% endfor %}

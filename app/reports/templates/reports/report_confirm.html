@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Confirm your report" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Confirm your report" %}</h1>
+<p>{% translate "Opening the link does not confirm the report. Confirm below to send it to the moderation queue." %}</p>
+<form method="post" action="{% url 'reports:confirm' token %}">
+  {% csrf_token %}
+  <button type="submit">{% translate "Confirm the report" %}</button>
+</form>
+{% endblock %}

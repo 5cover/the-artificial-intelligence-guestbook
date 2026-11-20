@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Report received" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Report received" %}</h1>
+{% if repeated %}
+  <p>{% translate "You have already reported this testimony. Your report is kept with the first one." %}</p>
+{% else %}
+  <p>{% translate "If your report needs confirmation, a link is on its way to your email address. It is read once you confirm it." %}</p>
+{% endif %}
+{% endblock %}

@@ -70,6 +70,8 @@
     </details>
   {% endif %}
 
+  <p><a href="{% url 'reports:report' record.public_id %}">{% translate "Report this testimony" %}</a></p>
+
   <details open>
     <summary>{% translate "Cite this testimony" %}</summary>
     <details open>

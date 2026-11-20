@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from moderation.rules import PublishingRule
 
-RULE_REQUIRED = {"return", "return-and-quarantine", "restrict-account"}
+RULE_REQUIRED = {"return", "return-and-quarantine", "restrict-account", "remove"}
 GUIDANCE_REQUIRED = {"return", "return-and-quarantine"}
 
 

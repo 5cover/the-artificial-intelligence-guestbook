@@ -54,10 +54,11 @@ def _erase_on_restore(internal_id):
     return "erase-on-restore-listed"
 
 
-def _purge_content(testimony):
+def _purge_content(testimony, keep_moderation_records=False):
     Revision.objects.filter(testimony=testimony).delete()
     ConsentRecord.objects.filter(testimony=testimony).delete()
-    ModerationRecord.objects.filter(testimony=testimony).delete()
+    if not keep_moderation_records:
+        ModerationRecord.objects.filter(testimony=testimony).delete()
     MagicLink.objects.filter(testimony=testimony).delete()
 
 
@@ -70,7 +71,7 @@ def erase_again(internal_id):
         _purge_content(testimony)
 
 
-def _withdraw_testimony(testimony, now):
+def _withdraw_testimony(testimony, now, keep_moderation_records=False):
     testimony.state = Testimony.State.WITHDRAWN
     testimony.withdrawn_at = now
     testimony.public_revision = None
@@ -79,11 +80,13 @@ def _withdraw_testimony(testimony, now):
     testimony.withdrawal_code_hash = None
     testimony.closed_account_email_hmac = None
     testimony.save()
-    _purge_content(testimony)
+    _purge_content(testimony, keep_moderation_records)
     return [
         "tombstone-set",
         "content-deleted",
-        "moderation-records-deleted",
+        "moderation-records-kept"
+        if keep_moderation_records
+        else "moderation-records-deleted",
         "account-unlinked",
     ]
 
@@ -100,7 +103,7 @@ def _clear_field(testimony, field_name):
 
 
 @transaction.atomic
-def execute(request, now=None):
+def execute(request, now=None, keep_moderation_records=False):
     """Run the deletion steps of a verified withdrawal request (deletion lifecycle, section 3)."""
     now = now or timezone.now()
     testimony = request.testimony
@@ -120,7 +123,7 @@ def execute(request, now=None):
     testimony_pk = testimony.pk
     steps = []
     if request.scope in (WithdrawalScope.TESTIMONY, WithdrawalScope.ACCOUNT):
-        steps += _withdraw_testimony(testimony, now)
+        steps += _withdraw_testimony(testimony, now, keep_moderation_records)
     elif request.scope == WithdrawalScope.FIELD:
         steps += _clear_field(testimony, request.field_name)
     else:

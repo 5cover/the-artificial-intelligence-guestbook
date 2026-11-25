@@ -33,6 +33,10 @@ uv run python app/manage.py runserver
 
 Outgoing email is printed to the console unless `GUESTBOOK_EMAIL_BACKEND` names another backend.
 
+## Creating the database
+
+`createdb -e guestbook -E UTF8 -T template0`
+
 ## Operations commands
 
 These run by hand for now. Scheduling them belongs to the deployment work.
